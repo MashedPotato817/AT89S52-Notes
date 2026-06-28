@@ -659,6 +659,33 @@
             th, td { padding: 0.5rem 0.625rem; }
         }
 
+        /* ============ COLLAPSE ALL BUTTON ============ */
+        .collapse-all {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 1.5rem;
+            width: 44px;
+            height: 44px;
+            background: var(--bg-card);
+            color: var(--blue-600);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            font-size: 1.25rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-md);
+            transition: all 0.2s;
+            z-index: 1000;
+        }
+
+        .collapse-all:hover {
+            background: var(--blue-50);
+            border-color: var(--blue-300);
+            transform: translateY(-2px);
+        }
+
         /* ============ PRINT ============ */
         @media print {
             body { background: white; color: black; }
@@ -698,6 +725,7 @@
         <a href="#module9">并行扩展</a>
         <a href="#module10">DAC/ADC</a>
         <a href="#code-templates">代码</a>
+        <a href="#quick-ref">⚡速记</a>
     </div>
 
     <!-- Main -->
@@ -2276,7 +2304,168 @@ void main(void) {
             </div>
         </section>
 
+        <!-- Quick Reference: 速记卡片 -->
+        <section class="card" id="quick-ref">
+            <div class="card-header">
+                <h2><span class="icon">⚡</span> 速记卡片</h2>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="card-body">
+
+                    <h3>// 寄存器速记</h3>
+
+                    <div class="knowledge-card">
+                        <h4>PSW（程序状态字）D0H</h4>
+                        <table>
+                            <tr><th>位</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th></tr>
+                            <tr><td>名称</td><td>CY</td><td>AC</td><td>F0</td><td>RS1</td><td>RS0</td><td>OV</td><td>—</td><td>P</td></tr>
+                            <tr><td>功能</td><td>进位</td><td>辅助进位</td><td>用户标志</td><td colspan="2">寄存器组选择</td><td>溢出</td><td>保留</td><td>奇偶</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <h4>TCON（定时器控制）88H</h4>
+                        <table>
+                            <tr><th>位</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th></tr>
+                            <tr><td>名称</td><td>TF1</td><td>TR1</td><td>TF0</td><td>TR0</td><td>IE1</td><td>IT1</td><td>IE0</td><td>IT0</td></tr>
+                            <tr><td>功能</td><td>T1溢出</td><td>T1启停</td><td>T0溢出</td><td>T0启停</td><td>INT1标志</td><td>INT1触发</td><td>INT0标志</td><td>INT0触发</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <h4>TMOD（定时器方式）89H</h4>
+                        <table>
+                            <tr><th>位</th><th>7</th><th>6</th><th>5-4</th><th>3</th><th>2</th><th>1-0</th></tr>
+                            <tr><td>名称</td><td>GATE</td><td>C/T</td><td>M1M0</td><td>GATE</td><td>C/T</td><td>M1M0</td></tr>
+                            <tr><td>归属</td><td colspan="3">T1</td><td colspan="3">T0</td></tr>
+                        </table>
+                        <p><strong>M1M0：</strong>00=方式0(13位) 01=方式1(16位) 10=方式2(8位自动重装) 11=方式3</p>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <h4>IE（中断允许）A8H</h4>
+                        <table>
+                            <tr><th>位</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th></tr>
+                            <tr><td>名称</td><td>EA</td><td>—</td><td>—</td><td>ES</td><td>ET1</td><td>EX1</td><td>ET0</td><td>EX0</td></tr>
+                            <tr><td>功能</td><td>总开关</td><td></td><td></td><td>串口</td><td>T1</td><td>INT1</td><td>T0</td><td>INT0</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <h4>SCON（串口控制）98H</h4>
+                        <table>
+                            <tr><th>位</th><th>7-6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th></tr>
+                            <tr><td>名称</td><td>SM0-SM1</td><td>SM2</td><td>REN</td><td>TB8</td><td>RB8</td><td>TI</td><td>RI</td></tr>
+                            <tr><td>功能</td><td>方式选择</td><td>多机</td><td>允许接收</td><td>发送第9位</td><td>接收第9位</td><td>发送完成</td><td>接收完成</td></tr>
+                        </table>
+                    </div>
+
+                    <h3>// 公式速记</h3>
+
+                    <div class="knowledge-card">
+                        <h4>周期计算（fosc=晶振频率）</h4>
+                        <table>
+                            <tr><th>周期</th><th>公式</th><th>12MHz</th></tr>
+                            <tr><td>振荡周期</td><td>1/fosc</td><td>1/12 μs</td></tr>
+                            <tr><td>状态周期</td><td>2/fosc</td><td>1/6 μs</td></tr>
+                            <tr><td>机器周期</td><td>12/fosc</td><td>1 μs</td></tr>
+                            <tr><td>指令周期</td><td>1~4机器周期</td><td>1~4 μs</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <h4>定时器初值计算</h4>
+                        <p><strong>方式1（16位）：</strong></p>
+                        <p style="font-family: var(--font-mono); color: var(--blue-600); font-weight: 700;">
+                            TH0 = (65536 - T×fosc/12) / 256<br>
+                            TL0 = (65536 - T×fosc/12) % 256
+                        </p>
+                        <p><strong>方式2（8位自动重装）：</strong></p>
+                        <p style="font-family: var(--font-mono); color: var(--blue-600); font-weight: 700;">
+                            TH1 = 256 - T×fosc/12
+                        </p>
+                        <p><strong>常用值（12MHz）：</strong></p>
+                        <table>
+                            <tr><td>定时</td><td>1ms</td><td>10ms</td><td>50ms</td><td>100ms</td></tr>
+                            <tr><td>初值</td><td>FC18H</td><td>D8F0H</td><td>3CB0H</td><td>1000H</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <h4>波特率计算（方式1，T1作波特率发生器）</h4>
+                        <p style="font-family: var(--font-mono); color: var(--blue-600); font-weight: 700;">
+                            波特率 = (2^SMOD/32) × fosc/(12×(256-TH1))
+                        </p>
+                        <p><strong>常用值（12MHz，SMOD=0）：</strong></p>
+                        <table>
+                            <tr><td>波特率</td><td>2400</td><td>4800</td><td>9600</td></tr>
+                            <tr><td>TH1</td><td>F3H</td><td>F9H</td><td>FDH</td></tr>
+                        </table>
+                    </div>
+
+                    <h3>// 地址速记</h3>
+
+                    <div class="knowledge-card">
+                        <h4>中断入口地址</h4>
+                        <table>
+                            <tr><td>INT0</td><td>T0</td><td>INT1</td><td>T1</td><td>串口</td></tr>
+                            <tr><td>0003H</td><td>000BH</td><td>0013H</td><td>001BH</td><td>0023H</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <h4>常用SFR地址</h4>
+                        <table>
+                            <tr><td>P0</td><td>P1</td><td>P2</td><td>P3</td><td>SP</td><td>PSW</td><td>ACC</td><td>B</td></tr>
+                            <tr><td>80H</td><td>90H</td><td>A0H</td><td>B0H</td><td>81H</td><td>D0H</td><td>E0H</td><td>F0H</td></tr>
+                        </table>
+                        <table>
+                            <tr><td>TCON</td><td>TMOD</td><td>TH0</td><td>TL0</td><td>TH1</td><td>TL1</td><td>SCON</td><td>IE</td></tr>
+                            <tr><td>88H</td><td>89H</td><td>8CH</td><td>8AH</td><td>8DH</td><td>8BH</td><td>98H</td><td>A8H</td></tr>
+                        </table>
+                    </div>
+
+                    <h3>// 复位后SFR初值</h3>
+
+                    <div class="knowledge-card">
+                        <h4>复位后关键寄存器值</h4>
+                        <table>
+                            <tr><td>PC</td><td>SP</td><td>P0-P3</td><td>PSW</td><td>TMOD</td><td>TH0/TL0</td><td>IE</td><td>IP</td></tr>
+                            <tr><td>0000H</td><td>07H</td><td>FFH</td><td>00H</td><td>00H</td><td>00H</td><td>00H</td><td>00H</td></tr>
+                        </table>
+                    </div>
+
+                    <h3>// P3口第二功能</h3>
+
+                    <div class="knowledge-card">
+                        <h4>P3口第二功能速记</h4>
+                        <table>
+                            <tr><td>P3.0</td><td>P3.1</td><td>P3.2</td><td>P3.3</td><td>P3.4</td><td>P3.5</td><td>P3.6</td><td>P3.7</td></tr>
+                            <tr><td>RXD</td><td>TXD</td><td>INT0</td><td>INT1</td><td>T0</td><td>T1</td><td>WR</td><td>RD</td></tr>
+                        </table>
+                    </div>
+
+                    <h3>// 片内RAM分区</h3>
+
+                    <div class="knowledge-card">
+                        <h4>片内RAM空间分布（256B）</h4>
+                        <table>
+                            <tr><th>地址</th><th>区域</th><th>说明</th></tr>
+                            <tr><td>00H-1FH</td><td>工作寄存器区</td><td>4组×8个（R0-R7）</td></tr>
+                            <tr><td>20H-2FH</td><td>位寻址区</td><td>128位（位地址00H-7FH）</td></tr>
+                            <tr><td>30H-7FH</td><td>通用RAM</td><td>数据缓冲、堆栈</td></tr>
+                            <tr><td>80H-FFH</td><td>SFR区</td><td>特殊功能寄存器</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
+
+    <!-- 折叠所有按钮 -->
+    <button class="collapse-all" id="collapseAll" title="折叠/展开所有模块">📂</button>
 
     <!-- Footer -->
     <footer class="footer">
@@ -2320,6 +2509,23 @@ void main(void) {
 
         // Auto-expand first card
         document.querySelector('.card').classList.add('active');
+
+        // Collapse/Expand all
+        const collapseBtn = document.getElementById('collapseAll');
+        let allCollapsed = false;
+
+        collapseBtn.addEventListener('click', () => {
+            const cards = document.querySelectorAll('.card');
+            allCollapsed = !allCollapsed;
+            cards.forEach(card => {
+                if (allCollapsed) {
+                    card.classList.remove('active');
+                } else {
+                    card.classList.add('active');
+                }
+            });
+            collapseBtn.textContent = allCollapsed ? '📂' : '📁';
+        });
     </script>
 </body>
 </html>
