@@ -1523,53 +1523,109 @@ sbit KEY = P3^2;    // 定义P3.2位</code></pre>
             <div class="card-content">
                 <div class="card-body">
                     <div class="warning-box">
-                        不考：查表程序设计
+                        不考：5.5 LCD1602、5.6 LCD12864、5.7.5 HD7279
                     </div>
 
-                    <h3>// 伪指令</h3>
+                    <h3>// LED显示</h3>
                     <div class="knowledge-card">
-                        <h4>常用伪指令</h4>
+                        <h4><span class="level-tag level-tag-understand">理解并掌握</span>流水灯实现（例5-1、5-2）</h4>
+                        <p><strong>三种方法：</strong></p>
                         <ul>
-                            <li><code>ORG</code> - 起始地址：<code>ORG 0000H</code></li>
-                            <li><code>END</code> - 程序结束</li>
-                            <li><code>DB</code> - 定义字节：<code>DB 30H, 40H</code></li>
-                            <li><code>DW</code> - 定义字</li>
-                            <li><code>EQU</code> - 等值赋值：<code>DELAY EQU 30H</code></li>
-                            <li><code>DATA</code> - 数据地址赋值</li>
-                            <li><code>BIT</code> - 位地址赋值</li>
+                            <li>数组查表法</li>
+                            <li>移位运算符法</li>
+                            <li>循环移位法</li>
                         </ul>
+<pre><code>// 移位法示例
+P1 = 0xFE;  // 1111 1110 点亮第1个LED
+for(i=0; i&lt;8; i++) {
+    Delay_ms(500);
+    P1 = (P1 &lt;&lt; 1) | 0x01;  // 左移
+}</code></pre>
+                        <div class="tip-box">
+                            <strong>出题角度：</strong>C51编程题，要求用移位实现流水灯
+                        </div>
                     </div>
 
-                    <h3>// 基本程序结构</h3>
                     <div class="knowledge-card">
-                        <h4>顺序程序</h4>
-                        <ul>
-                            <li>单字节/双字节加法</li>
-                            <li>拆字（高低字节分离）</li>
-                            <li>BCD码转换</li>
-                        </ul>
+                        <h4><span class="level-tag level-tag-understand">理解</span>LED数码管显示</h4>
+                        <p><strong>共阳极 vs 共阴极：</strong></p>
+                        <table>
+                            <tr><th>类型</th><th>公共端</th><th>点亮条件</th></tr>
+                            <tr><td>共阳极</td><td>COM接VCC</td><td>段码输出低电平</td></tr>
+                            <tr><td>共阴极</td><td>COM接GND</td><td>段码输出高电平</td></tr>
+                        </table>
+                        <p><strong>段码表（共阳极，0-9）：</strong></p>
+                        <table>
+                            <tr><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td></tr>
+                            <tr><td>C0</td><td>F9</td><td>A4</td><td>B0</td><td>99</td><td>92</td><td>82</td><td>F8</td><td>80</td><td>90</td></tr>
+                        </table>
+                        <div class="warning-box">
+                            <strong>出题重点：</strong>给定数字写段码，或给定段码识别数字
+                        </div>
                     </div>
+
                     <div class="knowledge-card">
-                        <h4>分支程序</h4>
-                        <ul>
-                            <li>单分支：<code>JZ/JNZ</code></li>
-                            <li>多分支：散转（<code>JMP @A+DPTR</code>）</li>
-                        </ul>
+                        <h4><span class="level-tag level-tag-understand">理解并掌握</span>动态扫描显示</h4>
+                        <p><strong>原理：</strong>逐位快速切换显示，利用人眼视觉暂留</p>
+<pre><code>// 动态扫描示例
+unsigned char code table[] = {0xC0,0xF9,0xA4,...}; // 段码表
+void Display(unsigned char *buf) {
+    unsigned char i;
+    for(i=0; i&lt;6; i++) {
+        P0 = table[buf[i]];  // 送段码
+        P2 = 0x20 >> i;       // 选位（位选）
+        Delay_ms(2);          // 延时
+        P2 = 0x00;            // 消隐
+    }
+}</code></pre>
+                        <div class="tip-box">
+                            <strong>出题角度：</strong>编程题考动态扫描显示多位数字
+                        </div>
                     </div>
+
+                    <h3>// 键盘接口</h3>
                     <div class="knowledge-card">
-                        <h4>循环程序</h4>
+                        <h4><span class="level-tag level-tag-understand">理解</span>按键消抖</h4>
+                        <p><strong>问题：</strong>机械按键按下/释放时会产生抖动（约10-20ms）</p>
+                        <p><strong>解决方法：</strong></p>
                         <ul>
-                            <li>单循环：计数初值 = 循环次数</li>
-                            <li>双重循环：延时程序</li>
-                            <li><code>DJNZ Rn, rel</code> 减1判0跳转</li>
+                            <li>硬件消抖：RC滤波电路</li>
+                            <li>软件消抖：延时10-20ms后再次检测</li>
                         </ul>
+<pre><code>// 软件消抖示例
+if(KEY == 0) {           // 检测到按下
+    Delay_ms(20);         // 延时消抖
+    if(KEY == 0) {        // 再次确认
+        while(!KEY);      // 等待释放
+        // 执行按键功能
+    }
+}</code></pre>
+                        <div class="tip-box">
+                            <strong>出题角度：</strong>简答题"按键抖动的原因及消除方法"
+                        </div>
                     </div>
+
                     <div class="knowledge-card">
-                        <h4>子程序</h4>
+                        <h4><span class="level-tag level-tag-understand">理解</span>矩阵键盘扫描（行扫描法）</h4>
+                        <p><strong>4×4矩阵键盘原理：</strong></p>
                         <ul>
-                            <li>LCALL/ACALL 调用，RET 返回</li>
-                            <li>注意保护现场（PUSH/POP）</li>
+                            <li>行线输出，列线输入</li>
+                            <li>逐行输出低电平，读取列线状态</li>
+                            <li>有键按下时对应列线为低</li>
                         </ul>
+<pre><code>// 行扫描法示例
+unsigned char KeyScan() {
+    P1 = 0xFE;  // 第1行输出0
+    if((P1 & 0xF0) != 0xF0) {  // 有列线为0
+        Delay_ms(20);
+        // 判断具体按键
+    }
+    P1 = 0xFD;  // 第2行输出0
+    // ... 继续扫描
+}</code></pre>
+                        <div class="tip-box">
+                            <strong>出题角度：</strong>编程题考矩阵键盘扫描程序
+                        </div>
                     </div>
 
                     <div class="tip-box">
