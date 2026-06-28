@@ -4,81 +4,247 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>单片机原理及C语言编程应用 - 考前速记</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --primary-light: #dbeafe;
-            --success: #16a34a;
-            --warning: #f59e0b;
-            --danger: #dc2626;
-            --text: #1e293b;
-            --text-light: #64748b;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --border: #e2e8f0;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-300: #d1d5db;
-            --gray-600: #4b5563;
-            --gray-700: #374151;
-            --gray-800: #1f2937;
-            --gray-900: #111827;
-            --radius: 8px;
-            --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
-            --shadow-md: 0 4px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06);
+            /* --- Terminal Green Palette --- */
+            --green-50: #0d1f0d;
+            --green-100: #0f2b0f;
+            --green-200: #1a3a1a;
+            --green-300: #2d5a2d;
+            --green-400: #4ade80;
+            --green-500: #22c55e;
+            --green-glow: rgba(74, 222, 128, 0.15);
+            --green-glow-strong: rgba(74, 222, 128, 0.3);
+
+            /* --- Amber Warning --- */
+            --amber-400: #fbbf24;
+            --amber-500: #f59e0b;
+            --amber-glow: rgba(251, 191, 36, 0.15);
+
+            /* --- Red Danger --- */
+            --red-400: #f87171;
+            --red-500: #ef4444;
+            --red-glow: rgba(248, 113, 113, 0.15);
+
+            /* --- Cyan Accent --- */
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-glow: rgba(34, 211, 238, 0.15);
+
+            /* --- Neutral --- */
+            --bg-deep: #0a0e0a;
+            --bg-surface: #111a11;
+            --bg-card: #162016;
+            --bg-elevated: #1c2a1c;
+            --border: #2a3a2a;
+            --border-bright: #3a5a3a;
+            --text-primary: #e8f0e8;
+            --text-secondary: #8a9a8a;
+            --text-dim: #5a6a5a;
+
+            /* --- Layout --- */
+            --radius: 6px;
+            --radius-lg: 10px;
+            --font-mono: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', monospace;
+            --font-body: 'Noto Sans SC', -apple-system, sans-serif;
         }
 
-        /* 深色模式 */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --text: #e2e8f0;
-                --text-light: #94a3b8;
-                --bg: #0f172a;
-                --card-bg: #1e293b;
-                --border: #334155;
-                --primary-light: #1e3a5f;
-                --gray-50: #0f172a;
-                --gray-100: #1e293b;
-                --gray-200: #334155;
-            }
-
-            .exam-info-card {
-                background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
-            }
-
-            tr:hover { background: var(--primary-light); }
-        }
-
-        * {
+        /* ============ RESET ============ */
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            line-height: 1.8;
-            color: var(--text);
-            background: var(--bg);
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
+        html {
+            scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* 快速导航标签 */
+        body {
+            font-family: var(--font-body);
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background: var(--bg-deep);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ============ CIRCUIT BOARD BACKGROUND ============ */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(74, 222, 128, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(34, 211, 238, 0.02) 0%, transparent 50%),
+                radial-gradient(circle at 50% 80%, rgba(251, 191, 36, 0.02) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Subtle grid pattern */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(74, 222, 128, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(74, 222, 128, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ============ HEADER ============ */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--green-400), transparent);
+            opacity: 0.4;
+        }
+
+        .header-content {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0.875rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--green-400);
+            letter-spacing: -0.02em;
+        }
+
+        .header h1 .blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .header .exam-info {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--amber-400);
+            background: var(--amber-glow);
+            padding: 0.25rem 0.75rem;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: var(--radius);
+        }
+
+        /* ============ HAMBURGER ============ */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 0.65rem;
+            right: 0.75rem;
+            width: 42px;
+            height: 42px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            z-index: 200;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: border-color 0.3s;
+        }
+
+        .menu-toggle:hover { border-color: var(--green-400); }
+
+        .menu-toggle span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--green-400);
+            border-radius: 1px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translateY(7px); }
+        .menu-toggle.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translateY(-7px); }
+
+        /* ============ FULLSCREEN NAV ============ */
+        .fullscreen-nav {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: var(--bg-deep);
+            z-index: 150;
+            padding: 5rem 1.5rem 1.5rem;
+            overflow-y: auto;
+            animation: navFadeIn 0.25s ease;
+        }
+
+        @keyframes navFadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fullscreen-nav.active { display: block; }
+
+        .fullscreen-nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border);
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .fullscreen-nav a:hover,
+        .fullscreen-nav a:active {
+            background: var(--green-glow);
+            color: var(--green-400);
+            border-color: var(--border-bright);
+        }
+
+        /* ============ QUICK NAV ============ */
         .quick-nav {
             display: flex;
             overflow-x: auto;
-            gap: 0.5rem;
-            padding: 0.75rem 1rem;
-            background: var(--card-bg);
+            gap: 0.375rem;
+            padding: 0.625rem 1.25rem;
+            background: var(--bg-surface);
             border-bottom: 1px solid var(--border);
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
             position: sticky;
-            top: 60px;
+            top: 52px;
             z-index: 99;
         }
 
@@ -86,395 +252,306 @@
 
         .quick-nav a {
             flex-shrink: 0;
-            padding: 0.5rem 1rem;
-            background: var(--primary-light);
-            color: var(--primary);
+            padding: 0.375rem 0.75rem;
+            background: transparent;
+            color: var(--text-dim);
             text-decoration: none;
-            border-radius: 2rem;
-            font-size: 0.875rem;
-            font-weight: 500;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
             transition: all 0.2s;
+            text-transform: uppercase;
         }
 
         .quick-nav a:hover,
         .quick-nav a:active {
-            background: var(--primary);
-            color: white;
+            background: var(--green-glow);
+            color: var(--green-400);
+            border-color: var(--green-300);
         }
 
-        /* 头部 */
-        .header {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            padding: 1rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow-md);
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .header h1 {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .header .exam-info {
-            font-size: 0.875rem;
-            opacity: 0.9;
-        }
-
-        /* 汉堡菜单按钮 */
-        .menu-toggle {
-            display: none;
-            position: fixed;
-            top: 0.75rem;
-            right: 0.75rem;
-            width: 44px;
-            height: 44px;
-            background: rgba(255,255,255,0.2);
-            border: 2px solid rgba(255,255,255,0.4);
-            border-radius: 8px;
-            cursor: pointer;
-            z-index: 200;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .menu-toggle span {
-            display: block;
-            width: 20px;
-            height: 2px;
-            background: white;
-            border-radius: 1px;
-            transition: all 0.3s;
-        }
-
-        .menu-toggle.active span:nth-child(1) {
-            transform: rotate(45deg) translateY(7px);
-        }
-
-        .menu-toggle.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .menu-toggle.active span:nth-child(3) {
-            transform: rotate(-45deg) translateY(-7px);
-        }
-
-        /* 全屏导航 */
-        .fullscreen-nav {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--card-bg);
-            z-index: 150;
-            padding: 5rem 1.5rem 1.5rem;
-            overflow-y: auto;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .fullscreen-nav.active {
-            display: block;
-        }
-
-        .fullscreen-nav a {
-            display: block;
-            padding: 1rem 1.25rem;
-            color: var(--text);
-            text-decoration: none;
-            border-bottom: 1px solid var(--border);
-            font-size: 1.1rem;
-            min-height: 48px;
-            display: flex;
-            align-items: center;
-            -webkit-tap-highlight-color: transparent;
-            transition: all 0.2s;
-        }
-
-        .fullscreen-nav a:hover,
-        .fullscreen-nav a:active {
-            background: var(--primary-light);
-            color: var(--primary);
-        }
-
-        /* 主内容 */
+        /* ============ MAIN CONTAINER ============ */
         .container {
-            max-width: 1200px;
+            max-width: 960px;
             margin: 0 auto;
-            padding: 1rem;
-            padding-bottom: 80px;
-        }
-
-        /* 代码模板卡片 */
-        .code-template {
-            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-            border: 2px solid var(--success);
-            border-radius: var(--radius);
             padding: 1.25rem;
-            margin: 0.75rem 0;
+            padding-bottom: 80px;
+            position: relative;
+            z-index: 1;
         }
 
-        .code-template h4 {
-            color: #166534;
-            margin-bottom: 0.75rem;
-            font-size: 1rem;
-        }
-
-        /* 例题卡片样式 */
-        .example-card {
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-            border-left: 4px solid #10b981;
-            border-radius: 0 var(--radius) var(--radius) 0;
-            padding: 1rem 1.25rem;
-            margin: 0.75rem 0;
-        }
-
-        .example-card h4 {
-            color: #065f46;
-            margin-bottom: 0.5rem;
-        }
-
-        /* 手风琴卡片 */
+        /* ============ CARDS ============ */
         .card {
-            background: white;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
             margin-bottom: 1rem;
             overflow: hidden;
+            transition: border-color 0.3s;
         }
+
+        .card:hover { border-color: var(--border-bright); }
 
         .card-header {
             padding: 1rem 1.25rem;
-            background: var(--gray-100);
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
             user-select: none;
             transition: background 0.2s;
+            position: relative;
         }
 
-        .card-header:hover {
-            background: var(--gray-200);
-        }
+        .card-header:hover { background: var(--bg-elevated); }
 
         .card-header h2 {
-            font-size: 1.125rem;
-            color: var(--gray-800);
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.625rem;
         }
 
         .card-header .icon {
-            font-size: 1.25rem;
+            font-size: 1.1rem;
+            width: 1.5rem;
+            text-align: center;
         }
 
         .card-header .arrow {
-            transition: transform 0.3s;
-            color: var(--gray-400);
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s;
         }
 
         .card.active .card-header .arrow {
             transform: rotate(180deg);
+            color: var(--green-400);
         }
 
         .card-content {
-            padding: 0 1.25rem;
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease, padding 0.3s ease;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .card.active .card-content {
-            padding: 1rem 1.25rem;
-            max-height: 5000px;
+            max-height: 10000px;
         }
 
-        /* 手风琴内嵌 */
+        .card-body {
+            padding: 0 1.25rem 1.25rem;
+        }
+
+        /* ============ EXAM INFO CARD ============ */
+        .exam-info-card {
+            border-color: rgba(251, 191, 36, 0.3);
+            background: linear-gradient(135deg, var(--bg-card) 0%, rgba(251, 191, 36, 0.05) 100%);
+        }
+
+        .exam-info-card .card-header h2 { color: var(--amber-400); }
+
+        /* ============ SUB-ACCORDION ============ */
         .accordion {
             margin: 0.5rem 0;
+            border: 1px solid var(--border);
             border-radius: var(--radius);
             overflow: hidden;
-            border: 1px solid var(--border);
+            transition: border-color 0.3s;
         }
 
+        .accordion:hover { border-color: var(--border-bright); }
+
         .accordion-header {
-            background: var(--card-bg);
-            color: var(--text);
-            padding: 0.875rem 1.25rem;
+            padding: 0.75rem 1rem;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: all 0.2s;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
             font-weight: 500;
-            min-height: 48px;
+            color: var(--text-secondary);
+            background: var(--bg-elevated);
+            transition: all 0.2s;
             -webkit-tap-highlight-color: transparent;
         }
 
         .accordion-header:hover {
-            background: var(--primary-light);
+            background: var(--green-glow);
+            color: var(--green-400);
         }
 
         .accordion-content {
             display: none;
-            padding: 1rem 1.25rem;
-            background: var(--bg);
+            padding: 1rem;
+            background: var(--bg-card);
             border-top: 1px solid var(--border);
-            animation: slideDown 0.3s ease;
+            animation: accordionSlide 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
+        @keyframes accordionSlide {
+            from { opacity: 0; transform: translateY(-6px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .accordion-content.active { display: block; }
 
         .accordion-icon {
-            transition: transform 0.3s;
-            font-size: 0.875rem;
-            color: var(--text-light);
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            transition: transform 0.3s, color 0.3s;
         }
 
-        .accordion-icon.active { transform: rotate(180deg); }
-
-        /* 步骤组件 */
-        .steps {
-            counter-reset: step;
+        .accordion-icon.active {
+            transform: rotate(180deg);
+            color: var(--green-400);
         }
 
-        .step {
-            counter-increment: step;
-            margin: 0.75rem 0;
-            padding: 1rem 1.25rem 1rem 3rem;
-            background: rgba(37, 99, 235, 0.05);
-            border-radius: var(--radius);
-            position: relative;
-            border: 1px solid var(--border);
-        }
-
-        .step::before {
-            content: counter(step);
-            position: absolute;
-            left: 0.75rem;
-            top: 1rem;
-            width: 1.75rem;
-            height: 1.75rem;
-            background: var(--primary);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
+        /* ============ SECTION HEADINGS ============ */
+        h3 {
+            font-family: var(--font-mono);
             font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--green-400);
+            margin: 1.25rem 0 0.75rem;
+            padding-bottom: 0.375rem;
+            border-bottom: 1px dashed var(--border);
+            letter-spacing: 0.02em;
         }
 
-        /* 提示框 */
-        .warning-box {
-            background: rgba(239, 68, 68, 0.1);
-            border: 2px solid var(--danger);
+        h3:first-child { margin-top: 0; }
+
+        /* ============ KNOWLEDGE CARDS ============ */
+        .knowledge-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--green-300);
+            border-radius: 0 var(--radius) var(--radius) 0;
+            padding: 0.875rem 1rem;
+            margin: 0.5rem 0;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .knowledge-card:hover {
+            border-left-color: var(--green-400);
+            background: rgba(74, 222, 128, 0.04);
+        }
+
+        .knowledge-card h4 {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--cyan-400);
+            margin-bottom: 0.375rem;
+        }
+
+        /* ============ ALERT BOXES ============ */
+        .warning-box, .tip-box, .info-box {
             border-radius: var(--radius);
-            padding: 1.25rem 1.5rem;
+            padding: 1rem 1.25rem;
             margin: 0.75rem 0;
-            font-size: 0.95rem;
+            font-size: 0.875rem;
             line-height: 1.7;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .warning-box::before, .tip-box::before, .info-box::before {
+            display: block;
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 0.75rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .warning-box {
+            background: var(--red-glow);
+            border: 1px solid rgba(248, 113, 113, 0.3);
         }
 
         .warning-box::before {
-            content: '⚠️ 注意';
-            display: block;
-            font-weight: bold;
-            color: var(--danger);
-            margin-bottom: 0.5rem;
+            content: '[!] WARNING';
+            color: var(--red-400);
         }
 
         .tip-box {
-            background: rgba(16, 185, 129, 0.1);
-            border: 2px solid var(--success);
-            border-radius: var(--radius);
-            padding: 1.25rem 1.5rem;
-            margin: 0.75rem 0;
-            font-size: 0.95rem;
-            line-height: 1.7;
+            background: var(--green-glow);
+            border: 1px solid rgba(74, 222, 128, 0.3);
         }
 
         .tip-box::before {
-            content: '💡 提示';
-            display: block;
-            font-weight: bold;
-            color: var(--success);
-            margin-bottom: 0.5rem;
+            content: '>>> TIP';
+            color: var(--green-400);
         }
 
         .info-box {
-            background: rgba(37, 99, 235, 0.1);
-            border: 2px solid var(--primary);
-            border-radius: var(--radius);
-            padding: 1.25rem 1.5rem;
-            margin: 0.75rem 0;
-            font-size: 0.95rem;
-            line-height: 1.7;
+            background: var(--cyan-glow);
+            border: 1px solid rgba(34, 211, 238, 0.3);
         }
 
         .info-box::before {
-            content: '📌 重点';
-            display: block;
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
+            content: '[i] INFO';
+            color: var(--cyan-400);
         }
 
-        /* 考试信息卡片 */
-        .exam-info-card {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            border: 1px solid #f59e0b;
+        /* ============ CODE TEMPLATE BLOCKS ============ */
+        .code-template {
+            background: var(--green-50);
+            border: 1px solid var(--green-200);
+            border-radius: var(--radius);
+            padding: 1rem 1.25rem;
+            margin: 0.75rem 0;
+            position: relative;
         }
 
-        .exam-info-card h2 {
-            color: #92400e;
-            border-bottom-color: rgba(146, 64, 14, 0.2);
+        .code-template::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--green-400), var(--cyan-400), var(--green-400));
+            opacity: 0.6;
         }
 
-        /* 表格 */
+        .code-template h4 {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--green-400);
+            margin-bottom: 0.75rem;
+        }
+
+        /* ============ TABLES ============ */
         .table-wrapper {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             margin: 0.75rem 0;
-            border-radius: var(--radius);
             border: 1px solid var(--border);
+            border-radius: var(--radius);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             table-layout: fixed;
         }
 
         th, td {
-            padding: 0.75rem 1rem;
+            padding: 0.625rem 0.875rem;
             border-bottom: 1px solid var(--border);
             text-align: left;
             word-break: break-all;
@@ -482,169 +559,237 @@
         }
 
         th {
-            background: var(--primary);
-            color: white;
+            background: var(--bg-elevated);
+            font-family: var(--font-mono);
             font-weight: 600;
+            font-size: 0.75rem;
+            color: var(--green-400);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
             position: sticky;
             top: 0;
         }
 
         tr:last-child td { border-bottom: none; }
-        tr:nth-child(even) { background: var(--gray-50); }
-        tr:hover { background: var(--primary-light); }
+        tr:nth-child(even) { background: rgba(74, 222, 128, 0.02); }
+        tr:hover { background: var(--green-glow); }
 
-        /* 代码块 */
+        /* ============ CODE ============ */
         code {
-            background: var(--gray-100);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            background: var(--bg-elevated);
+            color: var(--green-400);
             padding: 0.125rem 0.375rem;
-            border-radius: 4px;
-            font-family: "Cascadia Code", "Fira Code", monospace;
-            font-size: 0.8125rem;
-            color: var(--danger);
+            border-radius: 3px;
+            border: 1px solid var(--border);
         }
 
         pre {
-            background: var(--gray-900);
-            color: #e5e7eb;
-            padding: 1rem;
+            background: var(--bg-deep);
+            border: 1px solid var(--border);
             border-radius: var(--radius);
-            overflow-x: auto;
+            padding: 1rem;
             margin: 0.75rem 0;
-            font-size: 0.8125rem;
-            line-height: 1.5;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--green-400);
+            opacity: 0.4;
+            border-radius: 3px 0 0 3px;
         }
 
         pre code {
             background: none;
-            color: inherit;
+            border: none;
+            color: var(--text-primary);
             padding: 0;
+            font-size: 0.78rem;
+            line-height: 1.6;
         }
 
-        /* 列表 */
+        /* ============ LISTS ============ */
         ul, ol {
-            padding-left: 1.5rem;
-            margin: 0.5rem 0;
+            padding-left: 1.25rem;
+            margin: 0.375rem 0;
         }
 
         li {
             margin: 0.25rem 0;
+            font-size: 0.875rem;
         }
 
-        /* 知识点卡片 */
-        .knowledge-card {
-            background: var(--gray-50);
-            border: 1px solid var(--gray-200);
-            border-radius: var(--radius);
-            padding: 0.75rem;
+        li::marker {
+            color: var(--green-300);
+        }
+
+        /* ============ STEPS ============ */
+        .steps { counter-reset: step; }
+
+        .step {
+            counter-increment: step;
             margin: 0.5rem 0;
+            padding: 0.75rem 1rem 0.75rem 2.75rem;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            position: relative;
+            font-size: 0.875rem;
         }
 
-        .knowledge-card h4 {
-            color: var(--primary);
-            margin-bottom: 0.375rem;
-            font-size: 0.9375rem;
+        .step::before {
+            content: counter(step);
+            position: absolute;
+            left: 0.625rem;
+            top: 0.75rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            background: var(--green-400);
+            color: var(--bg-deep);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 0.7rem;
         }
 
-        /* 返回顶部 */
+        /* ============ BACK TO TOP ============ */
         .back-to-top {
             position: fixed;
             bottom: 1.5rem;
             right: 1.5rem;
-            width: 48px;
-            height: 48px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            font-size: 1.25rem;
+            width: 44px;
+            height: 44px;
+            background: var(--bg-card);
+            color: var(--green-400);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-family: var(--font-mono);
+            font-size: 1.1rem;
             cursor: pointer;
             display: none;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
             transition: all 0.2s;
             z-index: 1000;
-            -webkit-tap-highlight-color: transparent;
         }
 
-        .back-to-top:hover,
-        .back-to-top:active {
-            background: var(--primary-dark);
-            transform: scale(1.1);
+        .back-to-top:hover {
+            background: var(--green-glow);
+            border-color: var(--green-400);
+            transform: translateY(-2px);
         }
 
-        /* Footer */
+        /* ============ FOOTER ============ */
         .footer {
             text-align: center;
-            color: var(--text-light);
             padding: 1.5rem;
-            font-size: 0.85rem;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-dim);
             border-top: 1px solid var(--border);
             margin-top: 2rem;
+            position: relative;
+            z-index: 1;
         }
 
         .footer p { margin: 0.25rem 0; }
 
-        /* 响应式 */
-        @media (max-width: 768px) {
-            html { font-size: 15px; }
+        .footer .highlight {
+            color: var(--green-400);
+            font-weight: 600;
+        }
 
+        /* ============ ENTRANCE ANIMATION ============ */
+        @keyframes cardReveal {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            animation: cardReveal 0.4s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.05s; }
+        .card:nth-child(2) { animation-delay: 0.1s; }
+        .card:nth-child(3) { animation-delay: 0.15s; }
+        .card:nth-child(4) { animation-delay: 0.2s; }
+        .card:nth-child(5) { animation-delay: 0.25s; }
+        .card:nth-child(6) { animation-delay: 0.3s; }
+        .card:nth-child(7) { animation-delay: 0.35s; }
+        .card:nth-child(8) { animation-delay: 0.4s; }
+        .card:nth-child(9) { animation-delay: 0.45s; }
+        .card:nth-child(10) { animation-delay: 0.5s; }
+        .card:nth-child(11) { animation-delay: 0.55s; }
+        .card:nth-child(12) { animation-delay: 0.6s; }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
             .menu-toggle { display: flex; }
 
-            .quick-nav {
-                padding: 0.5rem 0.75rem;
-            }
+            .header .exam-info { display: none; }
 
-            .quick-nav a {
-                padding: 0.375rem 0.75rem;
-                font-size: 0.8rem;
-            }
+            .quick-nav { top: 48px; }
 
             .container { padding: 0.75rem; }
 
-            .card { padding: 1.25rem; border-radius: 0.75rem; }
+            .card-body { padding: 0 1rem 1rem; }
 
-            .card h2 { font-size: 1.125rem; }
-
-            th, td {
-                padding: 0.75rem;
-                font-size: 0.85rem;
-            }
+            h3 { font-size: 0.8rem; }
         }
 
         @media (max-width: 480px) {
-            html { font-size: 14px; }
+            .header h1 { font-size: 0.85rem; }
 
-            .header h1 { font-size: 1.1rem; }
-
-            .card { padding: 1rem; }
-
-            .card h2 { font-size: 1rem; }
-
-            th, td {
-                padding: 0.5rem;
-                font-size: 0.8rem;
+            .quick-nav a {
+                font-size: 0.65rem;
+                padding: 0.3rem 0.6rem;
             }
+
+            .card-header h2 { font-size: 0.85rem; }
+
+            .card-body { padding: 0 0.75rem 0.75rem; }
+        }
+
+        /* ============ PRINT ============ */
+        @media print {
+            body { background: white; color: black; }
+            body::before, body::after { display: none; }
+            .header, .quick-nav, .menu-toggle, .fullscreen-nav, .back-to-top { display: none !important; }
+            .card { break-inside: avoid; border: 1px solid #ccc; }
+            .card-content { max-height: none !important; }
+            code { background: #f5f5f5; color: #333; border-color: #ddd; }
+            pre { background: #f5f5f5; border-color: #ddd; }
+            pre code { color: #333; }
         }
     </style>
 </head>
 <body>
-    <!-- 汉堡菜单按钮 -->
-    <button class="menu-toggle" id="menuToggle">
-        <span></span>
-        <span></span>
-        <span></span>
+    <!-- Hamburger -->
+    <button class="menu-toggle" id="menuToggle" aria-label="菜单">
+        <span></span><span></span><span></span>
     </button>
 
-    <!-- 全屏导航 -->
+    <!-- Fullscreen Nav -->
     <nav class="fullscreen-nav" id="fullscreenNav">
         <a href="#module0" onclick="closeMenu()">📋 考试信息</a>
         <a href="#module1" onclick="closeMenu()">💻 C语言基础（1-4章）</a>
         <a href="#module2" onclick="closeMenu()">💻 C语言进阶（5-8章）</a>
-        <a href="#module3" onclick="closeMenu()">🔧 单片机概述与硬件（1-2章）</a>
+        <a href="#module3" onclick="closeMenu()">🔧 硬件结构（1-2章）</a>
         <a href="#module4" onclick="closeMenu()">📝 指令系统（第3章）</a>
-        <a href="#module5" onclick="closeMenu()">⚙️ 汇编程序设计（第5章）</a>
-        <a href="#module6" onclick="closeMenu()">⏱️ 定时/计数器（第6章）</a>
+        <a href="#module5" onclick="closeMenu()">⚙️ 汇编程序（第5章）</a>
+        <a href="#module6" onclick="closeMenu()">⏱️ 定时器（第6章）</a>
         <a href="#module7" onclick="closeMenu()">🔔 中断系统（第7章）</a>
         <a href="#module8" onclick="closeMenu()">📡 串口通信（第8章）</a>
         <a href="#module9" onclick="closeMenu()">🔌 系统扩展（第9章）</a>
@@ -652,984 +797,786 @@
         <a href="#code-templates" onclick="closeMenu()">📝 代码模板</a>
     </nav>
 
-    <!-- 头部 -->
+    <!-- Header -->
     <header class="header">
         <div class="header-content">
-            <h1>📖 单片机原理及C语言编程应用</h1>
-            <span class="exam-info">📅 2026-06-29 10:30-12:30</span>
+            <h1>$ AT89S52_exam_notes<span class="blink">_</span></h1>
+            <span class="exam-info">2026-06-29 | 10:30-12:30</span>
         </div>
     </header>
 
-    <!-- 快速导航标签 -->
+    <!-- Quick Nav -->
     <div class="quick-nav">
-        <a href="#module0">考试</a>
-        <a href="#module1">C语言1-4</a>
-        <a href="#module2">C语言5-8</a>
-        <a href="#module3">硬件</a>
-        <a href="#module4">指令</a>
-        <a href="#module5">汇编</a>
-        <a href="#module6">定时器</a>
-        <a href="#module7">中断</a>
-        <a href="#module8">串口</a>
-        <a href="#module9">扩展</a>
+        <a href="#module0">EXAM</a>
+        <a href="#module1">C 1-4</a>
+        <a href="#module2">C 5-8</a>
+        <a href="#module3">HW</a>
+        <a href="#module4">ASM</a>
+        <a href="#module5">PROG</a>
+        <a href="#module6">TMR</a>
+        <a href="#module7">INT</a>
+        <a href="#module8">UART</a>
+        <a href="#module9">EXT</a>
         <a href="#module10">C51</a>
-        <a href="#code-templates">代码模板</a>
+        <a href="#code-templates">CODE</a>
     </div>
 
-    <!-- 主内容 -->
+    <!-- Main -->
     <main class="container">
 
-        <!-- 模块0: 考试信息 -->
+        <!-- Module 0: Exam Info -->
         <section class="card exam-info-card" id="module0">
             <div class="card-header">
                 <h2><span class="icon">📋</span> 考试信息</h2>
                 <span class="arrow">▼</span>
             </div>
             <div class="card-content">
-                <div class="warning-box">
-                    考试时间：<strong>2026-06-29 周一 10:30-12:30</strong>（120分钟）<br>
-                    考试形式：闭卷笔试<br>
-                    题型：简答、分析题为主，含选择、填空、判断、简答、读程序、编程
-                </div>
+                <div class="card-body">
+                    <div class="warning-box">
+                        考试时间：<strong>2026-06-29 周一 10:30-12:30</strong>（120分钟）<br>
+                        考试形式：闭卷笔试<br>
+                        题型：简答、分析题为主，含选择、填空、判断、简答、读程序、编程
+                    </div>
 
-                <h3>📊 分值分布（预估）</h3>
-                <table>
-                    <tr>
-                        <th>部分</th>
-                        <th>内容</th>
-                        <th>分值</th>
-                    </tr>
-                    <tr>
-                        <td>C语言基础</td>
-                        <td>语法、控制、数组、函数、指针</td>
-                        <td>~20-25%</td>
-                    </tr>
-                    <tr>
-                        <td>单片机原理</td>
-                        <td>硬件、指令、中断、定时器、串口</td>
-                        <td>~75-80%</td>
-                    </tr>
-                </table>
-
-                <h3>📝 考试范围</h3>
-                <div class="warning-box">
-                    <strong>⚠️ C语言不考：</strong>5.3.3（函数的递归调用）、8.4（共用体）、8.5（枚举类型）
-                </div>
-                <div class="warning-box">
-                    <strong>⚠️ 单片机不考：</strong>第4章、6.5节、第10章、9.1.3/9.1.4、9.2.3/9.2.4/9.2.5、9.3
-                </div>
-
-                <h3>📖 教材章节与考试对照</h3>
-                <table>
-                    <tr>
-                        <th>教材章节</th>
-                        <th>标题</th>
-                        <th>考试范围</th>
-                        <th>页码</th>
-                    </tr>
-                    <tr>
-                        <td>第1章</td>
-                        <td>单片机概述</td>
-                        <td>✅ 考</td>
-                        <td>17</td>
-                    </tr>
-                    <tr>
-                        <td>第2章</td>
-                        <td>AT89S52片内硬件结构</td>
-                        <td>✅ 考</td>
-                        <td>31</td>
-                    </tr>
-                    <tr>
-                        <td>第3章</td>
-                        <td>8051指令系统与编程基础</td>
-                        <td>✅ 考</td>
-                        <td>60</td>
-                    </tr>
-                    <tr>
-                        <td>第4章</td>
-                        <td>AT89S52中断系统</td>
-                        <td>❌ 不考</td>
-                        <td>105</td>
-                    </tr>
-                    <tr>
-                        <td>第5章</td>
-                        <td>定时器/计数器</td>
-                        <td>✅ 考</td>
-                        <td>125</td>
-                    </tr>
-                    <tr>
-                        <td>第6章</td>
-                        <td>串行口</td>
-                        <td>✅ 考（6.5节除外）</td>
-                        <td>151</td>
-                    </tr>
-                    <tr>
-                        <td>第7章</td>
-                        <td>显示、键盘接口</td>
-                        <td>❌ 不考</td>
-                        <td>187</td>
-                    </tr>
-                    <tr>
-                        <td>第8章</td>
-                        <td>外部存储器扩展</td>
-                        <td>✅ 考</td>
-                        <td>233</td>
-                    </tr>
-                    <tr>
-                        <td>第9章</td>
-                        <td>I/O扩展</td>
-                        <td>✅ 考（部分）</td>
-                        <td>255</td>
-                    </tr>
-                    <tr>
-                        <td>第10章</td>
-                        <td>DAC、ADC接口</td>
-                        <td>❌ 不考</td>
-                        <td>275</td>
-                    </tr>
-                    <tr>
-                        <td>第11章</td>
-                        <td>串行扩展</td>
-                        <td>✅ 考</td>
-                        <td>308</td>
-                    </tr>
-                    <tr>
-                        <td>第12章</td>
-                        <td>其他应用接口</td>
-                        <td>❌ 不考</td>
-                        <td>332</td>
-                    </tr>
-                    <tr>
-                        <td>第13章</td>
-                        <td>抗干扰与可靠性</td>
-                        <td>❌ 不考</td>
-                        <td>350</td>
-                    </tr>
-                    <tr>
-                        <td>第14章</td>
-                        <td>系统设计与调试</td>
-                        <td>❌ 不考</td>
-                        <td>372</td>
-                    </tr>
-                </table>
-            </div>
-        </section>
-
-        <!-- 模块1: C语言第1-4章 -->
-        <section class="card" id="module1">
-            <div class="card-header">
-                <h2><span class="icon">💻</span> C语言基础（第1-4章）</h2>
-                <span class="arrow">▼</span>
-            </div>
-            <div class="card-content">
-                <div class="info-box">
-                    <strong>📌 重点：</strong>第3章(选择)、第4章(循环)是基础中的基础，必考！
-                </div>
-
-                <h3>第1章 程序设计基础</h3>
-                <ul>
-                    <li>程序 = 数据结构 + 算法</li>
-                    <li>三种基本结构：顺序、选择、循环</li>
-                    <li>N-S图、流程图的识别与绘制</li>
-                </ul>
-
-                <h3>第2章 数据类型与运算</h3>
-                <div class="knowledge-card">
-                    <h4>📌 基本数据类型</h4>
-                    <ul>
-                        <li><code>int</code> - 整型（2/4字节）</li>
-                        <li><code>float</code> - 单精度浮点（4字节，6-7位有效数字）</li>
-                        <li><code>double</code> - 双精度浮点（8字节，15-16位有效数字）</li>
-                        <li><code>char</code> - 字符型（1字节）</li>
-                    </ul>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 运算符优先级（必记）</h4>
-                    <p><strong>单目 > 算术 > 移位 > 关系 > 位 > 逻辑 > 条件 > 赋值 > 逗号</strong></p>
-                    <ul>
-                        <li><code>! </code> 优先级最高（单目）</li>
-                        <li><code>&&</code> 高于 <code>||</code></li>
-                        <li>赋值运算符自右向左结合：<code>a=b=c=1</code></li>
-                    </ul>
-                </div>
-
-                <h3>第3章 选择结构</h3>
-                <div class="knowledge-card">
-                    <h4>📌 if-else 配对规则</h4>
-                    <p><code>else</code> 与最近的、未配对的 <code>if</code> 配对</p>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 switch 注意事项</h4>
-                    <ul>
-                        <li>表达式必须是<strong>整型或字符型</strong></li>
-                        <li><code>case</code> 后必须是<strong>常量表达式</strong></li>
-                        <li>每个 <code>case</code> 后加 <code>break</code>，否则"穿透"</li>
-                    </ul>
-                </div>
-                <div class="tip-box">
-                    <strong>🎯 重点例题：</strong>例3-1、3-2、3-5（分段函数）、3-6（闰年判断）
-                </div>
-
-                <h3>第4章 循环结构</h3>
-                <div class="knowledge-card">
-                    <h4>📌 三种循环对比</h4>
+                    <h3>// 分值分布（预估）</h3>
                     <table>
-                        <tr>
-                            <th>循环</th>
-                            <th>特点</th>
-                            <th>适用场景</th>
-                        </tr>
-                        <tr>
-                            <td><code>for</code></td>
-                            <td>已知循环次数</td>
-                            <td>计数循环</td>
-                        </tr>
-                        <tr>
-                            <td><code>while</code></td>
-                            <td>先判断后执行</td>
-                            <td>条件循环</td>
-                        </tr>
-                        <tr>
-                            <td><code>do-while</code></td>
-                            <td>先执行后判断（至少1次）</td>
-                            <td>输入验证</td>
-                        </tr>
+                        <tr><th>部分</th><th>内容</th><th>分值</th></tr>
+                        <tr><td>C语言基础</td><td>语法、控制、数组、函数、指针</td><td>~20-25%</td></tr>
+                        <tr><td>单片机原理</td><td>硬件、指令、中断、定时器、串口</td><td>~75-80%</td></tr>
+                    </table>
+
+                    <h3>// 考试范围排除</h3>
+                    <div class="warning-box">
+                        <strong>C语言不考：</strong>5.3.3（递归调用）、8.4（共用体）、8.5（枚举类型）
+                    </div>
+                    <div class="warning-box">
+                        <strong>单片机不考：</strong>第4章、6.5节、第10章、9.1.3/9.1.4、9.2.3/9.2.4/9.2.5、9.3
+                    </div>
+
+                    <h3>// 教材章节对照</h3>
+                    <table>
+                        <tr><th>章节</th><th>标题</th><th>范围</th><th>页码</th></tr>
+                        <tr><td>Ch1</td><td>单片机概述</td><td>✅ 考</td><td>17</td></tr>
+                        <tr><td>Ch2</td><td>AT89S52硬件结构</td><td>✅ 考</td><td>31</td></tr>
+                        <tr><td>Ch3</td><td>8051指令系统</td><td>✅ 考</td><td>60</td></tr>
+                        <tr><td>Ch4</td><td>中断系统</td><td>❌ 不考</td><td>105</td></tr>
+                        <tr><td>Ch5</td><td>定时器/计数器</td><td>✅ 考</td><td>125</td></tr>
+                        <tr><td>Ch6</td><td>串行口</td><td>✅ 考(6.5除外)</td><td>151</td></tr>
+                        <tr><td>Ch7</td><td>显示、键盘接口</td><td>❌ 不考</td><td>187</td></tr>
+                        <tr><td>Ch8</td><td>外部存储器扩展</td><td>✅ 考</td><td>233</td></tr>
+                        <tr><td>Ch9</td><td>I/O扩展</td><td>✅ 考(部分)</td><td>255</td></tr>
+                        <tr><td>Ch10</td><td>DAC、ADC接口</td><td>❌ 不考</td><td>275</td></tr>
+                        <tr><td>Ch11</td><td>串行扩展</td><td>✅ 考</td><td>308</td></tr>
+                        <tr><td>Ch12-14</td><td>其他/抗干扰/设计</td><td>❌ 不考</td><td>332+</td></tr>
                     </table>
                 </div>
-                <div class="tip-box">
-                    <strong>🎯 重点例题：</strong>例4-1~4-10全部！特别是4-9（九九乘法表）、4-10（素数判断）
+            </div>
+        </section>
+
+        <!-- Module 1: C Language 1-4 -->
+        <section class="card" id="module1">
+            <div class="card-header">
+                <h2><span class="icon">💻</span> C语言基础（1-4章）</h2>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="card-body">
+                    <div class="info-box">
+                        第3章(选择)、第4章(循环)是基础中的基础，必考！
+                    </div>
+
+                    <h3>// Ch1 程序设计基础</h3>
+                    <ul>
+                        <li>程序 = 数据结构 + 算法</li>
+                        <li>三种基本结构：顺序、选择、循环</li>
+                        <li>N-S图、流程图的识别与绘制</li>
+                    </ul>
+
+                    <h3>// Ch2 数据类型与运算</h3>
+                    <div class="knowledge-card">
+                        <h4>基本数据类型</h4>
+                        <ul>
+                            <li><code>int</code> - 整型（2/4字节）</li>
+                            <li><code>float</code> - 单精度浮点（4字节，6-7位有效数字）</li>
+                            <li><code>double</code> - 双精度浮点（8字节，15-16位有效数字）</li>
+                            <li><code>char</code> - 字符型（1字节）</li>
+                        </ul>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>运算符优先级（必记）</h4>
+                        <p><strong>单目 > 算术 > 移位 > 关系 > 位 > 逻辑 > 条件 > 赋值 > 逗号</strong></p>
+                        <ul>
+                            <li><code>!</code> 优先级最高（单目）</li>
+                            <li><code>&&</code> 高于 <code>||</code></li>
+                            <li>赋值运算符自右向左结合：<code>a=b=c=1</code></li>
+                        </ul>
+                    </div>
+
+                    <h3>// Ch3 选择结构</h3>
+                    <div class="knowledge-card">
+                        <h4>if-else 配对规则</h4>
+                        <p><code>else</code> 与最近的、未配对的 <code>if</code> 配对</p>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>switch 注意事项</h4>
+                        <ul>
+                            <li>表达式必须是<strong>整型或字符型</strong></li>
+                            <li><code>case</code> 后必须是<strong>常量表达式</strong></li>
+                            <li>每个 <code>case</code> 后加 <code>break</code>，否则"穿透"</li>
+                        </ul>
+                    </div>
+                    <div class="tip-box">
+                        重点例题：例3-1、3-2、3-5（分段函数）、3-6（闰年判断）
+                    </div>
+
+                    <h3>// Ch4 循环结构</h3>
+                    <div class="knowledge-card">
+                        <h4>三种循环对比</h4>
+                        <table>
+                            <tr><th>循环</th><th>特点</th><th>适用场景</th></tr>
+                            <tr><td><code>for</code></td><td>已知循环次数</td><td>计数循环</td></tr>
+                            <tr><td><code>while</code></td><td>先判断后执行</td><td>条件循环</td></tr>
+                            <tr><td><code>do-while</code></td><td>先执行后判断（至少1次）</td><td>输入验证</td></tr>
+                        </table>
+                    </div>
+                    <div class="tip-box">
+                        重点例题：例4-1~4-10全部！特别是4-9（九九乘法表）、4-10（素数判断）
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- 模块2: C语言第5-8章 -->
+        <!-- Module 2: C Language 5-8 -->
         <section class="card" id="module2">
             <div class="card-header">
-                <h2><span class="icon">💻</span> C语言进阶（第5-8章）</h2>
+                <h2><span class="icon">💻</span> C语言进阶（5-8章）</h2>
                 <span class="arrow">▼</span>
             </div>
             <div class="card-content">
-                <div class="warning-box">
-                    <strong>⚠️ 不考：</strong>5.3.3（递归调用）、8.4（共用体）、8.5（枚举类型）
-                </div>
+                <div class="card-body">
+                    <div class="warning-box">
+                        不考：5.3.3（递归调用）、8.4（共用体）、8.5（枚举类型）
+                    </div>
 
-                <h3>第5章 函数</h3>
-                <div class="knowledge-card">
-                    <h4>📌 函数声明与定义</h4>
-                    <ul>
-                        <li>函数类型由 <code>return</code> 决定，缺省为 <code>int</code></li>
-                        <li>形参是局部变量，调用时分配，返回时释放</li>
-                        <li>数组作参数传递的是地址（可修改原数组）</li>
-                    </ul>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 变量的作用域和生存期</h4>
-                    <ul>
-                        <li><strong>局部变量</strong>：函数内有效，调用结束释放</li>
-                        <li><strong>全局变量</strong>：函数外定义，整个文件有效</li>
-                        <li><code>static</code> 局部变量：值保留到下次调用</li>
-                    </ul>
-                </div>
+                    <h3>// Ch5 函数</h3>
+                    <div class="knowledge-card">
+                        <h4>函数声明与定义</h4>
+                        <ul>
+                            <li>函数类型由 <code>return</code> 决定，缺省为 <code>int</code></li>
+                            <li>形参是局部变量，调用时分配，返回时释放</li>
+                            <li>数组作参数传递的是地址（可修改原数组）</li>
+                        </ul>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>变量的作用域和生存期</h4>
+                        <ul>
+                            <li><strong>局部变量</strong>：函数内有效，调用结束释放</li>
+                            <li><strong>全局变量</strong>：函数外定义，整个文件有效</li>
+                            <li><code>static</code> 局部变量：值保留到下次调用</li>
+                        </ul>
+                    </div>
 
-                <h3>第6章 数组</h3>
-                <div class="knowledge-card">
-                    <h4>📌 一维数组</h4>
-                    <ul>
-                        <li>定义：<code>int a[10];</code> 下标从0开始</li>
-                        <li>初始化：<code>int a[5]={1,2,3,4,5};</code></li>
-                        <li>部分初始化：<code>int a[5]={1,2};</code> 其余为0</li>
-                    </ul>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 二维数组</h4>
-                    <ul>
-                        <li>定义：<code>int a[3][4];</code> 3行4列</li>
-                        <li>按行存储，先行后列</li>
-                        <li>省略行数：<code>int a[][4]={{1,2},{3,4}};</code></li>
-                    </ul>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 字符数组与字符串</h4>
-                    <ul>
-                        <li>字符串以 <code>\0</code> 结尾</li>
-                        <li><code>strlen</code> 不计 <code>\0</code>，<code>sizeof</code> 计入</li>
-                        <li>常用函数：<code>strcpy</code>、<code>strcat</code>、<code>strcmp</code></li>
-                    </ul>
-                </div>
+                    <h3>// Ch6 数组</h3>
+                    <div class="knowledge-card">
+                        <h4>一维数组</h4>
+                        <ul>
+                            <li>定义：<code>int a[10];</code> 下标从0开始</li>
+                            <li>初始化：<code>int a[5]={1,2,3,4,5};</code></li>
+                            <li>部分初始化：<code>int a[5]={1,2};</code> 其余为0</li>
+                        </ul>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>二维数组</h4>
+                        <ul>
+                            <li>定义：<code>int a[3][4];</code> 3行4列</li>
+                            <li>按行存储，先行后列</li>
+                            <li>省略行数：<code>int a[][4]={{1,2},{3,4}};</code></li>
+                        </ul>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>字符数组与字符串</h4>
+                        <ul>
+                            <li>字符串以 <code>\0</code> 结尾</li>
+                            <li><code>strlen</code> 不计 <code>\0</code>，<code>sizeof</code> 计入</li>
+                            <li>常用函数：<code>strcpy</code>、<code>strcat</code>、<code>strcmp</code></li>
+                        </ul>
+                    </div>
 
-                <h3>第7章 指针</h3>
-                <div class="knowledge-card">
-                    <h4>📌 指针基础</h4>
-                    <ul>
-                        <li><code>&</code> 取地址，<code>*</code> 取内容</li>
-                        <li><code>int *p;</code> p是指向int的指针</li>
-                        <li>指针变量本身也有地址</li>
-                    </ul>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 指针与数组</h4>
-                    <ul>
-                        <li>数组名是首元素地址（常量指针）</li>
-                        <li><code>p+i</code> 等价于 <code>&a[i]</code></li>
-                        <li><code>*(p+i)</code> 等价于 <code>a[i]</code></li>
-                    </ul>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 指针与函数</h4>
-                    <ul>
-                        <li>地址传递可修改实参</li>
-                        <li>函数返回指针：<code>int *func()</code></li>
-                        <li>函数指针：<code>int (*p)(int, int)</code></li>
-                    </ul>
-                </div>
+                    <h3>// Ch7 指针</h3>
+                    <div class="knowledge-card">
+                        <h4>指针基础</h4>
+                        <ul>
+                            <li><code>&</code> 取地址，<code>*</code> 取内容</li>
+                            <li><code>int *p;</code> p是指向int的指针</li>
+                            <li>指针变量本身也有地址</li>
+                        </ul>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>指针与数组</h4>
+                        <ul>
+                            <li>数组名是首元素地址（常量指针）</li>
+                            <li><code>p+i</code> 等价于 <code>&a[i]</code></li>
+                            <li><code>*(p+i)</code> 等价于 <code>a[i]</code></li>
+                        </ul>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>指针与函数</h4>
+                        <ul>
+                            <li>地址传递可修改实参</li>
+                            <li>函数返回指针：<code>int *func()</code></li>
+                            <li>函数指针：<code>int (*p)(int, int)</code></li>
+                        </ul>
+                    </div>
 
-                <h3>第8章 结构体</h3>
-                <div class="knowledge-card">
-                    <h4>📌 结构体定义与使用</h4>
+                    <h3>// Ch8 结构体</h3>
+                    <div class="knowledge-card">
+                        <h4>结构体定义与使用</h4>
 <pre><code>struct Student {
     int num;
     char name[20];
     float score;
 };
 struct Student s1 = {101, "Li", 89.5};</code></pre>
-                </ul>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 结构体指针</h4>
-                    <ul>
-                        <li><code>p->成员</code> 等价于 <code>(*p).成员</code></li>
-                        <li>动态分配：<code>p = (struct Student *)malloc(sizeof(struct Student));</code></li>
-                    </ul>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>结构体指针</h4>
+                        <ul>
+                            <li><code>p->成员</code> 等价于 <code>(*p).成员</code></li>
+                            <li>动态分配：<code>p = (struct Student *)malloc(sizeof(struct Student));</code></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- 模块3: 单片机第1-2章 -->
+        <!-- Module 3: MCU Hardware -->
         <section class="card" id="module3">
             <div class="card-header">
-                <h2><span class="icon">🔧</span> 单片机概述与硬件结构（第1-2章）</h2>
+                <h2><span class="icon">🔧</span> 硬件结构（1-2章）</h2>
                 <span class="arrow">▼</span>
             </div>
             <div class="card-content">
-                <h3>第1章 单片机概述</h3>
-                <div class="knowledge-card">
-                    <h4>📌 基本概念</h4>
-                    <ul>
-                        <li>单片机 = CPU + 存储器 + I/O接口（集成在一块芯片上）</li>
-                        <li>哈佛结构：程序存储器和数据存储器分开</li>
-                        <li>MCS-51系列：8031/8051/8751</li>
-                    </ul>
-                </div>
+                <div class="card-body">
+                    <h3>// Ch1 单片机概述</h3>
+                    <div class="knowledge-card">
+                        <h4>基本概念</h4>
+                        <ul>
+                            <li>单片机 = CPU + 存储器 + I/O接口（集成在一块芯片上）</li>
+                            <li>哈佛结构：程序存储器和数据存储器分开</li>
+                            <li>MCS-51系列：8031/8051/8751</li>
+                        </ul>
+                    </div>
 
-                <h3>第2章 80C51硬件结构</h3>
-                <div class="knowledge-card">
-                    <h4>📌 引脚功能</h4>
-                    <ul>
-                        <li><strong>VCC</strong>(40脚)：+5V电源</li>
-                        <li><strong>VSS</strong>(20脚)：接地</li>
-                        <li><strong>XTAL1/XTAL2</strong>(19/18脚)：外接晶振</li>
-                        <li><strong>RST/VPD</strong>(9脚)：复位/备用电源</li>
-                        <li><strong>EA/VPP</strong>(31脚)：访问外部ROM允许</li>
-                        <li><strong>ALE/PROG</strong>(30脚)：地址锁存允许</li>
-                        <li><strong>PSEN</strong>(29脚)：外部ROM读选通</li>
-                    </ul>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 存储结构</h4>
-                    <ul>
-                        <li><strong>ROM</strong>：程序存储器（片内4KB，片外可扩展64KB）</li>
-                        <li><strong>RAM</strong>：数据存储器（片内256B，片外64KB）</li>
-                        <li>片内RAM分：工作寄存器区(00-1FH)、位寻址区(20-2FH)、通用RAM(30-7FH)、SFR(80-FFH)</li>
-                    </ul>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 并行I/O口</h4>
-                    <table>
-                        <tr>
-                            <th>端口</th>
-                            <th>特点</th>
-                        </tr>
-                        <tr>
-                            <td>P0</td>
-                            <td>开漏输出，外扩地址/数据总线复用</td>
-                        </tr>
-                        <tr>
-                            <td>P1</td>
-                            <td>准双向口，无第二功能</td>
-                        </tr>
-                        <tr>
-                            <td>P2</td>
-                            <td>准双向口，外扩时作高8位地址</td>
-                        </tr>
-                        <tr>
-                            <td>P3</td>
-                            <td>准双向口，有第二功能（串口/中断/定时器等）</td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 复位电路</h4>
-                    <ul>
-                        <li>上电自动复位 + 按键手动复位</li>
-                        <li>RST保持2个机器周期高电平复位</li>
-                        <li>复位后：PC=0000H，P0-P3=FFH，SP=07H</li>
-                    </ul>
+                    <h3>// Ch2 AT89S52 硬件结构</h3>
+                    <div class="knowledge-card">
+                        <h4>引脚功能</h4>
+                        <ul>
+                            <li><strong>VCC</strong>(40脚)：+5V电源</li>
+                            <li><strong>VSS</strong>(20脚)：接地</li>
+                            <li><strong>XTAL1/XTAL2</strong>(19/18脚)：外接晶振</li>
+                            <li><strong>RST/VPD</strong>(9脚)：复位/备用电源</li>
+                            <li><strong>EA/VPP</strong>(31脚)：访问外部ROM允许</li>
+                            <li><strong>ALE/PROG</strong>(30脚)：地址锁存允许</li>
+                            <li><strong>PSEN</strong>(29脚)：外部ROM读选通</li>
+                        </ul>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>存储结构</h4>
+                        <ul>
+                            <li><strong>ROM</strong>：程序存储器（片内4KB，片外可扩展64KB）</li>
+                            <li><strong>RAM</strong>：数据存储器（片内256B，片外64KB）</li>
+                            <li>片内RAM分：工作寄存器区(00-1FH)、位寻址区(20-2FH)、通用RAM(30-7FH)、SFR(80-FFH)</li>
+                        </ul>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>并行I/O口</h4>
+                        <table>
+                            <tr><th>端口</th><th>特点</th></tr>
+                            <tr><td>P0</td><td>开漏输出，外扩地址/数据总线复用</td></tr>
+                            <tr><td>P1</td><td>准双向口，无第二功能</td></tr>
+                            <tr><td>P2</td><td>准双向口，外扩时作高8位地址</td></tr>
+                            <tr><td>P3</td><td>准双向口，有第二功能（串口/中断/定时器等）</td></tr>
+                        </table>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>复位电路</h4>
+                        <ul>
+                            <li>上电自动复位 + 按键手动复位</li>
+                            <li>RST保持2个机器周期高电平复位</li>
+                            <li>复位后：PC=0000H，P0-P3=FFH，SP=07H</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- 模块4: 指令系统 -->
+        <!-- Module 4: Instruction Set -->
         <section class="card" id="module4">
             <div class="card-header">
                 <h2><span class="icon">📝</span> 指令系统（第3章）</h2>
                 <span class="arrow">▼</span>
             </div>
             <div class="card-content">
-                <div class="info-box">
-                    <strong>📌 重点：</strong>111条指令，重点掌握寻址方式和常用指令
-                </div>
+                <div class="card-body">
+                    <div class="info-box">
+                        111条指令，重点掌握寻址方式和常用指令
+                    </div>
 
-                <h3>七种寻址方式</h3>
-                <div class="knowledge-card">
-                    <h4>📌 1. 立即寻址</h4>
-                    <p>操作数在指令中：<code>MOV A, #30H</code></p>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 2. 直接寻址</h4>
-                    <p>操作数为地址：<code>MOV A, 30H</code>（访问片内RAM 30H单元）</p>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 3. 寄存器寻址</h4>
-                    <p>操作数在寄存器中：<code>MOV A, R0</code></p>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 4. 寄存器间接寻址</h4>
-                    <p>寄存器内容为地址：<code>MOV A, @R0</code>（R0中为地址）</p>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 5. 变址寻址</h4>
-                    <p>基址+变址：<code>MOVC A, @A+DPTR</code></p>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 6. 相对寻址</h4>
-                    <p>PC+偏移量：<code>SJMP rel</code>（相对转移）</p>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 7. 位寻址</h4>
-                    <p>对位操作：<code>MOV C, 20H</code>（位地址20H）</p>
-                </div>
+                    <h3>// 七种寻址方式</h3>
+                    <div class="knowledge-card">
+                        <h4>1. 立即寻址</h4>
+                        <p>操作数在指令中：<code>MOV A, #30H</code></p>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>2. 直接寻址</h4>
+                        <p>操作数为地址：<code>MOV A, 30H</code>（访问片内RAM 30H单元）</p>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>3. 寄存器寻址</h4>
+                        <p>操作数在寄存器中：<code>MOV A, R0</code></p>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>4. 寄存器间接寻址</h4>
+                        <p>寄存器内容为地址：<code>MOV A, @R0</code>（R0中为地址）</p>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>5. 变址寻址</h4>
+                        <p>基址+变址：<code>MOVC A, @A+DPTR</code></p>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>6. 相对寻址</h4>
+                        <p>PC+偏移量：<code>SJMP rel</code>（相对转移）</p>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>7. 位寻址</h4>
+                        <p>对位操作：<code>MOV C, 20H</code>（位地址20H）</p>
+                    </div>
 
-                <h3>常用指令分类</h3>
-                <div class="knowledge-card">
-                    <h4>📌 数据传送类</h4>
-                    <ul>
-                        <li><code>MOV</code> - 片内RAM传送</li>
-                        <li><code>MOVX</code> - 片外RAM传送</li>
-                        <li><code>MOVC</code> - ROM查表</li>
-                        <li><code>XCH</code> - 字节交换</li>
-                        <li><code>PUSH/POP</code> - 堆栈操作</li>
-                    </ul>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 算术运算类</h4>
-                    <ul>
-                        <li><code>ADD/ADDC</code> - 加法/带进位加</li>
-                        <li><code>SUBB</code> - 带借位减</li>
-                        <li><code>INC/DEC</code> - 加1/减1</li>
-                        <li><code>MUL AB</code> - 乘法（A×B→BA）</li>
-                        <li><code>DIV AB</code> - 除法（A÷B→A...B）</li>
-                        <li><code>DA A</code> - BCD调整</li>
-                    </ul>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 逻辑运算类</h4>
-                    <ul>
-                        <li><code>ANL</code> - 与</li>
-                        <li><code>ORL</code> - 或</li>
-                        <li><code>XRL</code> - 异或</li>
-                        <li><code>RL/RR/RLC/RRC</code> - 移位</li>
-                        <li><code>CPL</code> - 取反</li>
-                        <li><code>CLR</code> - 清零</li>
-                    </ul>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 控制转移类</h4>
-                    <ul>
-                        <li><code>LJMP/AJMP/SJMP/JMP</code> - 无条件转移</li>
-                        <li><code>JZ/JNZ</code> - 判断A是否为0</li>
-                        <li><code>CJNE</code> - 比较不等转移</li>
-                        <li><code>DJNZ</code> - 减1不为0转移（循环常用）</li>
-                        <li><code>LCALL/ACALL/RET</code> - 子程序调用与返回</li>
-                    </ul>
-                </div>
+                    <h3>// 常用指令分类</h3>
+                    <div class="knowledge-card">
+                        <h4>数据传送类</h4>
+                        <ul>
+                            <li><code>MOV</code> - 片内RAM传送</li>
+                            <li><code>MOVX</code> - 片外RAM传送</li>
+                            <li><code>MOVC</code> - ROM查表</li>
+                            <li><code>XCH</code> - 字节交换</li>
+                            <li><code>PUSH/POP</code> - 堆栈操作</li>
+                        </ul>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>算术运算类</h4>
+                        <ul>
+                            <li><code>ADD/ADDC</code> - 加法/带进位加</li>
+                            <li><code>SUBB</code> - 带借位减</li>
+                            <li><code>INC/DEC</code> - 加1/减1</li>
+                            <li><code>MUL AB</code> - 乘法（A×B→BA）</li>
+                            <li><code>DIV AB</code> - 除法（A÷B→A...B）</li>
+                            <li><code>DA A</code> - BCD调整</li>
+                        </ul>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>逻辑运算类</h4>
+                        <ul>
+                            <li><code>ANL</code> - 与 / <code>ORL</code> - 或 / <code>XRL</code> - 异或</li>
+                            <li><code>RL/RR/RLC/RRC</code> - 移位</li>
+                            <li><code>CPL</code> - 取反 / <code>CLR</code> - 清零</li>
+                        </ul>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>控制转移类</h4>
+                        <ul>
+                            <li><code>LJMP/AJMP/SJMP/JMP</code> - 无条件转移</li>
+                            <li><code>JZ/JNZ</code> - 判断A是否为0</li>
+                            <li><code>CJNE</code> - 比较不等转移</li>
+                            <li><code>DJNZ</code> - 减1不为0转移（循环常用）</li>
+                            <li><code>LCALL/ACALL/RET</code> - 子程序调用与返回</li>
+                        </ul>
+                    </div>
 
-                <div class="tip-box">
-                    <strong>🎯 重点例题：</strong>例3-3~3-14全部必须掌握！
+                    <div class="tip-box">
+                        重点例题：例3-3~3-14全部必须掌握！
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- 模块5: 汇编程序设计 -->
+        <!-- Module 5: Assembly Programming -->
         <section class="card" id="module5">
             <div class="card-header">
                 <h2><span class="icon">⚙️</span> 汇编程序设计（第5章）</h2>
                 <span class="arrow">▼</span>
             </div>
             <div class="card-content">
-                <div class="warning-box">
-                    <strong>⚠️ 不考：</strong>查表程序设计
-                </div>
+                <div class="card-body">
+                    <div class="warning-box">
+                        不考：查表程序设计
+                    </div>
 
-                <h3>伪指令</h3>
-                <div class="knowledge-card">
-                    <h4>📌 常用伪指令</h4>
-                    <ul>
-                        <li><code>ORG</code> - 起始地址：<code>ORG 0000H</code></li>
-                        <li><code>END</code> - 程序结束</li>
-                        <li><code>DB</code> - 定义字节：<code>DB 30H, 40H</code></li>
-                        <li><code>DW</code> - 定义字</li>
-                        <li><code>EQU</code> - 等值赋值：<code>DELAY EQU 30H</code></li>
-                        <li><code>DATA</code> - 数据地址赋值</li>
-                        <li><code>BIT</code> - 位地址赋值</li>
-                    </ul>
-                </div>
+                    <h3>// 伪指令</h3>
+                    <div class="knowledge-card">
+                        <h4>常用伪指令</h4>
+                        <ul>
+                            <li><code>ORG</code> - 起始地址：<code>ORG 0000H</code></li>
+                            <li><code>END</code> - 程序结束</li>
+                            <li><code>DB</code> - 定义字节：<code>DB 30H, 40H</code></li>
+                            <li><code>DW</code> - 定义字</li>
+                            <li><code>EQU</code> - 等值赋值：<code>DELAY EQU 30H</code></li>
+                            <li><code>DATA</code> - 数据地址赋值</li>
+                            <li><code>BIT</code> - 位地址赋值</li>
+                        </ul>
+                    </div>
 
-                <h3>基本程序结构</h3>
-                <div class="knowledge-card">
-                    <h4>📌 顺序程序</h4>
-                    <ul>
-                        <li>单字节/双字节加法</li>
-                        <li>拆字（高低字节分离）</li>
-                        <li>BCD码转换</li>
-                    </ul>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 分支程序</h4>
-                    <ul>
-                        <li>单分支：<code>JZ/JNZ</code></li>
-                        <li>多分支：散转（<code>JMP @A+DPTR</code>）</li>
-                    </ul>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 循环程序</h4>
-                    <ul>
-                        <li>单循环：计数初值 = 循环次数</li>
-                        <li>双重循环：延时程序</li>
-                        <li><code>DJNZ Rn, rel</code> 减1判0跳转</li>
-                    </ul>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 子程序</h4>
-                    <ul>
-                        <li>LCALL/ACALL 调用，RET 返回</li>
-                        <li>注意保护现场（PUSH/POP）</li>
-                    </ul>
-                </div>
+                    <h3>// 基本程序结构</h3>
+                    <div class="knowledge-card">
+                        <h4>顺序程序</h4>
+                        <ul>
+                            <li>单字节/双字节加法</li>
+                            <li>拆字（高低字节分离）</li>
+                            <li>BCD码转换</li>
+                        </ul>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>分支程序</h4>
+                        <ul>
+                            <li>单分支：<code>JZ/JNZ</code></li>
+                            <li>多分支：散转（<code>JMP @A+DPTR</code>）</li>
+                        </ul>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>循环程序</h4>
+                        <ul>
+                            <li>单循环：计数初值 = 循环次数</li>
+                            <li>双重循环：延时程序</li>
+                            <li><code>DJNZ Rn, rel</code> 减1判0跳转</li>
+                        </ul>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>子程序</h4>
+                        <ul>
+                            <li>LCALL/ACALL 调用，RET 返回</li>
+                            <li>注意保护现场（PUSH/POP）</li>
+                        </ul>
+                    </div>
 
-                <div class="tip-box">
-                    <strong>🎯 重点例题：</strong>例5-1~5-5全部必须掌握！
+                    <div class="tip-box">
+                        重点例题：例5-1~5-5全部必须掌握！
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- 模块6: 定时/计数器 -->
+        <!-- Module 6: Timer/Counter -->
         <section class="card" id="module6">
             <div class="card-header">
                 <h2><span class="icon">⏱️</span> 定时/计数器（第6章）</h2>
                 <span class="arrow">▼</span>
             </div>
             <div class="card-content">
-                <div class="warning-box">
-                    <strong>⚠️ 不考：</strong>6.5节
-                </div>
+                <div class="card-body">
+                    <div class="warning-box">
+                        不考：6.5节
+                    </div>
 
-                <h3>T0/T1 结构</h3>
-                <div class="knowledge-card">
-                    <h4>📌 核心寄存器</h4>
-                    <ul>
-                        <li><strong>TMOD</strong>（89H）：工作方式控制</li>
-                        <li><strong>TCON</strong>（88H）：控制和标志</li>
-                        <li><strong>TH0/TL0</strong>：定时器0高/低字节</li>
-                        <li><strong>TH1/TL1</strong>：定时器1高/字节</li>
-                    </ul>
-                </div>
+                    <h3>// T0/T1 核心寄存器</h3>
+                    <div class="knowledge-card">
+                        <h4>寄存器映射</h4>
+                        <ul>
+                            <li><strong>TMOD</strong>（89H）：工作方式控制</li>
+                            <li><strong>TCON</strong>（88H）：控制和标志</li>
+                            <li><strong>TH0/TL0</strong>：定时器0高/低字节</li>
+                            <li><strong>TH1/TL1</strong>：定时器1高/低字节</li>
+                        </ul>
+                    </div>
 
-                <h3>四种工作方式</h3>
-                <div class="knowledge-card">
-                    <h4>📌 方式0：13位定时/计数</h4>
-                    <p>TH0(8位) + TL0(5位) = 13位</p>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 方式1：16位定时/计数（最常用）</h4>
-                    <p>TH0(8位) + TL0(8位) = 16位</p>
-                    <p><strong>计数初值计算：</strong></p>
-                    <ul>
-                        <li>定时模式：X = 65536 - T×fosc/12</li>
-                        <li>计数模式：X = 65536 - N</li>
-                    </ul>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 方式2：8位自动重装</h4>
-                    <p>TL0计数，溢出时TH0自动重装，适合定时</p>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 方式3：仅T0可用</h4>
-                    <p>T0分为两个8位定时器，T1停止</p>
-                </div>
+                    <h3>// 四种工作方式</h3>
+                    <div class="knowledge-card">
+                        <h4>方式0：13位定时/计数</h4>
+                        <p>TH0(8位) + TL0(5位) = 13位</p>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>方式1：16位定时/计数（最常用）</h4>
+                        <p>TH0(8位) + TL0(8位) = 16位</p>
+                        <p><strong>计数初值计算：</strong></p>
+                        <ul>
+                            <li>定时模式：X = 65536 - T×fosc/12</li>
+                            <li>计数模式：X = 65536 - N</li>
+                        </ul>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>方式2：8位自动重装</h4>
+                        <p>TL0计数，溢出时TH0自动重装，适合定时</p>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>方式3：仅T0可用</h4>
+                        <p>T0分为两个8位定时器，T1停止</p>
+                    </div>
 
-                <h3>TMOD寄存器</h3>
-                <table>
-                    <tr>
-                        <th>位</th>
-                        <th>名称</th>
-                        <th>功能</th>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td>GATE</td>
-                        <td>T1门控位（1=INT1控制启停）</td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td>C/T</td>
-                        <td>T1定时/计数选择（0=定时，1=计数）</td>
-                    </tr>
-                    <tr>
-                        <td>5-4</td>
-                        <td>M1M0</td>
-                        <td>T1工作方式</td>
-                    </tr>
-                    <tr>
-                        <td>3-0</td>
-                        <td>-</td>
-                        <td>T0同上</td>
-                    </tr>
-                </table>
+                    <h3>// TMOD寄存器</h3>
+                    <table>
+                        <tr><th>位</th><th>名称</th><th>功能</th></tr>
+                        <tr><td>7</td><td>GATE</td><td>T1门控位（1=INT1控制启停）</td></tr>
+                        <tr><td>6</td><td>C/T</td><td>T1定时/计数选择（0=定时，1=计数）</td></tr>
+                        <tr><td>5-4</td><td>M1M0</td><td>T1工作方式</td></tr>
+                        <tr><td>3-0</td><td>-</td><td>T0同上</td></tr>
+                    </table>
 
-                <h3>应用步骤</h3>
-                <div class="knowledge-card">
-                    <h4>📌 定时器初始化</h4>
-                    <ol>
-                        <li>确定工作方式，写TMOD</li>
-                        <li>计算计数初值，装TH0/TL0</li>
-                        <li>开中断（ET0/ET1、EA）</li>
-                        <li>启动定时器（TR0/TR1）</li>
-                        <li>编写中断服务程序</li>
-                    </ol>
-                </div>
+                    <h3>// 初始化步骤</h3>
+                    <div class="knowledge-card">
+                        <h4>定时器初始化流程</h4>
+                        <ol>
+                            <li>确定工作方式，写TMOD</li>
+                            <li>计算计数初值，装TH0/TL0</li>
+                            <li>开中断（ET0/ET1、EA）</li>
+                            <li>启动定时器（TR0/TR1）</li>
+                            <li>编写中断服务程序</li>
+                        </ol>
+                    </div>
 
-                <div class="tip-box">
-                    <strong>🎯 重点例题：</strong>例6-1~6-5全部必须掌握！
+                    <div class="tip-box">
+                        重点例题：例6-1~6-5全部必须掌握！
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- 模块7: 中断系统 -->
+        <!-- Module 7: Interrupt System -->
         <section class="card" id="module7">
             <div class="card-header">
                 <h2><span class="icon">🔔</span> 中断系统（第7章）</h2>
                 <span class="arrow">▼</span>
             </div>
             <div class="card-content">
-                <div class="warning-box">
-                    <strong>⚠️ 不考：</strong>7.4节
-                </div>
+                <div class="card-body">
+                    <div class="warning-box">
+                        不考：7.4节
+                    </div>
 
-                <h3>五个中断源</h3>
-                <table>
-                    <tr>
-                        <th>中断源</th>
-                        <th>入口地址</th>
-                        <th>优先级</th>
-                    </tr>
-                    <tr>
-                        <td>INT0（外部中断0）</td>
-                        <td>0003H</td>
-                        <td>最高</td>
-                    </tr>
-                    <tr>
-                        <td>T0（定时器0）</td>
-                        <td>000BH</td>
-                        <td>↓</td>
-                    </tr>
-                    <tr>
-                        <td>INT1（外部中断1）</td>
-                        <td>0013H</td>
-                        <td>↓</td>
-                    </tr>
-                    <tr>
-                        <td>T1（定时器1）</td>
-                        <td>001BH</td>
-                        <td>↓</td>
-                    </tr>
-                    <tr>
-                        <td>串行口</td>
-                        <td>0023H</td>
-                        <td>最低</td>
-                    </tr>
-                </table>
+                    <h3>// 五个中断源</h3>
+                    <table>
+                        <tr><th>中断源</th><th>入口地址</th><th>优先级</th></tr>
+                        <tr><td>INT0（外部中断0）</td><td>0003H</td><td>最高</td></tr>
+                        <tr><td>T0（定时器0）</td><td>000BH</td><td>↓</td></tr>
+                        <tr><td>INT1（外部中断1）</td><td>0013H</td><td>↓</td></tr>
+                        <tr><td>T1（定时器1）</td><td>001BH</td><td>↓</td></tr>
+                        <tr><td>串行口</td><td>0023H</td><td>最低</td></tr>
+                    </table>
 
-                <h3>中断控制寄存器</h3>
-                <div class="knowledge-card">
-                    <h4>📌 TCON寄存器（88H）</h4>
-                    <ul>
-                        <li><strong>IT0/IT1</strong>：触发方式（0=低电平，1=下降沿）</li>
-                        <li><strong>IE0/IE1</strong>：中断请求标志</li>
-                        <li><strong>TR0/TR1</strong>：定时器启停</li>
-                        <li><strong>TF0/TF1</strong>：定时器溢出标志</li>
-                    </ul>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 IE寄存器（A8H）</h4>
-                    <ul>
-                        <li><strong>EA</strong>：总中断允许</li>
-                        <li><strong>ET0/ET1</strong>：定时器中断允许</li>
-                        <li><strong>EX0/EX1</strong>：外部中断允许</li>
-                        <li><strong>ES</strong>：串口中断允许</li>
-                    </ul>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 IP寄存器（B8H）</h4>
-                    <ul>
-                        <li><strong>PX0/PX1</strong>：外部中断优先级</li>
-                        <li><strong>PT0/PT1</strong>：定时器优先级</li>
-                        <li><strong>PS</strong>：串口优先级</li>
-                        <li>1=高优先级，0=低优先级</li>
-                    </ul>
-                </div>
+                    <h3>// 中断控制寄存器</h3>
+                    <div class="knowledge-card">
+                        <h4>TCON寄存器（88H）</h4>
+                        <ul>
+                            <li><strong>IT0/IT1</strong>：触发方式（0=低电平，1=下降沿）</li>
+                            <li><strong>IE0/IE1</strong>：中断请求标志</li>
+                            <li><strong>TR0/TR1</strong>：定时器启停</li>
+                            <li><strong>TF0/TF1</strong>：定时器溢出标志</li>
+                        </ul>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>IE寄存器（A8H）</h4>
+                        <ul>
+                            <li><strong>EA</strong>：总中断允许</li>
+                            <li><strong>ET0/ET1</strong>：定时器中断允许</li>
+                            <li><strong>EX0/EX1</strong>：外部中断允许</li>
+                            <li><strong>ES</strong>：串口中断允许</li>
+                        </ul>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>IP寄存器（B8H）</h4>
+                        <ul>
+                            <li><strong>PX0/PX1</strong>：外部中断优先级</li>
+                            <li><strong>PT0/PT1</strong>：定时器优先级</li>
+                            <li><strong>PS</strong>：串口优先级</li>
+                            <li>1=高优先级，0=低优先级</li>
+                        </ul>
+                    </div>
 
-                <h3>中断处理过程</h3>
-                <ol>
-                    <li>中断请求（硬件置位标志）</li>
-                    <li>中断响应（检查条件）</li>
-                    <li>断点保护（PC自动入栈）</li>
-                    <li>中断服务（执行ISR）</li>
-                    <li>中断返回（RETI）</li>
-                </ol>
+                    <h3>// 中断处理过程</h3>
+                    <ol>
+                        <li>中断请求（硬件置位标志）</li>
+                        <li>中断响应（检查条件）</li>
+                        <li>断点保护（PC自动入栈）</li>
+                        <li>中断服务（执行ISR）</li>
+                        <li>中断返回（RETI）</li>
+                    </ol>
 
-                <div class="tip-box">
-                    <strong>🎯 重点例题：</strong>例7-1~7-3全部必须掌握！
+                    <div class="tip-box">
+                        重点例题：例7-1~7-3全部必须掌握！
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- 模块8: 串口通信 -->
+        <!-- Module 8: Serial Port -->
         <section class="card" id="module8">
             <div class="card-header">
                 <h2><span class="icon">📡</span> 串口通信（第8章）</h2>
                 <span class="arrow">▼</span>
             </div>
             <div class="card-content">
-                <div class="warning-box">
-                    <strong>⚠️ 不考：</strong>8.5节
-                </div>
+                <div class="card-body">
+                    <div class="warning-box">
+                        不考：8.5节
+                    </div>
 
-                <h3>基本概念</h3>
-                <div class="knowledge-card">
-                    <h4>📌 通信方式</h4>
-                    <ul>
-                        <li><strong>串行/并行</strong>：数据位传输方式</li>
-                        <li><strong>同步/异步</strong>：时钟同步方式</li>
-                        <li><strong>单工/半双工/全双工</strong>：数据方向</li>
-                    </ul>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 波特率</h4>
-                    <ul>
-                        <li>每秒传输的二进制位数</li>
-                        <li>常用：9600、4800、2400 bps</li>
-                    </ul>
-                </div>
+                    <h3>// 基本概念</h3>
+                    <div class="knowledge-card">
+                        <h4>通信方式</h4>
+                        <ul>
+                            <li><strong>串行/并行</strong>：数据位传输方式</li>
+                            <li><strong>同步/异步</strong>：时钟同步方式</li>
+                            <li><strong>单工/半双工/全双工</strong>：数据方向</li>
+                        </ul>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>波特率</h4>
+                        <ul>
+                            <li>每秒传输的二进制位数</li>
+                            <li>常用：9600、4800、2400 bps</li>
+                        </ul>
+                    </div>
 
-                <h3>SCON寄存器（98H）</h3>
-                <table>
-                    <tr>
-                        <th>位</th>
-                        <th>名称</th>
-                        <th>功能</th>
-                    </tr>
-                    <tr>
-                        <td>7-6</td>
-                        <td>SM0-SM1</td>
-                        <td>工作方式选择（4种）</td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>SM2</td>
-                        <td>多机通信控制</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>REN</td>
-                        <td>允许接收</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>TB8</td>
-                        <td>发送第9位</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>RB8</td>
-                        <td>接收第9位</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>TI</td>
-                        <td>发送中断标志</td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>RI</td>
-                        <td>接收中断标志</td>
-                    </tr>
-                </table>
+                    <h3>// SCON寄存器（98H）</h3>
+                    <table>
+                        <tr><th>位</th><th>名称</th><th>功能</th></tr>
+                        <tr><td>7-6</td><td>SM0-SM1</td><td>工作方式选择（4种）</td></tr>
+                        <tr><td>5</td><td>SM2</td><td>多机通信控制</td></tr>
+                        <tr><td>4</td><td>REN</td><td>允许接收</td></tr>
+                        <tr><td>3</td><td>TB8</td><td>发送第9位</td></tr>
+                        <tr><td>2</td><td>RB8</td><td>接收第9位</td></tr>
+                        <tr><td>1</td><td>TI</td><td>发送中断标志</td></tr>
+                        <tr><td>0</td><td>RI</td><td>接收中断标志</td></tr>
+                    </table>
 
-                <h3>四种工作方式</h3>
-                <div class="knowledge-card">
-                    <h4>📌 方式0：同步移位</h4>
-                    <p>8位，波特率 = fosc/12</p>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 方式1：8位UART（最常用）</h4>
-                    <p>10位（1起始+8数据+1停止）</p>
-                    <p>波特率 = (2^SMOD/32) × T1溢出率</p>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 方式2：9位UART</h4>
-                    <p>11位，波特率 = (2^SMOD/64) × fosc</p>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 方式3：9位UART（可变波特率）</h4>
-                    <p>同方式2，波特率由T1决定</p>
-                </div>
+                    <h3>// 四种工作方式</h3>
+                    <div class="knowledge-card">
+                        <h4>方式0：同步移位</h4>
+                        <p>8位，波特率 = fosc/12</p>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>方式1：8位UART（最常用）</h4>
+                        <p>10位（1起始+8数据+1停止）</p>
+                        <p>波特率 = (2^SMOD/32) × T1溢出率</p>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>方式2：9位UART</h4>
+                        <p>11位，波特率 = (2^SMOD/64) × fosc</p>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>方式3：9位UART（可变波特率）</h4>
+                        <p>同方式2，波特率由T1决定</p>
+                    </div>
 
-                <h3>初始化步骤</h3>
-                <ol>
-                    <li>设置SCON（工作方式）</li>
-                    <li>设置PCON（SMOD波特率倍增）</li>
-                    <li>设置T1（波特率发生器，方式2）</li>
-                    <li>开中断（ES、EA）</li>
-                    <li>启动T1（TR1）</li>
-                </ol>
+                    <h3>// 初始化步骤</h3>
+                    <ol>
+                        <li>设置SCON（工作方式）</li>
+                        <li>设置PCON（SMOD波特率倍增）</li>
+                        <li>设置T1（波特率发生器，方式2）</li>
+                        <li>开中断（ES、EA）</li>
+                        <li>启动T1（TR1）</li>
+                    </ol>
 
-                <div class="tip-box">
-                    <strong>🎯 重点例题：</strong>例8-1~8-7全部必须掌握！
+                    <div class="tip-box">
+                        重点例题：例8-1~8-7全部必须掌握！
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- 模块9: 系统扩展 -->
+        <!-- Module 9: System Extension -->
         <section class="card" id="module9">
             <div class="card-header">
                 <h2><span class="icon">🔌</span> 系统扩展（第9章）</h2>
                 <span class="arrow">▼</span>
             </div>
             <div class="card-content">
-                <div class="warning-box">
-                    <strong>⚠️ 不考：</strong>9.1.3、9.1.4、9.2.3、9.2.4、9.2.5、9.3
-                </div>
+                <div class="card-body">
+                    <div class="warning-box">
+                        不考：9.1.3、9.1.4、9.2.3、9.2.4、9.2.5、9.3
+                    </div>
 
-                <h3>9.1 存储器扩展</h3>
-                <div class="knowledge-card">
-                    <h4>📌 ROM扩展（只读存储器）</h4>
-                    <ul>
-                        <li>27系列EPROM：2716(2K)、2732(4K)、2764(8K)</li>
-                        <li>28系列EEPROM：电擦除</li>
-                        <li>连接：P0低8位地址+数据复用，P2高8位地址</li>
-                    </ul>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 RAM扩展（随机存储器）</h4>
-                    <ul>
-                        <li>6116(2K)、6264(8K)</li>
-                        <li>片选信号：CE（低有效）</li>
-                        <li>读写控制：OE、WE</li>
-                    </ul>
-                </div>
+                    <h3>// 9.1 存储器扩展</h3>
+                    <div class="knowledge-card">
+                        <h4>ROM扩展（只读存储器）</h4>
+                        <ul>
+                            <li>27系列EPROM：2716(2K)、2732(4K)、2764(8K)</li>
+                            <li>28系列EEPROM：电擦除</li>
+                            <li>连接：P0低8位地址+数据复用，P2高8位地址</li>
+                        </ul>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>RAM扩展（随机存储器）</h4>
+                        <ul>
+                            <li>6116(2K)、6264(8K)</li>
+                            <li>片选信号：CE（低有效）</li>
+                            <li>读写控制：OE、WE</li>
+                        </ul>
+                    </div>
 
-                <h3>9.2 I/O口扩展</h3>
-                <div class="knowledge-card">
-                    <h4>📌 8255A可编程接口</h4>
-                    <ul>
-                        <li>3个8位口：PA、PB、PC</li>
-                        <li>PC口可分两个4位使用</li>
-                        <li>4个端口地址：A口、B口、C口、控制口</li>
-                    </ul>
-                </div>
+                    <h3>// 9.2 I/O口扩展</h3>
+                    <div class="knowledge-card">
+                        <h4>8255A可编程接口</h4>
+                        <ul>
+                            <li>3个8位口：PA、PB、PC</li>
+                            <li>PC口可分两个4位使用</li>
+                            <li>4个端口地址：A口、B口、C口、控制口</li>
+                        </ul>
+                    </div>
 
-                <h3>总线扩展</h3>
-                <div class="knowledge-card">
-                    <h4>📌 三总线</h4>
-                    <ul>
-                        <li><strong>地址总线（AB）</strong>：P0低8位（74LS373锁存）+ P2高8位</li>
-                        <li><strong>数据总线（DB）</strong>：P0分时复用</li>
-                        <li><strong>控制总线（CB）</strong>：RD、WR、PSEN、ALE等</li>
-                    </ul>
-                </div>
+                    <h3>// 总线扩展</h3>
+                    <div class="knowledge-card">
+                        <h4>三总线</h4>
+                        <ul>
+                            <li><strong>地址总线（AB）</strong>：P0低8位（74LS373锁存）+ P2高8位</li>
+                            <li><strong>数据总线（DB）</strong>：P0分时复用</li>
+                            <li><strong>控制总线（CB）</strong>：RD、WR、PSEN、ALE等</li>
+                        </ul>
+                    </div>
 
-                <div class="tip-box">
-                    <strong>🎯 重点例题：</strong>例9-1~9-5全部必须掌握！
+                    <div class="tip-box">
+                        重点例题：例9-1~9-5全部必须掌握！
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- 模块10: C51编程 -->
+        <!-- Module 10: C51 Programming -->
         <section class="card" id="module10">
             <div class="card-header">
                 <h2><span class="icon">📟</span> C51编程（第11章）</h2>
                 <span class="arrow">▼</span>
             </div>
             <div class="card-content">
-                <h3>C51与标准C的区别</h3>
-                <div class="knowledge-card">
-                    <h4>📌 数据类型</h4>
-                    <ul>
-                        <li><code>bit</code> - 位变量</li>
-                        <li><code>sbit</code> - 特殊功能位</li>
-                        <li><code>sfr</code> - 特殊功能寄存器（1字节）</li>
-                        <li><code>sfr16</code> - 16位特殊功能寄存器</li>
-                    </ul>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 存储类型</h4>
-                    <table>
-                        <tr>
-                            <th>关键字</th>
-                            <th>存储区域</th>
-                        </tr>
-                        <tr>
-                            <td><code>data</code></td>
-                            <td>片内RAM直接寻址（00-7FH）</td>
-                        </tr>
-                        <tr>
-                            <td><code>bdata</code></td>
-                            <td>片内RAM位寻址区（20-2FH）</td>
-                        </tr>
-                        <tr>
-                            <td><code>idata</code></td>
-                            <td>片内RAM间接寻址（00-FFH）</td>
-                        </tr>
-                        <tr>
-                            <td><code>xdata</code></td>
-                            <td>片外RAM（0000-FFFFH）</td>
-                        </tr>
-                        <tr>
-                            <td><code>code</code></td>
-                            <td>ROM程序存储器</td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 中断函数</h4>
+                <div class="card-body">
+                    <h3>// C51与标准C的区别</h3>
+                    <div class="knowledge-card">
+                        <h4>数据类型</h4>
+                        <ul>
+                            <li><code>bit</code> - 位变量</li>
+                            <li><code>sbit</code> - 特殊功能位</li>
+                            <li><code>sfr</code> - 特殊功能寄存器（1字节）</li>
+                            <li><code>sfr16</code> - 16位特殊功能寄存器</li>
+                        </ul>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>存储类型</h4>
+                        <table>
+                            <tr><th>关键字</th><th>存储区域</th></tr>
+                            <tr><td><code>data</code></td><td>片内RAM直接寻址（00-7FH）</td></tr>
+                            <tr><td><code>bdata</code></td><td>片内RAM位寻址区（20-2FH）</td></tr>
+                            <tr><td><code>idata</code></td><td>片内RAM间接寻址（00-FFH）</td></tr>
+                            <tr><td><code>xdata</code></td><td>片外RAM（0000-FFFFH）</td></tr>
+                            <tr><td><code>code</code></td><td>ROM程序存储器</td></tr>
+                        </table>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>中断函数</h4>
 <pre><code>void Timer0_ISR() interrupt 1 {
-    // 中断服务程序
     // interrupt n: 中断号
     // 0=INT0, 1=T0, 2=INT1, 3=T1, 4=串口
 }</code></pre>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 SFR定义示例</h4>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>SFR定义示例</h4>
 <pre><code>#include &lt;reg51.h&gt;
 
 sbit LED = P1^0;  // P1.0位定义
@@ -1639,18 +1586,18 @@ void main() {
     LED = 0;  // 点亮LED
     while(1);
 }</code></pre>
-                </div>
+                    </div>
 
-                <h3>常用应用</h3>
-                <div class="knowledge-card">
-                    <h4>📌 I/O操作</h4>
+                    <h3>// 常用应用</h3>
+                    <div class="knowledge-card">
+                        <h4>I/O操作</h4>
 <pre><code>// 读P1口
 unsigned char val = P1;
 // 写P2口
 P2 = 0x55;</code></pre>
-                </div>
-                <div class="knowledge-card">
-                    <h4>📌 定时器C51实现</h4>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4>定时器C51实现</h4>
 <pre><code>void Timer0_Init() {
     TMOD = 0x01;  // T0方式1
     TH0 = 0x3C;   // 50ms初值
@@ -1663,25 +1610,26 @@ P2 = 0x55;</code></pre>
 void Timer0_ISR() interrupt 1 {
     TH0 = 0x3C;   // 重装初值
     TL0 = 0xB0;
-    // 定时处理
 }</code></pre>
-                </div>
+                    </div>
 
-                <div class="tip-box">
-                    <strong>🎯 重点例题：</strong>例11-2~11-10全部必须掌握！
+                    <div class="tip-box">
+                        重点例题：例11-2~11-10全部必须掌握！
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- 代码模板模块 -->
+        <!-- Code Templates -->
         <section class="card" id="code-templates">
             <div class="card-header">
                 <h2><span class="icon">📝</span> 常用代码模板</h2>
                 <span class="arrow">▼</span>
             </div>
             <div class="card-content">
-                <div class="code-template">
-                    <h4>📌 定时器初始化模板</h4>
+                <div class="card-body">
+                    <div class="code-template">
+                        <h4>定时器初始化模板</h4>
 <pre><code>void Timer0_Init(void) {
     TMOD = 0x01;    // T0方式1，16位定时
     TH0 = 0x3C;     // 50ms初值 (12MHz)
@@ -1696,10 +1644,10 @@ void Timer0_ISR(void) interrupt 1 {
     TL0 = 0xB0;
     // 定时处理代码
 }</code></pre>
-                </div>
+                    </div>
 
-                <div class="code-template">
-                    <h4>📌 串口初始化模板</h4>
+                    <div class="code-template">
+                        <h4>串口初始化模板</h4>
 <pre><code>void UART_Init(void) {
     SCON = 0x50;    // 方式1，允许接收
     PCON = 0x00;    // 不倍增
@@ -1714,18 +1662,16 @@ void Timer0_ISR(void) interrupt 1 {
 void UART_ISR(void) interrupt 4 {
     if (RI) {
         RI = 0;
-        // 接收处理
         SBUF = SBUF;  // 回显
     }
     if (TI) {
         TI = 0;
-        // 发送完成处理
     }
 }</code></pre>
-                </div>
+                    </div>
 
-                <div class="code-template">
-                    <h4>📌 外部中断初始化模板</h4>
+                    <div class="code-template">
+                        <h4>外部中断初始化模板</h4>
 <pre><code>void INT0_Init(void) {
     IT0 = 1;    // 下降沿触发
     EX0 = 1;    // 开外部中断0
@@ -1735,10 +1681,10 @@ void UART_ISR(void) interrupt 4 {
 void INT0_ISR(void) interrupt 0 {
     // 中断处理代码
 }</code></pre>
-                </div>
+                    </div>
 
-                <div class="code-template">
-                    <h4>📌 延时函数模板</h4>
+                    <div class="code-template">
+                        <h4>延时函数模板</h4>
 <pre><code>// 毫秒延时 (12MHz)
 void Delay_ms(unsigned int ms) {
     unsigned int i, j;
@@ -1750,71 +1696,68 @@ void Delay_ms(unsigned int ms) {
 void Delay_us(unsigned int us) {
     while (us--);
 }</code></pre>
-                </div>
+                    </div>
 
-                <div class="code-template">
-                    <h4>📌 GPIO操作模板</h4>
+                    <div class="code-template">
+                        <h4>GPIO操作模板</h4>
 <pre><code>#include &lt;reg52.h&gt;
 
 sbit LED = P1^0;    // LED接P1.0
 sbit KEY = P3^2;    // 按键接P3.2
 
 void main(void) {
-    LED = 1;         // 初始熄灭
+    LED = 1;
     while (1) {
-        if (KEY == 0) {      // 按键按下
-            Delay_ms(20);    // 消抖
+        if (KEY == 0) {
+            Delay_ms(20);
             if (KEY == 0) {
-                LED = ~LED;  // 翻转LED
-                while (!KEY); // 等待释放
+                LED = ~LED;
+                while (!KEY);
             }
         }
     }
 }</code></pre>
-                </div>
+                    </div>
 
-                <div class="code-template">
-                    <h4>📌 矩阵键盘扫描模板</h4>
+                    <div class="code-template">
+                        <h4>矩阵键盘扫描模板</h4>
 <pre><code>unsigned char KeyScan(void) {
     unsigned char key = 0;
-    P1 = 0x0F;           // 行线输出0
-    if (P1 != 0x0F) {    // 有键按下
-        Delay_ms(20);     // 消抖
+    P1 = 0x0F;
+    if (P1 != 0x0F) {
+        Delay_ms(20);
         if (P1 != 0x0F) {
-            // 扫描行
-            P1 = 0xFE;   // 第1行
+            P1 = 0xFE;
             if (P1 != 0xFE) key = ...;
-            P1 = 0xFD;   // 第2行
+            P1 = 0xFD;
             if (P1 != 0xFD) key = ...;
-            // ... 继续扫描
         }
     }
     return key;
 }</code></pre>
-                </div>
+                    </div>
 
-                <div class="tip-box">
-                    <strong>💡 提示：</strong>以上模板基于12MHz晶振，实际使用时需根据晶振频率调整定时初值和延时参数。
+                    <div class="tip-box">
+                        以上模板基于12MHz晶振，实际使用时需根据晶振频率调整定时初值和延时参数。
+                    </div>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <!-- 页脚 -->
+    <!-- Footer -->
     <footer class="footer">
-        <p>📖 单片机原理及C语言编程应用 - 考前速记</p>
-        <p style="color: var(--primary); font-weight: 600;">📅 考试时间：2026-06-29 周一 10:30-12:30</p>
-        <p>祝考试顺利！加油！💪</p>
-        <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 0.5rem;">Composed by MashedPotato</p>
-        <p style="font-size: 0.8rem; opacity: 0.6;">最后更新：<span id="lastModified"></span></p>
+        <p>AT89S52 Exam Notes</p>
+        <p class="highlight">2026-06-29 | 10:30-12:30 | 祝考试顺利！</p>
+        <p style="opacity: 0.5; margin-top: 0.5rem;">Composed by MashedPotato | Last updated: <span id="lastModified"></span></p>
     </footer>
 
-    <!-- 返回顶部按钮 -->
+    <!-- Back to top -->
     <button class="back-to-top" id="backToTop" aria-label="返回顶部">↑</button>
 
     <script>
-        // 手风琴折叠
+        // Accordion
         document.querySelectorAll('.card-header').forEach(header => {
             header.addEventListener('click', () => {
                 const card = header.parentElement;
@@ -1822,7 +1765,7 @@ void main(void) {
             });
         });
 
-        // 汉堡菜单
+        // Hamburger menu
         const menuToggle = document.getElementById('menuToggle');
         const fullscreenNav = document.getElementById('fullscreenNav');
 
@@ -1838,7 +1781,7 @@ void main(void) {
             document.body.style.overflow = '';
         }
 
-        // 返回顶部
+        // Back to top
         const backToTop = document.getElementById('backToTop');
 
         window.addEventListener('scroll', () => {
@@ -1850,22 +1793,16 @@ void main(void) {
         });
 
         backToTop.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        // 最后更新时间
+        // Last modified
         document.getElementById('lastModified').textContent = new Date(document.lastModified).toLocaleString('zh-CN', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit'
+            year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit'
         });
 
-        // 默认展开第一个模块
+        // Auto-expand first card
         document.querySelector('.card').classList.add('active');
     </script>
 </body>
