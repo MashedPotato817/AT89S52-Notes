@@ -1044,14 +1044,14 @@
 
                     <h3>// Ch1 程序设计基础</h3>
                     <ul>
-                        <li>程序 = 数据结构 + 算法</li>
-                        <li>三种基本结构：顺序、选择、循环</li>
-                        <li>N-S图、流程图的识别与绘制</li>
+                        <li><span class="level-tag level-tag-know">了解</span>程序 = 数据结构 + 算法</li>
+                        <li><span class="level-tag level-tag-know">了解</span>三种基本结构：顺序、选择、循环</li>
+                        <li><span class="level-tag level-tag-master">熟练掌握</span>N-S图、流程图的识别与绘制</li>
                     </ul>
 
                     <h3>// Ch2 数据类型与运算</h3>
                     <div class="knowledge-card">
-                        <h4>基本数据类型</h4>
+                        <h4><span class="level-tag level-tag-master">掌握</span>基本数据类型</h4>
                         <ul>
                             <li><code>int</code> - 整型（2/4字节）</li>
                             <li><code>float</code> - 单精度浮点（4字节，6-7位有效数字）</li>
@@ -1060,7 +1060,7 @@
                         </ul>
                     </div>
                     <div class="knowledge-card">
-                        <h4>运算符优先级（必记）</h4>
+                        <h4><span class="level-tag level-tag-master">掌握</span>运算符优先级（必记）</h4>
                         <p><strong>单目 > 算术 > 移位 > 关系 > 位 > 逻辑 > 条件 > 赋值 > 逗号</strong></p>
                         <ul>
                             <li><code>!</code> 优先级最高（单目）</li>
@@ -1071,11 +1071,11 @@
 
                     <h3>// Ch3 选择结构</h3>
                     <div class="knowledge-card">
-                        <h4>if-else 配对规则</h4>
+                        <h4><span class="level-tag level-tag-master">掌握</span>if-else 配对规则</h4>
                         <p><code>else</code> 与最近的、未配对的 <code>if</code> 配对</p>
                     </div>
                     <div class="knowledge-card">
-                        <h4>switch 注意事项</h4>
+                        <h4><span class="level-tag level-tag-master">掌握</span>switch 注意事项</h4>
                         <ul>
                             <li>表达式必须是<strong>整型或字符型</strong></li>
                             <li><code>case</code> 后必须是<strong>常量表达式</strong></li>
@@ -1088,13 +1088,20 @@
 
                     <h3>// Ch4 循环结构</h3>
                     <div class="knowledge-card">
-                        <h4>三种循环对比</h4>
+                        <h4><span class="level-tag level-tag-master">熟练掌握</span>三种循环对比</h4>
                         <table>
                             <tr><th>循环</th><th>特点</th><th>适用场景</th></tr>
                             <tr><td><code>for</code></td><td>已知循环次数</td><td>计数循环</td></tr>
                             <tr><td><code>while</code></td><td>先判断后执行</td><td>条件循环</td></tr>
                             <tr><td><code>do-while</code></td><td>先执行后判断（至少1次）</td><td>输入验证</td></tr>
                         </table>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-understand">理解</span>break和continue</h4>
+                        <ul>
+                            <li><code>break</code>：跳出当前循环</li>
+                            <li><code>continue</code>：跳过本次循环，继续下一次</li>
+                        </ul>
                     </div>
                     <div class="tip-box">
                         重点例题：例4-1~4-10全部！特别是4-9（九九乘法表）、4-10（素数判断）
@@ -1117,7 +1124,7 @@
 
                     <h3>// Ch5 函数</h3>
                     <div class="knowledge-card">
-                        <h4>函数声明与定义</h4>
+                        <h4><span class="level-tag level-tag-master">熟练掌握</span>函数声明与定义</h4>
                         <ul>
                             <li>函数类型由 <code>return</code> 决定，缺省为 <code>int</code></li>
                             <li>形参是局部变量，调用时分配，返回时释放</li>
@@ -1125,7 +1132,7 @@
                         </ul>
                     </div>
                     <div class="knowledge-card">
-                        <h4>变量的作用域和生存期</h4>
+                        <h4><span class="level-tag level-tag-understand">理解</span>变量的作用域和生存期</h4>
                         <ul>
                             <li><strong>局部变量</strong>：函数内有效，调用结束释放</li>
                             <li><strong>全局变量</strong>：函数外定义，整个文件有效</li>
@@ -1135,7 +1142,7 @@
 
                     <h3>// Ch6 数组</h3>
                     <div class="knowledge-card">
-                        <h4>一维数组</h4>
+                        <h4><span class="level-tag level-tag-master">熟练掌握</span>一维数组</h4>
                         <ul>
                             <li>定义：<code>int a[10];</code> 下标从0开始</li>
                             <li>初始化：<code>int a[5]={1,2,3,4,5};</code></li>
@@ -1143,7 +1150,7 @@
                         </ul>
                     </div>
                     <div class="knowledge-card">
-                        <h4>二维数组</h4>
+                        <h4><span class="level-tag level-tag-know">了解</span>二维数组</h4>
                         <ul>
                             <li>定义：<code>int a[3][4];</code> 3行4列</li>
                             <li>按行存储，先行后列</li>
@@ -1151,7 +1158,7 @@
                         </ul>
                     </div>
                     <div class="knowledge-card">
-                        <h4>字符数组与字符串</h4>
+                        <h4><span class="level-tag level-tag-master">掌握</span>字符数组与字符串</h4>
                         <ul>
                             <li>字符串以 <code>\0</code> 结尾</li>
                             <li><code>strlen</code> 不计 <code>\0</code>，<code>sizeof</code> 计入</li>
@@ -1161,7 +1168,7 @@
 
                     <h3>// Ch7 指针</h3>
                     <div class="knowledge-card">
-                        <h4>指针基础</h4>
+                        <h4><span class="level-tag level-tag-understand">理解</span>指针基础</h4>
                         <ul>
                             <li><code>&</code> 取地址，<code>*</code> 取内容</li>
                             <li><code>int *p;</code> p是指向int的指针</li>
@@ -1169,7 +1176,7 @@
                         </ul>
                     </div>
                     <div class="knowledge-card">
-                        <h4>指针与数组</h4>
+                        <h4><span class="level-tag level-tag-understand">理解</span>指针与数组</h4>
                         <ul>
                             <li>数组名是首元素地址（常量指针）</li>
                             <li><code>p+i</code> 等价于 <code>&a[i]</code></li>
@@ -1177,7 +1184,7 @@
                         </ul>
                     </div>
                     <div class="knowledge-card">
-                        <h4>指针与函数</h4>
+                        <h4><span class="level-tag level-tag-know">了解</span>指针与函数</h4>
                         <ul>
                             <li>地址传递可修改实参</li>
                             <li>函数返回指针：<code>int *func()</code></li>
@@ -1187,7 +1194,7 @@
 
                     <h3>// Ch8 结构体</h3>
                     <div class="knowledge-card">
-                        <h4>结构体定义与使用</h4>
+                        <h4><span class="level-tag level-tag-master">掌握</span>结构体定义与使用</h4>
 <pre><code>struct Student {
     int num;
     char name[20];
@@ -1196,7 +1203,7 @@
 struct Student s1 = {101, "Li", 89.5};</code></pre>
                     </div>
                     <div class="knowledge-card">
-                        <h4>结构体指针</h4>
+                        <h4><span class="level-tag level-tag-know">了解</span>结构体指针</h4>
                         <ul>
                             <li><code>p->成员</code> 等价于 <code>(*p).成员</code></li>
                             <li>动态分配：<code>p = (struct Student *)malloc(sizeof(struct Student));</code></li>
