@@ -783,6 +783,7 @@
 
     <!-- Fullscreen Nav -->
     <nav class="fullscreen-nav" id="fullscreenNav">
+        <a href="#guide" onclick="closeMenu()">📖 复习指南</a>
         <a href="#module0" onclick="closeMenu()">📋 考试信息</a>
         <a href="#module1" onclick="closeMenu()">💻 C语言基础（1-4章）</a>
         <a href="#module2" onclick="closeMenu()">💻 C语言进阶（5-8章）</a>
@@ -807,6 +808,7 @@
 
     <!-- Quick Nav -->
     <div class="quick-nav">
+        <a href="#guide">GUIDE</a>
         <a href="#module0">EXAM</a>
         <a href="#module1">C 1-4</a>
         <a href="#module2">C 5-8</a>
@@ -823,6 +825,395 @@
 
     <!-- Main -->
     <main class="container">
+
+        <!-- Guide: 复习指南 -->
+        <section class="card" id="guide">
+            <div class="card-header">
+                <h2><span class="icon">📖</span> 复习指南</h2>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="card-body">
+                    <div class="info-box">
+                        考试时间：2026年6月29日（星期一）上午 10:30-12:30<br>
+                        考试地点：学思楼219、220<br>
+                        <em>注：以学院教务最终通知为准</em>
+                    </div>
+
+                    <h3>// 📘 《C语言程序设计》复习指南</h3>
+                    <ul>
+                        <li><strong>考试范围</strong>：教材第1、2、3、4、5、6、7、8章</li>
+                        <li><strong>分值占比</strong>：约20%~25%</li>
+                    </ul>
+
+                    <div class="accordion">
+                        <div class="accordion-header">
+                            <span>第一章 引言</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <ol>
+                                <li>了解程序的概念</li>
+                                <li>了解C语言的主要特点和使用场合</li>
+                                <li>掌握C语言标识符合法的定义</li>
+                                <li>熟练掌握使用流程图描述简单算法</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="accordion">
+                        <div class="accordion-header">
+                            <span>第二章 用C语言编写程序</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <ol>
+                                <li>熟悉使用编辑环境编写C语言程序</li>
+                                <li>会使用格式化输入输出函数 <code>printf()</code>、<code>scanf()</code></li>
+                                <li>掌握变量、常量、基本数据类型的概念、定义与使用</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="accordion">
+                        <div class="accordion-header">
+                            <span>第三章 分支结构</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <ol>
+                                <li>掌握 <code>if-else</code>、<code>switch</code> 结构，能使用该结构编写程序</li>
+                                <li>掌握字符型数据的概念、定义和使用</li>
+                                <li>了解使用 <code>else-if</code> 的多分支结构</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="accordion">
+                        <div class="accordion-header">
+                            <span>第四章 循环结构</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <ol>
+                                <li>熟练掌握 <code>while</code>、<code>do-while</code>、<code>for</code> 结构，能使用该结构编程</li>
+                                <li>理解 <code>break</code>、<code>continue</code> 语句</li>
+                                <li>了解循环嵌套</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="accordion">
+                        <div class="accordion-header">
+                            <span>第五章 函数</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <ol>
+                                <li>熟练掌握函数的定义与调用</li>
+                                <li>理解调用函数过程中参数的传递过程</li>
+                                <li>理解全局变量和局部变量</li>
+                                <li>了解结构化程序设计思想</li>
+                            </ol>
+                            <div class="warning-box">
+                                本次考试不包含：5.3.3 变量生存期和静态局部变量
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion">
+                        <div class="accordion-header">
+                            <span>第六章 回顾数据类型和表达式</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <ol>
+                                <li>熟练掌握基本数据类型的输入输出</li>
+                                <li>熟练掌握C语言中的各类表达式</li>
+                                <li>了解类型转换</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="accordion">
+                        <div class="accordion-header">
+                            <span>第七章 数组</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <ol>
+                                <li>熟练掌握一维数组的定义与使用</li>
+                                <li>了解二维数组的定义与使用</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="accordion">
+                        <div class="accordion-header">
+                            <span>第八章 指针</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <ol>
+                                <li>理解指针的基本概念、掌握指针变量的定义与基本运算</li>
+                                <li>理解数组、指针和地址之间的关系</li>
+                                <li>了解指针作为函数的参数</li>
+                            </ol>
+                            <div class="warning-box">
+                                本次考试不包含：8.4 字符串压缩、8.5 任意个整数求和
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>// 📙 《单片机原理及应用》复习指南</h3>
+                    <ul>
+                        <li><strong>考试范围</strong>：教材第1、2、3、5、6、7、8、9、11章</li>
+                        <li><strong>排除章节</strong>：1.7、1.8；2.9、2.10；5.5、5.6、5.7.5；7.4.4~7.4.7、7.5；9.6；11.3、11.6、11.7</li>
+                    </ul>
+
+                    <div class="accordion">
+                        <div class="accordion-header">
+                            <span>第一章 单片机概述</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <ol>
+                                <li>理解什么是单片机</li>
+                                <li>了解单片机的发展历史</li>
+                                <li>了解单片机的主要特点和应用场合</li>
+                                <li>了解单片机和嵌入式DSP、嵌入式微处理器的分别</li>
+                            </ol>
+                            <div class="warning-box">
+                                本次考试不包含：1.7 各类衍生品种的8051单片机、1.8 PIC和AVR系列单片机
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion">
+                        <div class="accordion-header">
+                            <span>第二章 单片机的片内硬件结构</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <ol>
+                                <li>掌握51单片机的片内硬件组成（CPU、并口、定时、ROM、RAM、中断、串口）</li>
+                                <li>掌握51单片机的40个引脚（结合第九章的三总线）</li>
+                                <li>掌握单片机CPU的主要组成（运算器、控制器），重点掌握寄存器PSW、程序计数器PC</li>
+                                <li>理解51单片机的存储结构，理解ROM、RAM，重点掌握片内RAM的空间分布</li>
+                                <li>掌握P0/P1/P2/P3口的主要功能</li>
+                                <li>了解内部时钟电路，掌握外部时钟电路（会画但不要求记参数）</li>
+                                <li>理解振荡周期、时钟周期（状态周期）、机器周期、指令周期，能根据晶振参数计算各类周期时间</li>
+                                <li>掌握复位后常见SFR的初值</li>
+                                <li>掌握复位电路的原理（RST加大于2个机器周期的高电平），会画复位电路（上电复位和按键复位，不要求记参数）</li>
+                                <li>理解最小系统的概念</li>
+                            </ol>
+                            <div class="warning-box">
+                                本次考试不包含：2.9 看门狗定时器、2.10 低功耗节电模式
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion">
+                        <div class="accordion-header">
+                            <span>第三章 C51编程语言基础</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <ol>
+                                <li>了解C51和C语言的比较</li>
+                                <li>掌握C51的数据类型，重点掌握 <code>bit</code>、<code>sfr</code>、<code>sfr16</code>、<code>sbit</code> 的使用</li>
+                                <li>理解C51的存储类型，结合第二章中存储器相关知识一起理解</li>
+                                <li>了解数据存储模式</li>
+                                <li>掌握C51对SFR和位变量的定义和访问，重点掌握通过头文件实现</li>
+                                <li>掌握C51对绝对地址的访问，重点掌握利用 <code>_at_</code> 关键字实现（理解并掌握教材P53例3-3、例3-4）</li>
+                                <li>掌握C51的基本运算，特别关注位运算（理解并掌握教材P56例3-5）</li>
+                                <li>掌握C51的结构（理解并掌握教材P60例3-7、P62例3-9）</li>
+                                <li>掌握C51的数组（理解并掌握教材P66例3-14）</li>
+                                <li>了解C51的指针</li>
+                                <li>掌握C51的函数，重点掌握中断服务函数（结合第六章掌握）</li>
+                                <li>理解宏定义和文件包含</li>
+                                <li>掌握常见的库函数 <code>reg51.h</code>、<code>absacc.h</code>、<code>stdio.h</code>、<code>string.h</code> 等</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="accordion">
+                        <div class="accordion-header">
+                            <span>第五章 单片机与显示器件以及开关、键盘的接口设计</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <ol>
+                                <li>理解并掌握教材P111例5-1、P113例5-2，重点掌握流水灯实现的三种方法</li>
+                                <li>理解并掌握教材P116例5-3、P117例5-4</li>
+                                <li>理解LED数码管的显示原理，理解共阳极、共阴极的概念，能写出数码管的段码（理解并掌握教材P120例5-5）</li>
+                                <li>理解并掌握数码管的静态和动态显示</li>
+                                <li>了解LED点阵显示器的显示原理</li>
+                                <li>理解按键抖动的危害及如何消除按键的抖动</li>
+                                <li>了解独立式键盘的工作原理</li>
+                                <li>理解矩阵式键盘的工作原理（行扫描）</li>
+                                <li>理解键盘扫描的三种工作方式（查询、定时、中断）</li>
+                            </ol>
+                            <div class="warning-box">
+                                本次考试不包含：5.5 LCD1602、5.6 LCD12864、5.7.5 HD7279
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion">
+                        <div class="accordion-header">
+                            <span>第六章 中断系统</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <ol>
+                                <li>掌握51单片机的5个中断源，中断请求信号、中断请求标志</li>
+                                <li>掌握TCON、SCON（结合第八章串口）、IE、IP这些和中断相关的寄存器的设置（理解并掌握教材P178例6-1）</li>
+                                <li>理解中断嵌套、中断优先级的概念，掌握同一优先级中断的查询次序（参考P180表6-1，理解并掌握教材P180例6-2）</li>
+                                <li>掌握中断响应的条件（P180-P181），掌握各中断源服务程序的入口地址（P181表6-2）</li>
+                                <li>了解中断响应的时间</li>
+                                <li>理解不同中断请求撤销的方式，重点关注外部中断电平和跳沿触发方式下的撤销和串口中断的撤销（结合第八章串口）</li>
+                                <li>重点掌握中断函数的定义，会使用中断函数编写程序（理解并掌握教材P85例6-3）</li>
+                                <li>理解教材P190例6-5</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="accordion">
+                        <div class="accordion-header">
+                            <span>第七章 定时器/计数器</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <ol>
+                                <li>熟练掌握TMOD、TCON、TH、TL寄存器的设置</li>
+                                <li>掌握定时器工作方式0、1、2，了解方式3</li>
+                                <li>掌握定时器/计数器计数初值的计算（理解并掌握教材P201例7-1、P203例7-2、P205例7-3）</li>
+                            </ol>
+                            <div class="warning-box">
+                                本次考试不包含：7.4.4~7.4.7，7.5
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion">
+                        <div class="accordion-header">
+                            <span>第八章 串行口</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <ol>
+                                <li>掌握并行与串行通讯，同步与异步通信、串行传输模式的概念</li>
+                                <li>了解串行通讯的错误校验</li>
+                                <li>掌握SCON、PCON寄存器中相关的位</li>
+                                <li>理解串口4种方式的特点和适用场合</li>
+                                <li>理解并掌握教材P233例8-1、P236例8-2</li>
+                                <li>了解多机通信的流程</li>
+                                <li>掌握4种工作方式下波特率的计算</li>
+                                <li>了解通信标准接口RS-232、RS-422和RS-485</li>
+                                <li>理解并掌握教材P248例8-4</li>
+                                <li>看懂教材P259例8-7</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="accordion">
+                        <div class="accordion-header">
+                            <span>第九章 并行扩展</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <ol>
+                                <li>掌握三总线的概念</li>
+                                <li>掌握片选信号的线选法和译码法</li>
+                                <li>掌握地址总线的数目和存储单元的数目之间的关系</li>
+                                <li>掌握74LS373、74LS138的使用</li>
+                                <li>掌握扩展RAM的电路，会画P284图9-13，并掌握教材P285例9-1</li>
+                                <li>了解Flash的编程，了解ISP下载</li>
+                                <li>掌握扩展ROM的电路，会画P291图9-19</li>
+                                <li>掌握扩展多片RAM和ROM的电路，并能根据地址要求设计电路</li>
+                                <li>理解接口、端口的概念，掌握IO的基本功能</li>
+                                <li>理解独立编址和统一编址</li>
+                                <li>理解IO数据的传送方式</li>
+                                <li>了解8255的引脚功能和内部结构，看懂会画8255与51的接线图，并能写出各端口地址</li>
+                                <li>对照P296图9-22和P297图9-23，会写出工作方式选择控制字、C口按位置位/复位控制字（理解并掌握教材P296例9-3、P297例9-4）</li>
+                                <li>了解8255的3种工作方式，掌握方式0（理解并掌握教材P298例9-5）</li>
+                                <li>串口扩展并口结合第八章串口方式0掌握</li>
+                            </ol>
+                            <div class="warning-box">
+                                本次考试不包含：9.6 74LSTTL
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion">
+                        <div class="accordion-header">
+                            <span>第十一章 DAC、ADC</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <ol>
+                                <li>理解DAC的主要技术指标</li>
+                                <li>掌握数/模转换和模/数转换的定义</li>
+                                <li>了解DAC0832内部结构和引脚的功能</li>
+                                <li>掌握DAC0832的三种工作方式，能根据51与DAC0832的连接方式的接口电路图区别出是单缓冲还是双缓冲工作方式，会熟练写出地址</li>
+                                <li>掌握单缓冲工作方式在实际中的应用。会编写产生连续锯齿波、三角波和梯形波的应用程序（理解并掌握教材P344例11-2，不考虑方波和正弦波）</li>
+                                <li>了解ADC的主要技术指标</li>
+                                <li>理解ADC的转换原理</li>
+                                <li>了解ADC0809的内部结构和引脚功能，会熟练写出通道地址</li>
+                                <li>掌握0809的控制流程，会利用单片机控制0809进行AD转换（理解并掌握教材P357例11-4）</li>
+                                <li>掌握常见的软件滤波方法（理解并掌握教材P374例11-8、P374例11-9、P375例11-10）</li>
+                            </ol>
+                            <div class="warning-box">
+                                本次考试不包含：11.3 TLC5615、11.6 TLC549、11.7 TLC2543
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>// 📝 考试题型（A、B卷相同）</h3>
+                    <table>
+                        <tr><th>题型</th><th>分值</th><th>说明</th></tr>
+                        <tr><td>一、选择题</td><td>10分</td><td>每题1分，共10题</td></tr>
+                        <tr><td>二、填空题</td><td>10分</td><td>每空1分，共10空</td></tr>
+                        <tr><td>三、简答题</td><td>12分</td><td>每题4分，共3题</td></tr>
+                        <tr><td>四、C语言编程题</td><td>16分</td><td>共1题，要求画流程图</td></tr>
+                        <tr><td>五、C51编程题</td><td>12分</td><td>每题6分，共2题</td></tr>
+                        <tr><td>六、分析电路并编程题</td><td>30分</td><td>每题10分，共3题</td></tr>
+                        <tr><td>七、电路设计题</td><td>10分</td><td>共1题</td></tr>
+                    </table>
+
+                    <h3>// 🎯 重点例题汇总</h3>
+                    <ul>
+                        <li><strong>第3章</strong>：例3-3、例3-4、例3-5、例3-7、例3-9、例3-14</li>
+                        <li><strong>第5章</strong>：例5-1、例5-2、例5-3、例5-4、例5-5</li>
+                        <li><strong>第6章</strong>：例6-1、例6-2、例6-3、例6-5</li>
+                        <li><strong>第7章</strong>：例7-1、例7-2、例7-3</li>
+                        <li><strong>第8章</strong>：例8-1、例8-2、例8-4</li>
+                        <li><strong>第9章</strong>：图9-13、图9-19、例9-1、例9-3、例9-4、例9-5</li>
+                        <li><strong>第11章</strong>：例11-2、例11-4、例11-8、例11-9、例11-10</li>
+                    </ul>
+
+                    <h3>// 📚 书后习题重点题型</h3>
+                    <ul>
+                        <li><strong>第二章</strong>：P41 填空、单选</li>
+                        <li><strong>第三章</strong>：P74 编程</li>
+                        <li><strong>第五章</strong>：P170 填空、简答1、2</li>
+                        <li><strong>第六章</strong>：P192 填空、单选</li>
+                        <li><strong>第七章</strong>：P225 填空、单选</li>
+                        <li><strong>第八章</strong>：P273 填空</li>
+                        <li><strong>第九章</strong>：P377 填空</li>
+                    </ul>
+
+                    <h3>// 📊 期末总评成绩构成（百分制）</h3>
+                    <table>
+                        <tr><th>项目</th><th>占比</th></tr>
+                        <tr><td>平时成绩</td><td>20%</td></tr>
+                        <tr><td>实验成绩</td><td>30%</td></tr>
+                        <tr><td>期末考试</td><td>50%</td></tr>
+                    </table>
+                </div>
+            </div>
+        </section>
 
         <!-- Module 0: Exam Info -->
         <section class="card exam-info-card" id="module0">
