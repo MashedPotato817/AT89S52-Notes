@@ -1959,39 +1959,68 @@ void UART_ISR(void) interrupt 4 {
             </div>
         </section>
 
-        <!-- Module 9: System Extension -->
+        <!-- Module 9: System Extension (第9章) -->
         <section class="card" id="module9">
             <div class="card-header">
-                <h2><span class="icon">🔌</span> 系统扩展（第9章）</h2>
+                <h2><span class="icon">🔌</span> 并行扩展（第9章）</h2>
                 <span class="arrow">▼</span>
             </div>
             <div class="card-content">
                 <div class="card-body">
                     <div class="warning-box">
-                        不考：9.1.3、9.1.4、9.2.3、9.2.4、9.2.5、9.3
+                        不考：9.6 74LSTTL
                     </div>
 
-                    <h3>// 9.1 存储器扩展</h3>
+                    <h3>// 三总线概念</h3>
                     <div class="knowledge-card">
-                        <h4>ROM扩展（只读存储器）</h4>
-                        <ul>
-                            <li>27系列EPROM：2716(2K)、2732(4K)、2764(8K)</li>
-                            <li>28系列EEPROM：电擦除</li>
-                            <li>连接：P0低8位地址+数据复用，P2高8位地址</li>
-                        </ul>
+                        <h4><span class="level-tag level-tag-master">掌握</span>三总线结构</h4>
+                        <table>
+                            <tr><th>总线</th><th>组成</th><th>说明</th></tr>
+                            <tr><td>地址总线AB</td><td>P0低8位 + P2高8位</td><td>P0需74LS373锁存</td></tr>
+                            <tr><td>数据总线DB</td><td>P0分时复用</td><td>与低8位地址共用</td></tr>
+                            <tr><td>控制总线CB</td><td>RD/WR/PSEN/ALE等</td><td>读写控制信号</td></tr>
+                        </table>
+                        <div class="warning-box">
+                            <strong>出题重点：</strong>P0是地址/数据复用，需要锁存器分离
+                        </div>
                     </div>
+
+                    <h3>// 存储器扩展</h3>
                     <div class="knowledge-card">
-                        <h4>RAM扩展（随机存储器）</h4>
+                        <h4><span class="level-tag level-tag-master">掌握</span>地址线与存储单元关系</h4>
+                        <p><strong>n条地址线 → 2^n 个存储单元</strong></p>
                         <ul>
-                            <li>6116(2K)、6264(8K)</li>
-                            <li>片选信号：CE（低有效）</li>
-                            <li>读写控制：OE、WE</li>
+                            <li>13条地址线 → 8KB（2^13 = 8192）</li>
+                            <li>14条地址线 → 16KB</li>
+                            <li>16条地址线 → 64KB</li>
                         </ul>
                     </div>
 
-                    <h3>// 9.2 I/O口扩展</h3>
                     <div class="knowledge-card">
-                        <h4>8255A可编程接口</h4>
+                        <h4><span class="level-tag level-tag-master">掌握</span>片选信号</h4>
+                        <p><strong>线选法：</strong>用地址线直接作片选（简单但地址不连续）</p>
+                        <p><strong>译码法：</strong>用74LS138译码器（地址连续）</p>
+<pre><code>// 74LS138译码器
+// A15 A14 A13 → Y0-Y7
+// 0   0   0   → Y0选中（0000H-1FFFH）
+// 0   0   1   → Y1选中（2000H-3FFFH）</code></pre>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-master">掌握</span>RAM扩展电路（图9-13、例9-1）</h4>
+                        <p><strong>6264（8KB SRAM）连接：</strong></p>
+                        <ul>
+                            <li>A0-A12 → 地址线</li>
+                            <li>D0-D7 → 数据线（P0）</li>
+                            <li>CE → 片选（P2.5或译码输出）</li>
+                            <li>OE → RD</li>
+                            <li>WE → WR</li>
+                        </ul>
+                    </div>
+
+                    <h3>// 8255A可编程接口</h3>
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-know">了解</span>8255A结构</h4>
                         <ul>
                             <li>3个8位口：PA、PB、PC</li>
                             <li>PC口可分两个4位使用</li>
@@ -1999,14 +2028,17 @@ void UART_ISR(void) interrupt 4 {
                         </ul>
                     </div>
 
-                    <h3>// 总线扩展</h3>
                     <div class="knowledge-card">
-                        <h4>三总线</h4>
-                        <ul>
-                            <li><strong>地址总线（AB）</strong>：P0低8位（74LS373锁存）+ P2高8位</li>
-                            <li><strong>数据总线（DB）</strong>：P0分时复用</li>
-                            <li><strong>控制总线（CB）</strong>：RD、WR、PSEN、ALE等</li>
-                        </ul>
+                        <h4><span class="level-tag level-tag-understand">理解</span>控制字（例9-3、9-4）</h4>
+                        <p><strong>方式选择控制字：</strong></p>
+                        <table>
+                            <tr><th>位</th><th>7</th><th>6-5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th></tr>
+                            <tr><td>含义</td><td>1</td><td>A组方式</td><td>PA方向</td><td>PC上</td><td>B组方式</td><td>PB方向</td><td>PC下</td></tr>
+                        </table>
+                        <p>方向：0=输出，1=输入</p>
+                        <div class="tip-box">
+                            <strong>出题角度：</strong>给定要求写控制字，或给定控制字判断工作方式
+                        </div>
                     </div>
 
                     <div class="tip-box">
@@ -2020,7 +2052,7 @@ void UART_ISR(void) interrupt 4 {
             </div>
         </section>
 
-        <!-- Module 10: DAC/ADC -->
+        <!-- Module 10: DAC/ADC (第11章) -->
         <section class="card" id="module10">
             <div class="card-header">
                 <h2><span class="icon">📟</span> DAC/ADC接口（第11章）</h2>
@@ -2028,70 +2060,82 @@ void UART_ISR(void) interrupt 4 {
             </div>
             <div class="card-content">
                 <div class="card-body">
-                    <h3>// C51与标准C的区别</h3>
+                    <div class="warning-box">
+                        不考：11.3 TLC5615、11.6 TLC549、11.7 TLC2543
+                    </div>
+
+                    <h3>// DAC（数/模转换）</h3>
                     <div class="knowledge-card">
-                        <h4>数据类型</h4>
+                        <h4><span class="level-tag level-tag-master">掌握</span>DAC0832工作方式（例11-2）</h4>
+                        <p><strong>三种工作方式：</strong></p>
                         <ul>
-                            <li><code>bit</code> - 位变量</li>
-                            <li><code>sbit</code> - 特殊功能位</li>
-                            <li><code>sfr</code> - 特殊功能寄存器（1字节）</li>
-                            <li><code>sfr16</code> - 16位特殊功能寄存器</li>
+                            <li><strong>直通方式</strong>：WR1/WR2/XFER/CS全接低</li>
+                            <li><strong>单缓冲方式</strong>：只有一级锁存（最常用）</li>
+                            <li><strong>双缓冲方式</strong>：两级锁存</li>
                         </ul>
-                    </div>
-                    <div class="knowledge-card">
-                        <h4>存储类型</h4>
-                        <table>
-                            <tr><th>关键字</th><th>存储区域</th></tr>
-                            <tr><td><code>data</code></td><td>片内RAM直接寻址（00-7FH）</td></tr>
-                            <tr><td><code>bdata</code></td><td>片内RAM位寻址区（20-2FH）</td></tr>
-                            <tr><td><code>idata</code></td><td>片内RAM间接寻址（00-FFH）</td></tr>
-                            <tr><td><code>xdata</code></td><td>片外RAM（0000-FFFFH）</td></tr>
-                            <tr><td><code>code</code></td><td>ROM程序存储器</td></tr>
-                        </table>
-                    </div>
-                    <div class="knowledge-card">
-                        <h4>中断函数</h4>
-<pre><code>void Timer0_ISR() interrupt 1 {
-    // interrupt n: 中断号
-    // 0=INT0, 1=T0, 2=INT1, 3=T1, 4=串口
-}</code></pre>
-                    </div>
-                    <div class="knowledge-card">
-                        <h4>SFR定义示例</h4>
-<pre><code>#include &lt;reg51.h&gt;
+                        <p><strong>单缓冲方式地址：</strong></p>
+<pre><code>// DAC0832地址 = 7FFFH（P2.7=0选中）
+#define DAC0832 XBYTE[0x7FFF]
 
-sbit LED = P1^0;  // P1.0位定义
-sfr P1 = 0x90;    // P1口地址
-
-void main() {
-    LED = 0;  // 点亮LED
-    while(1);
-}</code></pre>
-                    </div>
-
-                    <h3>// 常用应用</h3>
-                    <div class="knowledge-card">
-                        <h4>I/O操作</h4>
-<pre><code>// 读P1口
-unsigned char val = P1;
-// 写P2口
-P2 = 0x55;</code></pre>
-                    </div>
-                    <div class="knowledge-card">
-                        <h4>定时器C51实现</h4>
-<pre><code>void Timer0_Init() {
-    TMOD = 0x01;  // T0方式1
-    TH0 = 0x3C;   // 50ms初值
-    TL0 = 0xB0;
-    ET0 = 1;       // 开T0中断
-    EA = 1;        // 开总中断
-    TR0 = 1;       // 启动T0
+void DAC_Output(unsigned char val) {
+    DAC0832 = val;  // 写入转换值
 }
 
-void Timer0_ISR() interrupt 1 {
-    TH0 = 0x3C;   // 重装初值
-    TL0 = 0xB0;
+// 产生锯齿波
+void Sawtooth() {
+    unsigned char i;
+    while(1) {
+        for(i=0; i&lt;255; i++) {
+            DAC0832 = i;
+        }
+    }
 }</code></pre>
+                        <div class="tip-box">
+                            <strong>出题角度：</strong>编程题要求产生锯齿波、三角波
+                        </div>
+                    </div>
+
+                    <h3>// ADC（模/数转换）</h3>
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-master">掌握</span>ADC0809控制流程（例11-4）</h4>
+                        <p><strong>ADC0809转换流程：</strong></p>
+                        <ol>
+                            <li>选择通道地址（A/B/C）</li>
+                            <li>发送START启动转换</li>
+                            <li>等待EOC变高（转换完成）</li>
+                            <li>发送OE读取数据</li>
+                        </ol>
+<pre><code>// ADC0809读取（通道0）
+#define ADC0809 XBYTE[0x7FF8]  // 通道0地址
+
+unsigned char ADC_Read(unsigned char ch) {
+    ADC0809 = ch;           // 选择通道并启动
+    while(!EOC);            // 等待转换完成
+    return ADC0809;         // 读取结果
+}</code></pre>
+                        <div class="warning-box">
+                            <strong>出题重点：</strong>ADC0809的转换流程和地址写法
+                        </div>
+                    </div>
+
+                    <h3>// 软件滤波</h3>
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-master">掌握</span>常见滤波方法（例11-8/9/10）</h4>
+                        <p><strong>1. 算术平均滤波：</strong></p>
+<pre><code>unsigned char AvgFilter() {
+    unsigned int sum = 0;
+    unsigned char i;
+    for(i=0; i&lt;16; i++) {
+        sum += ADC_Read(0);
+    }
+    return (unsigned char)(sum >> 4);  // 除以16
+}</code></pre>
+                        <p><strong>2. 中位值滤波：</strong></p>
+<pre><code>// 取多次采样的中间值
+// 排序后取中间值，去掉最大最小</code></pre>
+                        <p><strong>3. 滑动平均滤波：</strong></p>
+<pre><code>// 保持一个数组，新数据入队，老数据出队
+// 求平均值</code></pre>
                     </div>
 
                     <div class="tip-box">
