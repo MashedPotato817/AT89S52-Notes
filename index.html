@@ -642,7 +642,8 @@
 
     <!-- Quick Nav -->
     <div class="quick-nav">
-        <a href="#guide">📖 指南</a>
+        <a href="#guide-c">📘 C语言指南</a>
+        <a href="#guide-mcu">📙 单片机指南</a>
         <a href="#module1">C语言1-4</a>
         <a href="#module2">C语言5-8</a>
         <a href="#module3">硬件</a>
@@ -659,25 +660,18 @@
     <!-- Main -->
     <main class="container">
 
-        <!-- Guide: 复习指南 -->
-        <section class="card" id="guide">
+        <!-- Guide C: C语言复习指南 -->
+        <section class="card" id="guide-c">
             <div class="card-header">
-                <h2><span class="icon">📖</span> 复习指南</h2>
+                <h2><span class="icon">📘</span> C语言复习指南</h2>
                 <span class="arrow">▼</span>
             </div>
             <div class="card-content">
                 <div class="card-body">
                     <div class="info-box">
-                        考试时间：2026年6月29日（星期一）上午 10:30-12:30<br>
-                        考试地点：学思楼219、220<br>
-                        <em>注：以学院教务最终通知为准</em>
+                        考试范围：教材第1、2、3、4、5、6、7、8章<br>
+                        分值占比：约20%~25%
                     </div>
-
-                    <h3>📘 《C语言程序设计》复习指南</h3>
-                    <ul>
-                        <li><strong>考试范围</strong>：教材第1、2、3、4、5、6、7、8章</li>
-                        <li><strong>分值占比</strong>：约20%~25%</li>
-                    </ul>
 
                     <div class="knowledge-card">
                         <h4>第一章 引言</h4>
@@ -696,6 +690,9 @@
                             <li>会使用格式化输入输出函数 <code>printf()</code>、<code>scanf()</code></li>
                             <li>掌握变量、常量、基本数据类型的概念、定义与使用</li>
                         </ol>
+                        <div class="info-box">
+                            书后习题：P41 填空、单选
+                        </div>
                     </div>
 
                     <div class="knowledge-card">
@@ -757,12 +754,22 @@
                             本次考试不包含：8.4 字符串压缩、8.5 任意个整数求和
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
 
-                    <h3>📙 《单片机原理及应用》复习指南</h3>
-                    <ul>
-                        <li><strong>考试范围</strong>：教材第1、2、3、5、6、7、8、9、11章</li>
-                        <li><strong>排除章节</strong>：1.7、1.8；2.9、2.10；5.5、5.6、5.7.5；7.4.4~7.4.7、7.5；9.6；11.3、11.6、11.7</li>
-                    </ul>
+        <!-- Guide MCU: 单片机复习指南 -->
+        <section class="card" id="guide-mcu">
+            <div class="card-header">
+                <h2><span class="icon">📙</span> 单片机复习指南</h2>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="card-body">
+                    <div class="info-box">
+                        考试范围：教材第1、2、3、5、6、7、8、9、11章<br>
+                        排除章节：1.7、1.8；2.9、2.10；5.5、5.6、5.7.5；7.4.4~7.4.7、7.5；9.6；11.3、11.6、11.7
+                    </div>
 
                     <div class="knowledge-card">
                         <h4>第一章 单片机概述</h4>
