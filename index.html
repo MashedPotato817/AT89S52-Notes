@@ -1218,50 +1218,181 @@ struct Student s1 = {101, "Li", 89.5};</code></pre>
                     <div class="knowledge-card">
                         <h4>基本概念</h4>
                         <ul>
-                            <li>单片机 = CPU + 存储器 + I/O接口（集成在一块芯片上）</li>
-                            <li>哈佛结构：程序存储器和数据存储器分开</li>
-                            <li>MCS-51系列：8031/8051/8751</li>
+                            <li><span class="level-tag level-tag-understand">理解</span>单片机 = CPU + 存储器 + I/O接口（集成在一块芯片上）</li>
+                            <li><span class="level-tag level-tag-understand">理解</span>哈佛结构：程序存储器和数据存储器分开</li>
+                            <li><span class="level-tag level-tag-know">了解</span>MCS-51系列：8031/8051/8751</li>
                         </ul>
+                        <div class="tip-box">
+                            <strong>出题角度：</strong>填空题常考"单片机将___、___、___集成在一块芯片上"
+                        </div>
                     </div>
 
                     <h3>// Ch2 AT89S52 硬件结构</h3>
+
                     <div class="knowledge-card">
-                        <h4>引脚功能</h4>
+                        <h4><span class="level-tag level-tag-master">掌握</span>片内硬件组成</h4>
+                        <p>AT89S52单片机内部包含：</p>
                         <ul>
-                            <li><strong>VCC</strong>(40脚)：+5V电源</li>
-                            <li><strong>VSS</strong>(20脚)：接地</li>
-                            <li><strong>XTAL1/XTAL2</strong>(19/18脚)：外接晶振</li>
-                            <li><strong>RST/VPD</strong>(9脚)：复位/备用电源</li>
-                            <li><strong>EA/VPP</strong>(31脚)：访问外部ROM允许</li>
-                            <li><strong>ALE/PROG</strong>(30脚)：地址锁存允许</li>
-                            <li><strong>PSEN</strong>(29脚)：外部ROM读选通</li>
+                            <li><strong>CPU</strong>：8位微处理器</li>
+                            <li><strong>ROM</strong>：8KB Flash程序存储器</li>
+                            <li><strong>RAM</strong>：256B数据存储器</li>
+                            <li><strong>并行I/O口</strong>：P0、P1、P2、P3四个8位口</li>
+                            <li><strong>定时器/计数器</strong>：T0、T1、T2三个16位</li>
+                            <li><strong>中断系统</strong>：5个中断源</li>
+                            <li><strong>串行口</strong>：UART全双工串行口</li>
                         </ul>
+                        <div class="tip-box">
+                            <strong>出题角度：</strong>简答题"51单片机片内包含哪些功能部件？"
+                        </div>
                     </div>
+
                     <div class="knowledge-card">
-                        <h4>存储结构</h4>
-                        <ul>
-                            <li><strong>ROM</strong>：程序存储器（片内4KB，片外可扩展64KB）</li>
-                            <li><strong>RAM</strong>：数据存储器（片内256B，片外64KB）</li>
-                            <li>片内RAM分：工作寄存器区(00-1FH)、位寻址区(20-2FH)、通用RAM(30-7FH)、SFR(80-FFH)</li>
-                        </ul>
-                    </div>
-                    <div class="knowledge-card">
-                        <h4>并行I/O口</h4>
+                        <h4><span class="level-tag level-tag-master">掌握</span>40个引脚功能</h4>
                         <table>
-                            <tr><th>端口</th><th>特点</th></tr>
-                            <tr><td>P0</td><td>开漏输出，外扩地址/数据总线复用</td></tr>
-                            <tr><td>P1</td><td>准双向口，无第二功能</td></tr>
-                            <tr><td>P2</td><td>准双向口，外扩时作高8位地址</td></tr>
-                            <tr><td>P3</td><td>准双向口，有第二功能（串口/中断/定时器等）</td></tr>
+                            <tr><th>引脚</th><th>名称</th><th>功能</th><th>出题重点</th></tr>
+                            <tr><td>40</td><td>VCC</td><td>+5V电源</td><td>—</td></tr>
+                            <tr><td>20</td><td>VSS</td><td>接地</td><td>—</td></tr>
+                            <tr><td>19</td><td>XTAL1</td><td>片内振荡器输入</td><td>接晶振</td></tr>
+                            <tr><td>18</td><td>XTAL2</td><td>片内振荡器输出</td><td>接晶振</td></tr>
+                            <tr><td>9</td><td>RST</td><td>复位信号输入</td><td>高电平复位</td></tr>
+                            <tr><td>31</td><td>EA</td><td>外部ROM允许</td><td>EA=1用片内ROM</td></tr>
+                            <tr><td>30</td><td>ALE</td><td>地址锁存允许</td><td>锁存P0低8位地址</td></tr>
+                            <tr><td>29</td><td>PSEN</td><td>外部ROM读选通</td><td>低电平有效</td></tr>
                         </table>
+                        <div class="warning-box">
+                            <strong>出题重点：</strong>EA、ALE、PSEN三个控制引脚的功能和接法
+                        </div>
                     </div>
+
                     <div class="knowledge-card">
-                        <h4>复位电路</h4>
+                        <h4><span class="level-tag level-tag-master">掌握</span>CPU主要组成：PSW和PC</h4>
+                        <p><strong>程序计数器PC（16位）：</strong></p>
                         <ul>
-                            <li>上电自动复位 + 按键手动复位</li>
-                            <li>RST保持2个机器周期高电平复位</li>
-                            <li>复位后：PC=0000H，P0-P3=FFH，SP=07H</li>
+                            <li>存放下一条要执行指令的地址</li>
+                            <li>复位后PC=0000H（程序从0000H开始执行）</li>
+                            <li>自动加1，实现程序顺序执行</li>
                         </ul>
+                        <p><strong>程序状态字PSW（8位）：</strong></p>
+                        <table>
+                            <tr><th>位</th><th>名称</th><th>功能</th><th>重点</th></tr>
+                            <tr><td>7</td><td>CY</td><td>进位标志</td><td>加法进位/减法借位</td></tr>
+                            <tr><td>6</td><td>AC</td><td>辅助进位</td><td>BCD运算</td></tr>
+                            <tr><td>5</td><td>F0</td><td>用户标志</td><td>用户自定义</td></tr>
+                            <tr><td>4</td><td>RS1</td><td>寄存器组选择</td><td rowspan="2">00-11选4组</td></tr>
+                            <tr><td>3</td><td>RS0</td><td>寄存器组选择</td></tr>
+                            <tr><td>2</td><td>OV</td><td>溢出标志</td><td>有符号数溢出</td></tr>
+                            <tr><td>1</td><td>—</td><td>保留</td><td>—</td></tr>
+                            <tr><td>0</td><td>P</td><td>奇偶标志</td><td>A中1的个数奇偶</td></tr>
+                        </table>
+                        <div class="tip-box">
+                            <strong>出题角度：</strong>填空题考PSW各位的含义，选择题考RS1/RS0选择寄存器组
+                        </div>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-understand">理解</span>存储结构（重点：片内RAM）</h4>
+                        <p><strong>ROM空间（程序存储器）：</strong></p>
+                        <ul>
+                            <li>片内：8KB Flash（0000H-1FFFH）</li>
+                            <li>片外：可扩展64KB（0000H-FFFFH）</li>
+                            <li>EA=1时先执行片内ROM，EA=0时只用片外</li>
+                        </ul>
+                        <p><strong>片内RAM空间（256B）：</strong></p>
+                        <table>
+                            <tr><th>地址</th><th>区域</th><th>说明</th></tr>
+                            <tr><td>00H-1FH</td><td>工作寄存器区</td><td>4组×8个寄存器（R0-R7）</td></tr>
+                            <tr><td>20H-2FH</td><td>位寻址区</td><td>128个位地址（00H-7FH）</td></tr>
+                            <tr><td>30H-7FH</td><td>通用RAM区</td><td>数据缓冲区、堆栈</td></tr>
+                            <tr><td>80H-FFH</td><td>特殊功能寄存器SFR</td><td>控制寄存器</td></tr>
+                        </table>
+                        <div class="warning-box">
+                            <strong>出题重点：</strong>片内RAM四个区域的地址范围和功能，特别是位寻址区
+                        </div>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-master">掌握</span>并行I/O口</h4>
+                        <table>
+                            <tr><th>端口</th><th>类型</th><th>第二功能</th><th>外扩时作用</th></tr>
+                            <tr><td>P0</td><td>开漏输出</td><td>无</td><td>低8位地址/数据复用</td></tr>
+                            <tr><td>P1</td><td>准双向口</td><td>无</td><td>—</td></tr>
+                            <tr><td>P2</td><td>准双向口</td><td>无</td><td>高8位地址</td></tr>
+                            <tr><td>P3</td><td>准双向口</td><td>有（串口/中断/定时等）</td><td>—</td></tr>
+                        </table>
+                        <p><strong>P3口第二功能（常考）：</strong></p>
+                        <ul>
+                            <li>P3.0 - RXD（串行接收）</li>
+                            <li>P3.1 - TXD（串行发送）</li>
+                            <li>P3.2 - INT0（外部中断0）</li>
+                            <li>P3.3 - INT1（外部中断1）</li>
+                            <li>P3.4 - T0（定时器0外部输入）</li>
+                            <li>P3.5 - T1（定时器1外部输入）</li>
+                            <li>P3.6 - WR（外部RAM写）</li>
+                            <li>P3.7 - RD（外部RAM读）</li>
+                        </ul>
+                        <div class="tip-box">
+                            <strong>出题角度：</strong>填空题考P3口第二功能，选择题考哪个口有第二功能
+                        </div>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-know">了解</span>时钟电路，<span class="level-tag level-tag-master">掌握</span>周期计算</h4>
+                        <p><strong>外部时钟电路：</strong></p>
+                        <ul>
+                            <li>晶振接XTAL1和XTAL2</li>
+                            <li>典型晶振频率：6MHz、11.0592MHz、12MHz</li>
+                        </ul>
+                        <p><strong>四种周期及计算（12MHz晶振）：</strong></p>
+                        <table>
+                            <tr><th>周期</th><th>关系</th><th>12MHz时</th></tr>
+                            <tr><td>振荡周期</td><td>= 1/fosc</td><td>1/12μs</td></tr>
+                            <tr><td>时钟周期（状态周期）</td><td>= 2×振荡周期</td><td>1/6μs</td></tr>
+                            <tr><td>机器周期</td><td>= 6×时钟周期 = 12×振荡周期</td><td>1μs</td></tr>
+                            <tr><td>指令周期</td><td>= 1~4个机器周期</td><td>1~4μs</td></tr>
+                        </table>
+                        <div class="warning-box">
+                            <strong>出题重点：</strong>给定晶振频率，计算机器周期；单周期指令执行时间
+                        </div>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-master">掌握</span>复位电路</h4>
+                        <p><strong>复位条件：</strong>RST引脚保持2个机器周期以上的高电平</p>
+                        <p><strong>复位后SFR初值（必记）：</strong></p>
+                        <table>
+                            <tr><th>寄存器</th><th>复位值</th><th>含义</th></tr>
+                            <tr><td>PC</td><td>0000H</td><td>程序从0000H开始</td></tr>
+                            <tr><td>SP</td><td>07H</td><td>堆栈指针指向07H</td></tr>
+                            <tr><td>P0-P3</td><td>FFH</td><td>I/O口全为高电平</td></tr>
+                            <tr><td>PSW</td><td>00H</td><td>选择第0组寄存器</td></tr>
+                            <tr><td>TMOD</td><td>00H</td><td>定时器方式0</td></tr>
+                            <tr><td>TH0/TL0</td><td>00H</td><td>定时器0清零</td></tr>
+                            <tr><td>IE</td><td>00H</td><td>中断全部禁止</td></tr>
+                            <tr><td>IP</td><td>00H</td><td>低优先级</td></tr>
+                        </table>
+                        <p><strong>复位电路类型：</strong></p>
+                        <ul>
+                            <li>上电自动复位：电容充电产生高电平脉冲</li>
+                            <li>按键手动复位：按下按键RST接VCC</li>
+                        </ul>
+                        <div class="tip-box">
+                            <strong>出题角度：</strong>填空题考复位条件、复位后PC/SP/P0-P3的值；画图题考复位电路
+                        </div>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-understand">理解</span>最小系统</h4>
+                        <p><strong>最小系统组成：</strong></p>
+                        <ul>
+                            <li>单片机芯片</li>
+                            <li>时钟电路（晶振+电容）</li>
+                            <li>复位电路（电阻+电容+按键）</li>
+                            <li>电源（VCC+5V，VSS接地）</li>
+                            <li>EA接VCC（使用片内ROM）</li>
+                        </ul>
+                        <div class="tip-box">
+                            <strong>出题角度：</strong>简答题"画出51单片机最小系统电路图"
+                        </div>
                     </div>
                 </div>
             </div>
