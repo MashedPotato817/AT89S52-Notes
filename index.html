@@ -8,9 +8,15 @@
         :root {
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
+            --primary-light: #dbeafe;
             --success: #16a34a;
             --warning: #f59e0b;
             --danger: #dc2626;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
             --gray-50: #f9fafb;
             --gray-100: #f3f4f6;
             --gray-200: #e5e7eb;
@@ -24,6 +30,27 @@
             --shadow-md: 0 4px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06);
         }
 
+        /* 深色模式 */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text: #e2e8f0;
+                --text-light: #94a3b8;
+                --bg: #0f172a;
+                --card-bg: #1e293b;
+                --border: #334155;
+                --primary-light: #1e3a5f;
+                --gray-50: #0f172a;
+                --gray-100: #1e293b;
+                --gray-200: #334155;
+            }
+
+            .exam-info-card {
+                background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
+            }
+
+            tr:hover { background: var(--primary-light); }
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -31,10 +58,48 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            line-height: 1.6;
-            color: var(--gray-800);
-            background: var(--gray-50);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            line-height: 1.8;
+            color: var(--text);
+            background: var(--bg);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* 快速导航标签 */
+        .quick-nav {
+            display: flex;
+            overflow-x: auto;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            position: sticky;
+            top: 60px;
+            z-index: 99;
+        }
+
+        .quick-nav::-webkit-scrollbar { display: none; }
+
+        .quick-nav a {
+            flex-shrink: 0;
+            padding: 0.5rem 1rem;
+            background: var(--primary-light);
+            color: var(--primary);
+            text-decoration: none;
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .quick-nav a:hover,
+        .quick-nav a:active {
+            background: var(--primary);
+            color: white;
         }
 
         /* 头部 */
@@ -67,48 +132,87 @@
         }
 
         /* 汉堡菜单按钮 */
-        .menu-btn {
+        .menu-toggle {
             display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
+            position: fixed;
+            top: 0.75rem;
+            right: 0.75rem;
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.4);
+            border-radius: 8px;
             cursor: pointer;
-            padding: 0.5rem;
+            z-index: 200;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* 导航栏 */
-        .nav {
-            background: white;
-            border-bottom: 1px solid var(--gray-200);
-            position: sticky;
-            top: 60px;
-            z-index: 99;
-        }
-
-        .nav-list {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            list-style: none;
-            overflow-x: auto;
-            padding: 0.5rem;
-            gap: 0.25rem;
-        }
-
-        .nav-list a {
+        .menu-toggle span {
             display: block;
-            padding: 0.5rem 1rem;
-            color: var(--gray-600);
+            width: 20px;
+            height: 2px;
+            background: white;
+            border-radius: 1px;
+            transition: all 0.3s;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translateY(7px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translateY(-7px);
+        }
+
+        /* 全屏导航 */
+        .fullscreen-nav {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--card-bg);
+            z-index: 150;
+            padding: 5rem 1.5rem 1.5rem;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fullscreen-nav.active {
+            display: block;
+        }
+
+        .fullscreen-nav a {
+            display: block;
+            padding: 1rem 1.25rem;
+            color: var(--text);
             text-decoration: none;
-            font-size: 0.875rem;
-            white-space: nowrap;
-            border-radius: var(--radius);
+            border-bottom: 1px solid var(--border);
+            font-size: 1.1rem;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            -webkit-tap-highlight-color: transparent;
             transition: all 0.2s;
         }
 
-        .nav-list a:hover {
-            background: var(--gray-100);
+        .fullscreen-nav a:hover,
+        .fullscreen-nav a:active {
+            background: var(--primary-light);
             color: var(--primary);
         }
 
@@ -117,6 +221,36 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 1rem;
+            padding-bottom: 80px;
+        }
+
+        /* 代码模板卡片 */
+        .code-template {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 2px solid var(--success);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            margin: 0.75rem 0;
+        }
+
+        .code-template h4 {
+            color: #166534;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        /* 例题卡片样式 */
+        .example-card {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-left: 4px solid #10b981;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            padding: 1rem 1.25rem;
+            margin: 0.75rem 0;
+        }
+
+        .example-card h4 {
+            color: #065f46;
+            margin-bottom: 0.5rem;
         }
 
         /* 手风琴卡片 */
@@ -176,57 +310,188 @@
             max-height: 5000px;
         }
 
-        /* 提示框 */
-        .tip {
-            padding: 0.75rem 1rem;
+        /* 手风琴内嵌 */
+        .accordion {
+            margin: 0.5rem 0;
             border-radius: var(--radius);
-            margin: 0.75rem 0;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .accordion-header {
+            background: var(--card-bg);
+            color: var(--text);
+            padding: 0.875rem 1.25rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+            font-weight: 500;
+            min-height: 48px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .accordion-header:hover {
+            background: var(--primary-light);
+        }
+
+        .accordion-content {
+            display: none;
+            padding: 1rem 1.25rem;
+            background: var(--bg);
+            border-top: 1px solid var(--border);
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .accordion-content.active { display: block; }
+
+        .accordion-icon {
+            transition: transform 0.3s;
             font-size: 0.875rem;
+            color: var(--text-light);
         }
 
-        .tip-danger {
-            background: #fef2f2;
-            border-left: 4px solid var(--danger);
-            color: #991b1b;
+        .accordion-icon.active { transform: rotate(180deg); }
+
+        /* 步骤组件 */
+        .steps {
+            counter-reset: step;
         }
 
-        .tip-success {
-            background: #f0fdf4;
-            border-left: 4px solid var(--success);
-            color: #166534;
+        .step {
+            counter-increment: step;
+            margin: 0.75rem 0;
+            padding: 1rem 1.25rem 1rem 3rem;
+            background: rgba(37, 99, 235, 0.05);
+            border-radius: var(--radius);
+            position: relative;
+            border: 1px solid var(--border);
         }
 
-        .tip-warning {
-            background: #fffbeb;
-            border-left: 4px solid var(--warning);
+        .step::before {
+            content: counter(step);
+            position: absolute;
+            left: 0.75rem;
+            top: 1rem;
+            width: 1.75rem;
+            height: 1.75rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        /* 提示框 */
+        .warning-box {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid var(--danger);
+            border-radius: var(--radius);
+            padding: 1.25rem 1.5rem;
+            margin: 0.75rem 0;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .warning-box::before {
+            content: '⚠️ 注意';
+            display: block;
+            font-weight: bold;
+            color: var(--danger);
+            margin-bottom: 0.5rem;
+        }
+
+        .tip-box {
+            background: rgba(16, 185, 129, 0.1);
+            border: 2px solid var(--success);
+            border-radius: var(--radius);
+            padding: 1.25rem 1.5rem;
+            margin: 0.75rem 0;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .tip-box::before {
+            content: '💡 提示';
+            display: block;
+            font-weight: bold;
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+
+        .info-box {
+            background: rgba(37, 99, 235, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: var(--radius);
+            padding: 1.25rem 1.5rem;
+            margin: 0.75rem 0;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .info-box::before {
+            content: '📌 重点';
+            display: block;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* 考试信息卡片 */
+        .exam-info-card {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 1px solid #f59e0b;
+        }
+
+        .exam-info-card h2 {
             color: #92400e;
-        }
-
-        .tip-info {
-            background: #eff6ff;
-            border-left: 4px solid var(--primary);
-            color: #1e40af;
+            border-bottom-color: rgba(146, 64, 14, 0.2);
         }
 
         /* 表格 */
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 0.75rem 0;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 0.75rem 0;
-            font-size: 0.875rem;
+            font-size: 0.9rem;
+            table-layout: fixed;
         }
 
         th, td {
-            padding: 0.625rem;
-            border: 1px solid var(--gray-200);
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
             text-align: left;
+            word-break: break-all;
+            overflow-wrap: break-word;
         }
 
         th {
-            background: var(--gray-100);
+            background: var(--primary);
+            color: white;
             font-weight: 600;
-            color: var(--gray-700);
+            position: sticky;
+            top: 0;
         }
+
+        tr:last-child td { border-bottom: none; }
+        tr:nth-child(even) { background: var(--gray-50); }
+        tr:hover { background: var(--primary-light); }
 
         /* 代码块 */
         code {
@@ -283,169 +548,149 @@
         /* 返回顶部 */
         .back-to-top {
             position: fixed;
-            bottom: 2rem;
-            right: 2rem;
+            bottom: 1.5rem;
+            right: 1.5rem;
             width: 48px;
             height: 48px;
             background: var(--primary);
             color: white;
             border: none;
             border-radius: 50%;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             cursor: pointer;
-            box-shadow: var(--shadow-md);
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s;
-            z-index: 999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+            transition: all 0.2s;
+            z-index: 1000;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .back-to-top.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .back-to-top:hover {
+        .back-to-top:hover,
+        .back-to-top:active {
             background: var(--primary-dark);
-            transform: translateY(-2px);
+            transform: scale(1.1);
         }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: var(--text-light);
+            padding: 1.5rem;
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        .footer p { margin: 0.25rem 0; }
 
         /* 响应式 */
         @media (max-width: 768px) {
-            .menu-btn {
-                display: block;
+            html { font-size: 15px; }
+
+            .menu-toggle { display: flex; }
+
+            .quick-nav {
+                padding: 0.5rem 0.75rem;
             }
 
-            .nav {
-                position: fixed;
-                top: 0;
-                left: -100%;
-                width: 280px;
-                height: 100vh;
-                z-index: 200;
-                transition: left 0.3s;
-                border-right: 1px solid var(--gray-200);
+            .quick-nav a {
+                padding: 0.375rem 0.75rem;
+                font-size: 0.8rem;
             }
 
-            .nav.active {
-                left: 0;
-            }
+            .container { padding: 0.75rem; }
 
-            .nav-list {
-                flex-direction: column;
-                padding: 4rem 1rem 1rem;
-            }
+            .card { padding: 1.25rem; border-radius: 0.75rem; }
 
-            .overlay {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0,0,0,0.5);
-                z-index: 199;
-            }
+            .card h2 { font-size: 1.125rem; }
 
-            .overlay.active {
-                display: block;
-            }
-
-            .header h1 {
-                font-size: 1rem;
-            }
-
-            .header .exam-info {
-                display: none;
-            }
-
-            table {
-                display: block;
-                overflow-x: auto;
+            th, td {
+                padding: 0.75rem;
+                font-size: 0.85rem;
             }
         }
 
         @media (max-width: 480px) {
-            .container {
-                padding: 0.75rem;
-            }
+            html { font-size: 14px; }
 
-            .card-header {
-                padding: 0.875rem 1rem;
-            }
+            .header h1 { font-size: 1.1rem; }
 
-            .card-content {
-                padding: 0 1rem;
-            }
+            .card { padding: 1rem; }
 
-            .card.active .card-content {
-                padding: 0.875rem 1rem;
-            }
+            .card h2 { font-size: 1rem; }
 
-            .card-header h2 {
-                font-size: 1rem;
+            th, td {
+                padding: 0.5rem;
+                font-size: 0.8rem;
             }
         }
     </style>
 </head>
 <body>
+    <!-- 汉堡菜单按钮 -->
+    <button class="menu-toggle" id="menuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- 全屏导航 -->
+    <nav class="fullscreen-nav" id="fullscreenNav">
+        <a href="#module0" onclick="closeMenu()">📋 考试信息</a>
+        <a href="#module1" onclick="closeMenu()">💻 C语言基础（1-4章）</a>
+        <a href="#module2" onclick="closeMenu()">💻 C语言进阶（5-8章）</a>
+        <a href="#module3" onclick="closeMenu()">🔧 单片机概述与硬件（1-2章）</a>
+        <a href="#module4" onclick="closeMenu()">📝 指令系统（第3章）</a>
+        <a href="#module5" onclick="closeMenu()">⚙️ 汇编程序设计（第5章）</a>
+        <a href="#module6" onclick="closeMenu()">⏱️ 定时/计数器（第6章）</a>
+        <a href="#module7" onclick="closeMenu()">🔔 中断系统（第7章）</a>
+        <a href="#module8" onclick="closeMenu()">📡 串口通信（第8章）</a>
+        <a href="#module9" onclick="closeMenu()">🔌 系统扩展（第9章）</a>
+        <a href="#module10" onclick="closeMenu()">📟 C51编程（第11章）</a>
+        <a href="#code-templates" onclick="closeMenu()">📝 代码模板</a>
+    </nav>
+
     <!-- 头部 -->
     <header class="header">
         <div class="header-content">
             <h1>📖 单片机原理及C语言编程应用</h1>
             <span class="exam-info">📅 2026-06-29 10:30-12:30</span>
-            <button class="menu-btn" id="menuBtn">☰</button>
         </div>
     </header>
 
-    <!-- 导航栏 -->
-    <nav class="nav" id="nav">
-        <ul class="nav-list">
-            <li><a href="#module0">📋 考试信息</a></li>
-            <li><a href="#module1">💻 C语言1-4章</a></li>
-            <li><a href="#module2">💻 C语言5-8章</a></li>
-            <li><a href="#module3">🔧 单片机1-2章</a></li>
-            <li><a href="#module4">📝 指令系统</a></li>
-            <li><a href="#module5">⚙️ 汇编程序</a></li>
-            <li><a href="#module6">⏱️ 定时器</a></li>
-            <li><a href="#module7">🔔 中断系统</a></li>
-            <li><a href="#module8">📡 串口通信</a></li>
-            <li><a href="#module9">🔌 系统扩展</a></li>
-            <li><a href="#module10">📟 C51编程</a></li>
-        </ul>
-    </nav>
-
-    <!-- 遮罩层 -->
-    <div class="overlay" id="overlay"></div>
+    <!-- 快速导航标签 -->
+    <div class="quick-nav">
+        <a href="#module0">考试</a>
+        <a href="#module1">C语言1-4</a>
+        <a href="#module2">C语言5-8</a>
+        <a href="#module3">硬件</a>
+        <a href="#module4">指令</a>
+        <a href="#module5">汇编</a>
+        <a href="#module6">定时器</a>
+        <a href="#module7">中断</a>
+        <a href="#module8">串口</a>
+        <a href="#module9">扩展</a>
+        <a href="#module10">C51</a>
+        <a href="#code-templates">代码模板</a>
+    </div>
 
     <!-- 主内容 -->
     <main class="container">
 
         <!-- 模块0: 考试信息 -->
-        <section class="card" id="module0">
+        <section class="card exam-info-card" id="module0">
             <div class="card-header">
                 <h2><span class="icon">📋</span> 考试信息</h2>
                 <span class="arrow">▼</span>
             </div>
             <div class="card-content">
-                <table>
-                    <tr>
-                        <th>项目</th>
-                        <th>内容</th>
-                    </tr>
-                    <tr>
-                        <td>考试时间</td>
-                        <td><strong>2026-06-29 周一 10:30-12:30</strong>（120分钟）</td>
-                    </tr>
-                    <tr>
-                        <td>考试形式</td>
-                        <td>闭卷笔试</td>
-                    </tr>
-                    <tr>
-                        <td>题型</td>
-                        <td>简答、分析题为主，含选择、填空、判断、简答、读程序、编程</td>
-                    </tr>
-                </table>
+                <div class="warning-box">
+                    考试时间：<strong>2026-06-29 周一 10:30-12:30</strong>（120分钟）<br>
+                    考试形式：闭卷笔试<br>
+                    题型：简答、分析题为主，含选择、填空、判断、简答、读程序、编程
+                </div>
 
                 <h3>📊 分值分布（预估）</h3>
                 <table>
@@ -467,10 +712,10 @@
                 </table>
 
                 <h3>📝 考试范围</h3>
-                <div class="tip tip-danger">
+                <div class="warning-box">
                     <strong>⚠️ C语言不考：</strong>5.3.3（函数的递归调用）、8.4（共用体）、8.5（枚举类型）
                 </div>
-                <div class="tip tip-danger">
+                <div class="warning-box">
                     <strong>⚠️ 单片机不考：</strong>第4章、6.5节、第10章、9.1.3/9.1.4、9.2.3/9.2.4/9.2.5、9.3
                 </div>
 
@@ -577,7 +822,7 @@
                 <span class="arrow">▼</span>
             </div>
             <div class="card-content">
-                <div class="tip tip-info">
+                <div class="info-box">
                     <strong>📌 重点：</strong>第3章(选择)、第4章(循环)是基础中的基础，必考！
                 </div>
 
@@ -621,7 +866,7 @@
                         <li>每个 <code>case</code> 后加 <code>break</code>，否则"穿透"</li>
                     </ul>
                 </div>
-                <div class="tip tip-success">
+                <div class="tip-box">
                     <strong>🎯 重点例题：</strong>例3-1、3-2、3-5（分段函数）、3-6（闰年判断）
                 </div>
 
@@ -651,7 +896,7 @@
                         </tr>
                     </table>
                 </div>
-                <div class="tip tip-success">
+                <div class="tip-box">
                     <strong>🎯 重点例题：</strong>例4-1~4-10全部！特别是4-9（九九乘法表）、4-10（素数判断）
                 </div>
             </div>
@@ -664,7 +909,7 @@
                 <span class="arrow">▼</span>
             </div>
             <div class="card-content">
-                <div class="tip tip-danger">
+                <div class="warning-box">
                     <strong>⚠️ 不考：</strong>5.3.3（递归调用）、8.4（共用体）、8.5（枚举类型）
                 </div>
 
@@ -840,7 +1085,7 @@ struct Student s1 = {101, "Li", 89.5};</code></pre>
                 <span class="arrow">▼</span>
             </div>
             <div class="card-content">
-                <div class="tip tip-info">
+                <div class="info-box">
                     <strong>📌 重点：</strong>111条指令，重点掌握寻址方式和常用指令
                 </div>
 
@@ -918,7 +1163,7 @@ struct Student s1 = {101, "Li", 89.5};</code></pre>
                     </ul>
                 </div>
 
-                <div class="tip tip-success">
+                <div class="tip-box">
                     <strong>🎯 重点例题：</strong>例3-3~3-14全部必须掌握！
                 </div>
             </div>
@@ -931,7 +1176,7 @@ struct Student s1 = {101, "Li", 89.5};</code></pre>
                 <span class="arrow">▼</span>
             </div>
             <div class="card-content">
-                <div class="tip tip-danger">
+                <div class="warning-box">
                     <strong>⚠️ 不考：</strong>查表程序设计
                 </div>
 
@@ -981,7 +1226,7 @@ struct Student s1 = {101, "Li", 89.5};</code></pre>
                     </ul>
                 </div>
 
-                <div class="tip tip-success">
+                <div class="tip-box">
                     <strong>🎯 重点例题：</strong>例5-1~5-5全部必须掌握！
                 </div>
             </div>
@@ -994,7 +1239,7 @@ struct Student s1 = {101, "Li", 89.5};</code></pre>
                 <span class="arrow">▼</span>
             </div>
             <div class="card-content">
-                <div class="tip tip-danger">
+                <div class="warning-box">
                     <strong>⚠️ 不考：</strong>6.5节
                 </div>
 
@@ -1073,7 +1318,7 @@ struct Student s1 = {101, "Li", 89.5};</code></pre>
                     </ol>
                 </div>
 
-                <div class="tip tip-success">
+                <div class="tip-box">
                     <strong>🎯 重点例题：</strong>例6-1~6-5全部必须掌握！
                 </div>
             </div>
@@ -1086,7 +1331,7 @@ struct Student s1 = {101, "Li", 89.5};</code></pre>
                 <span class="arrow">▼</span>
             </div>
             <div class="card-content">
-                <div class="tip tip-danger">
+                <div class="warning-box">
                     <strong>⚠️ 不考：</strong>7.4节
                 </div>
 
@@ -1162,7 +1407,7 @@ struct Student s1 = {101, "Li", 89.5};</code></pre>
                     <li>中断返回（RETI）</li>
                 </ol>
 
-                <div class="tip tip-success">
+                <div class="tip-box">
                     <strong>🎯 重点例题：</strong>例7-1~7-3全部必须掌握！
                 </div>
             </div>
@@ -1175,7 +1420,7 @@ struct Student s1 = {101, "Li", 89.5};</code></pre>
                 <span class="arrow">▼</span>
             </div>
             <div class="card-content">
-                <div class="tip tip-danger">
+                <div class="warning-box">
                     <strong>⚠️ 不考：</strong>8.5节
                 </div>
 
@@ -1268,7 +1513,7 @@ struct Student s1 = {101, "Li", 89.5};</code></pre>
                     <li>启动T1（TR1）</li>
                 </ol>
 
-                <div class="tip tip-success">
+                <div class="tip-box">
                     <strong>🎯 重点例题：</strong>例8-1~8-7全部必须掌握！
                 </div>
             </div>
@@ -1281,7 +1526,7 @@ struct Student s1 = {101, "Li", 89.5};</code></pre>
                 <span class="arrow">▼</span>
             </div>
             <div class="card-content">
-                <div class="tip tip-danger">
+                <div class="warning-box">
                     <strong>⚠️ 不考：</strong>9.1.3、9.1.4、9.2.3、9.2.4、9.2.5、9.3
                 </div>
 
@@ -1323,7 +1568,7 @@ struct Student s1 = {101, "Li", 89.5};</code></pre>
                     </ul>
                 </div>
 
-                <div class="tip tip-success">
+                <div class="tip-box">
                     <strong>🎯 重点例题：</strong>例9-1~9-5全部必须掌握！
                 </div>
             </div>
@@ -1422,16 +1667,151 @@ void Timer0_ISR() interrupt 1 {
 }</code></pre>
                 </div>
 
-                <div class="tip tip-success">
+                <div class="tip-box">
                     <strong>🎯 重点例题：</strong>例11-2~11-10全部必须掌握！
+                </div>
+            </div>
+        </section>
+
+        <!-- 代码模板模块 -->
+        <section class="card" id="code-templates">
+            <div class="card-header">
+                <h2><span class="icon">📝</span> 常用代码模板</h2>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="code-template">
+                    <h4>📌 定时器初始化模板</h4>
+<pre><code>void Timer0_Init(void) {
+    TMOD = 0x01;    // T0方式1，16位定时
+    TH0 = 0x3C;     // 50ms初值 (12MHz)
+    TL0 = 0xB0;
+    ET0 = 1;         // 开T0中断
+    EA = 1;          // 开总中断
+    TR0 = 1;         // 启动T0
+}
+
+void Timer0_ISR(void) interrupt 1 {
+    TH0 = 0x3C;     // 重装初值
+    TL0 = 0xB0;
+    // 定时处理代码
+}</code></pre>
+                </div>
+
+                <div class="code-template">
+                    <h4>📌 串口初始化模板</h4>
+<pre><code>void UART_Init(void) {
+    SCON = 0x50;    // 方式1，允许接收
+    PCON = 0x00;    // 不倍增
+    TMOD = 0x20;    // T1方式2，自动重装
+    TH1 = 0xFD;     // 9600bps (12MHz)
+    TL1 = 0xFD;
+    ES = 1;          // 开串口中断
+    EA = 1;          // 开总中断
+    TR1 = 1;         // 启动T1
+}
+
+void UART_ISR(void) interrupt 4 {
+    if (RI) {
+        RI = 0;
+        // 接收处理
+        SBUF = SBUF;  // 回显
+    }
+    if (TI) {
+        TI = 0;
+        // 发送完成处理
+    }
+}</code></pre>
+                </div>
+
+                <div class="code-template">
+                    <h4>📌 外部中断初始化模板</h4>
+<pre><code>void INT0_Init(void) {
+    IT0 = 1;    // 下降沿触发
+    EX0 = 1;    // 开外部中断0
+    EA = 1;     // 开总中断
+}
+
+void INT0_ISR(void) interrupt 0 {
+    // 中断处理代码
+}</code></pre>
+                </div>
+
+                <div class="code-template">
+                    <h4>📌 延时函数模板</h4>
+<pre><code>// 毫秒延时 (12MHz)
+void Delay_ms(unsigned int ms) {
+    unsigned int i, j;
+    for (i = 0; i < ms; i++)
+        for (j = 0; j < 120; j++);
+}
+
+// 微秒延时 (12MHz)
+void Delay_us(unsigned int us) {
+    while (us--);
+}</code></pre>
+                </div>
+
+                <div class="code-template">
+                    <h4>📌 GPIO操作模板</h4>
+<pre><code>#include &lt;reg52.h&gt;
+
+sbit LED = P1^0;    // LED接P1.0
+sbit KEY = P3^2;    // 按键接P3.2
+
+void main(void) {
+    LED = 1;         // 初始熄灭
+    while (1) {
+        if (KEY == 0) {      // 按键按下
+            Delay_ms(20);    // 消抖
+            if (KEY == 0) {
+                LED = ~LED;  // 翻转LED
+                while (!KEY); // 等待释放
+            }
+        }
+    }
+}</code></pre>
+                </div>
+
+                <div class="code-template">
+                    <h4>📌 矩阵键盘扫描模板</h4>
+<pre><code>unsigned char KeyScan(void) {
+    unsigned char key = 0;
+    P1 = 0x0F;           // 行线输出0
+    if (P1 != 0x0F) {    // 有键按下
+        Delay_ms(20);     // 消抖
+        if (P1 != 0x0F) {
+            // 扫描行
+            P1 = 0xFE;   // 第1行
+            if (P1 != 0xFE) key = ...;
+            P1 = 0xFD;   // 第2行
+            if (P1 != 0xFD) key = ...;
+            // ... 继续扫描
+        }
+    }
+    return key;
+}</code></pre>
+                </div>
+
+                <div class="tip-box">
+                    <strong>💡 提示：</strong>以上模板基于12MHz晶振，实际使用时需根据晶振频率调整定时初值和延时参数。
                 </div>
             </div>
         </section>
 
     </main>
 
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p>📖 单片机原理及C语言编程应用 - 考前速记</p>
+        <p style="color: var(--primary); font-weight: 600;">📅 考试时间：2026-06-29 周一 10:30-12:30</p>
+        <p>祝考试顺利！加油！💪</p>
+        <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 0.5rem;">Composed by MashedPotato</p>
+        <p style="font-size: 0.8rem; opacity: 0.6;">最后更新：<span id="lastModified"></span></p>
+    </footer>
+
     <!-- 返回顶部按钮 -->
-    <button class="back-to-top" id="backToTop" title="返回顶部">↑</button>
+    <button class="back-to-top" id="backToTop" aria-label="返回顶部">↑</button>
 
     <script>
         // 手风琴折叠
@@ -1443,41 +1823,46 @@ void Timer0_ISR() interrupt 1 {
         });
 
         // 汉堡菜单
-        const menuBtn = document.getElementById('menuBtn');
-        const nav = document.getElementById('nav');
-        const overlay = document.getElementById('overlay');
+        const menuToggle = document.getElementById('menuToggle');
+        const fullscreenNav = document.getElementById('fullscreenNav');
 
-        menuBtn.addEventListener('click', () => {
-            nav.classList.toggle('active');
-            overlay.classList.toggle('active');
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            fullscreenNav.classList.toggle('active');
+            document.body.style.overflow = fullscreenNav.classList.contains('active') ? 'hidden' : '';
         });
 
-        overlay.addEventListener('click', () => {
-            nav.classList.remove('active');
-            overlay.classList.remove('active');
-        });
+        function closeMenu() {
+            menuToggle.classList.remove('active');
+            fullscreenNav.classList.remove('active');
+            document.body.style.overflow = '';
+        }
 
-        // 导航点击后关闭菜单
-        document.querySelectorAll('.nav-list a').forEach(link => {
-            link.addEventListener('click', () => {
-                nav.classList.remove('active');
-                overlay.classList.remove('active');
-            });
-        });
-
-        // 返回顶部按钮
+        // 返回顶部
         const backToTop = document.getElementById('backToTop');
 
         window.addEventListener('scroll', () => {
             if (window.scrollY > 300) {
-                backToTop.classList.add('visible');
+                backToTop.style.display = 'flex';
             } else {
-                backToTop.classList.remove('visible');
+                backToTop.style.display = 'none';
             }
         });
 
         backToTop.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // 最后更新时间
+        document.getElementById('lastModified').textContent = new Date(document.lastModified).toLocaleString('zh-CN', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
         });
 
         // 默认展开第一个模块
