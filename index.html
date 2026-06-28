@@ -1851,7 +1851,7 @@ void Timer0_ISR(void) interrupt 1 {
             </div>
         </section>
 
-        <!-- Module 8: Serial Port -->
+        <!-- Module 8: Serial Port (第8章) -->
         <section class="card" id="module8">
             <div class="card-header">
                 <h2><span class="icon">📡</span> 串口通信（第8章）</h2>
@@ -1859,66 +1859,94 @@ void Timer0_ISR(void) interrupt 1 {
             </div>
             <div class="card-content">
                 <div class="card-body">
-                    <div class="warning-box">
-                        不考：8.5节
-                    </div>
 
                     <h3>// 基本概念</h3>
                     <div class="knowledge-card">
-                        <h4>通信方式</h4>
+                        <h4><span class="level-tag level-tag-master">掌握</span>通信方式分类</h4>
                         <ul>
                             <li><strong>串行/并行</strong>：数据位传输方式</li>
                             <li><strong>同步/异步</strong>：时钟同步方式</li>
                             <li><strong>单工/半双工/全双工</strong>：数据方向</li>
                         </ul>
-                    </div>
-                    <div class="knowledge-card">
-                        <h4>波特率</h4>
-                        <ul>
-                            <li>每秒传输的二进制位数</li>
-                            <li>常用：9600、4800、2400 bps</li>
-                        </ul>
+                        <div class="tip-box">
+                            <strong>出题角度：</strong>填空题考通信方式分类
+                        </div>
                     </div>
 
                     <h3>// SCON寄存器（98H）</h3>
-                    <table>
-                        <tr><th>位</th><th>名称</th><th>功能</th></tr>
-                        <tr><td>7-6</td><td>SM0-SM1</td><td>工作方式选择（4种）</td></tr>
-                        <tr><td>5</td><td>SM2</td><td>多机通信控制</td></tr>
-                        <tr><td>4</td><td>REN</td><td>允许接收</td></tr>
-                        <tr><td>3</td><td>TB8</td><td>发送第9位</td></tr>
-                        <tr><td>2</td><td>RB8</td><td>接收第9位</td></tr>
-                        <tr><td>1</td><td>TI</td><td>发送中断标志</td></tr>
-                        <tr><td>0</td><td>RI</td><td>接收中断标志</td></tr>
-                    </table>
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-master">掌握</span>SCON位定义</h4>
+                        <table>
+                            <tr><th>位</th><th>名称</th><th>功能</th><th>说明</th></tr>
+                            <tr><td>7-6</td><td>SM0-SM1</td><td>工作方式选择</td><td>00-11对应方式0-3</td></tr>
+                            <tr><td>5</td><td>SM2</td><td>多机通信控制</td><td>方式2/3使用</td></tr>
+                            <tr><td>4</td><td>REN</td><td>允许接收</td><td>1=允许接收</td></tr>
+                            <tr><td>3</td><td>TB8</td><td>发送第9位</td><td>方式2/3使用</td></tr>
+                            <tr><td>2</td><td>RB8</td><td>接收第9位</td><td>方式2/3使用</td></tr>
+                            <tr><td>1</td><td>TI</td><td>发送中断标志</td><td>发送完自动置1，需软件清0</td></tr>
+                            <tr><td>0</td><td>RI</td><td>接收中断标志</td><td>接收完自动置1，需软件清0</td></tr>
+                        </table>
+                        <div class="warning-box">
+                            <strong>出题重点：</strong>TI和RI必须软件清0（不像定时器中断自动清0）
+                        </div>
+                    </div>
 
                     <h3>// 四种工作方式</h3>
                     <div class="knowledge-card">
-                        <h4>方式0：同步移位</h4>
+                        <h4><span class="level-tag level-tag-know">了解</span>方式0：同步移位</h4>
                         <p>8位，波特率 = fosc/12</p>
                     </div>
                     <div class="knowledge-card">
-                        <h4>方式1：8位UART（最常用）</h4>
+                        <h4><span class="level-tag level-tag-understand">理解</span>方式1：8位UART（最常用）</h4>
                         <p>10位（1起始+8数据+1停止）</p>
+                        <p><strong>波特率计算：</strong></p>
                         <p>波特率 = (2^SMOD/32) × T1溢出率</p>
+                        <p>T1溢出率 = fosc/(12×(256-TH1))</p>
+                        <div class="tip-box">
+                            <strong>出题角度：</strong>给定波特率和晶振，计算TH1初值
+                        </div>
                     </div>
                     <div class="knowledge-card">
-                        <h4>方式2：9位UART</h4>
+                        <h4><span class="level-tag level-tag-know">了解</span>方式2：9位UART</h4>
                         <p>11位，波特率 = (2^SMOD/64) × fosc</p>
                     </div>
                     <div class="knowledge-card">
-                        <h4>方式3：9位UART（可变波特率）</h4>
+                        <h4><span class="level-tag level-tag-know">了解</span>方式3：9位UART（可变波特率）</h4>
                         <p>同方式2，波特率由T1决定</p>
                     </div>
 
-                    <h3>// 初始化步骤</h3>
-                    <ol>
-                        <li>设置SCON（工作方式）</li>
-                        <li>设置PCON（SMOD波特率倍增）</li>
-                        <li>设置T1（波特率发生器，方式2）</li>
-                        <li>开中断（ES、EA）</li>
-                        <li>启动T1（TR1）</li>
-                    </ol>
+                    <h3>// 串口初始化</h3>
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-understand">理解并掌握</span>初始化步骤</h4>
+                        <ol>
+                            <li>设置SCON（工作方式）</li>
+                            <li>设置PCON（SMOD波特率倍增）</li>
+                            <li>设置T1（波特率发生器，方式2）</li>
+                            <li>开中断（ES、EA）</li>
+                            <li>启动T1（TR1）</li>
+                        </ol>
+<pre><code>void UART_Init(void) {
+    SCON = 0x50;    // 方式1，允许接收
+    PCON = 0x00;    // SMOD=0
+    TMOD = 0x20;    // T1方式2
+    TH1 = 0xFD;     // 9600bps (12MHz)
+    TL1 = 0xFD;
+    ES = 1;          // 开串口中断
+    EA = 1;          // 开总中断
+    TR1 = 1;         // 启动T1
+}
+
+void UART_ISR(void) interrupt 4 {
+    if (RI) {
+        RI = 0;      // 软件清0！
+        // 接收处理
+    }
+    if (TI) {
+        TI = 0;      // 软件清0！
+        // 发送完成
+    }
+}</code></pre>
+                    </div>
 
                     <div class="tip-box">
                         重点例题：例8-1、例8-2、例8-4
