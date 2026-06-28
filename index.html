@@ -126,7 +126,6 @@
             padding: 0.75rem 1.25rem;
             background: var(--bg-surface);
             border-bottom: 1px solid var(--border);
-            -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
             position: sticky;
             top: 52px;
@@ -657,6 +656,17 @@
             table { font-size: 0.8rem; }
 
             th, td { padding: 0.5rem 0.625rem; }
+        }
+
+        /* ============ FORMULA ============ */
+        .formula {
+            font-family: var(--font-mono);
+            color: var(--blue-600);
+            font-weight: 700;
+        }
+
+        .footer-note {
+            margin-top: 0.5rem;
         }
 
         /* ============ COLLAPSE ALL BUTTON ============ */
@@ -2377,12 +2387,12 @@ void main(void) {
                     <div class="knowledge-card">
                         <h4>定时器初值计算</h4>
                         <p><strong>方式1（16位）：</strong></p>
-                        <p style="font-family: var(--font-mono); color: var(--blue-600); font-weight: 700;">
+                        <p class="formula">
                             TH0 = (65536 - T×fosc/12) / 256<br>
                             TL0 = (65536 - T×fosc/12) % 256
                         </p>
                         <p><strong>方式2（8位自动重装）：</strong></p>
-                        <p style="font-family: var(--font-mono); color: var(--blue-600); font-weight: 700;">
+                        <p class="formula">
                             TH1 = 256 - T×fosc/12
                         </p>
                         <p><strong>常用值（12MHz）：</strong></p>
@@ -2394,7 +2404,7 @@ void main(void) {
 
                     <div class="knowledge-card">
                         <h4>波特率计算（方式1，T1作波特率发生器）</h4>
-                        <p style="font-family: var(--font-mono); color: var(--blue-600); font-weight: 700;">
+                        <p class="formula">
                             波特率 = (2^SMOD/32) × fosc/(12×(256-TH1))
                         </p>
                         <p><strong>常用值（12MHz，SMOD=0）：</strong></p>
@@ -2471,7 +2481,7 @@ void main(void) {
     <footer class="footer">
         <p>📖 单片机原理及C语言编程应用 - 考前速记</p>
         <p class="highlight">📅 2026-06-29 周一 10:30-12:30 | 祝考试顺利！💪</p>
-        <p style="margin-top: 0.5rem;">Composed by MashedPotato | 最后更新: <span id="lastModified"></span></p>
+        <p class="footer-note">Composed by MashedPotato | 最后更新: <span id="lastModified"></span></p>
     </footer>
 
     <!-- Back to top -->
