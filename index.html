@@ -2354,48 +2354,68 @@ void main(void) {
                     <h3>// 寄存器速记</h3>
 
                     <div class="knowledge-card">
-                        <h4>PSW（程序状态字）D0H</h4>
+                        <h4><span class="sfr-tag sfr-bit">PSW</span> 程序状态字 D0H</h4>
                         <table>
-                            <tr><th>位</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th></tr>
-                            <tr><td>名称</td><td>CY</td><td>AC</td><td>F0</td><td>RS1</td><td>RS0</td><td>OV</td><td>—</td><td>P</td></tr>
-                            <tr><td>功能</td><td>进位</td><td>辅助进位</td><td>用户标志</td><td colspan="2">寄存器组选择</td><td>溢出</td><td>保留</td><td>奇偶</td></tr>
+                            <tr><th>位</th><th>名称</th><th>功能</th></tr>
+                            <tr><td>7</td><td>CY</td><td>进位标志</td></tr>
+                            <tr><td>6</td><td>AC</td><td>辅助进位</td></tr>
+                            <tr><td>5</td><td>F0</td><td>用户标志</td></tr>
+                            <tr><td>4-3</td><td>RS1-RS0</td><td>寄存器组选择</td></tr>
+                            <tr><td>2</td><td>OV</td><td>溢出标志</td></tr>
+                            <tr><td>0</td><td>P</td><td>奇偶标志</td></tr>
                         </table>
                     </div>
 
                     <div class="knowledge-card">
-                        <h4>TCON（定时器控制）88H</h4>
+                        <h4><span class="sfr-tag sfr-bit">TCON</span> 定时器控制 88H</h4>
                         <table>
-                            <tr><th>位</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th></tr>
-                            <tr><td>名称</td><td>TF1</td><td>TR1</td><td>TF0</td><td>TR0</td><td>IE1</td><td>IT1</td><td>IE0</td><td>IT0</td></tr>
-                            <tr><td>功能</td><td>T1溢出</td><td>T1启停</td><td>T0溢出</td><td>T0启停</td><td>INT1标志</td><td>INT1触发</td><td>INT0标志</td><td>INT0触发</td></tr>
+                            <tr><th>位</th><th>名称</th><th>功能</th></tr>
+                            <tr><td>7</td><td>TF1</td><td>T1溢出标志</td></tr>
+                            <tr><td>6</td><td>TR1</td><td>T1启停控制</td></tr>
+                            <tr><td>5</td><td>TF0</td><td>T0溢出标志</td></tr>
+                            <tr><td>4</td><td>TR0</td><td>T0启停控制</td></tr>
+                            <tr><td>3</td><td>IE1</td><td>INT1中断标志</td></tr>
+                            <tr><td>2</td><td>IT1</td><td>INT1触发方式</td></tr>
+                            <tr><td>1</td><td>IE0</td><td>INT0中断标志</td></tr>
+                            <tr><td>0</td><td>IT0</td><td>INT0触发方式</td></tr>
                         </table>
                     </div>
 
                     <div class="knowledge-card">
-                        <h4>TMOD（定时器方式）89H</h4>
+                        <h4>TMOD 定时器方式 89H</h4>
                         <table>
-                            <tr><th>位</th><th>7</th><th>6</th><th>5-4</th><th>3</th><th>2</th><th>1-0</th></tr>
-                            <tr><td>名称</td><td>GATE</td><td>C/T</td><td>M1M0</td><td>GATE</td><td>C/T</td><td>M1M0</td></tr>
-                            <tr><td>归属</td><td colspan="3">T1</td><td colspan="3">T0</td></tr>
+                            <tr><th>位</th><th>T1</th><th>T0</th></tr>
+                            <tr><td>7/3</td><td>GATE</td><td>GATE</td></tr>
+                            <tr><td>6/2</td><td>C/T</td><td>C/T</td></tr>
+                            <tr><td>5-4/1-0</td><td>M1M0</td><td>M1M0</td></tr>
                         </table>
-                        <p><strong>M1M0：</strong>00=方式0(13位) 01=方式1(16位) 10=方式2(8位自动重装) 11=方式3</p>
+                        <p><strong>M1M0：</strong>00=方式0 01=方式1 10=方式2 11=方式3</p>
                     </div>
 
                     <div class="knowledge-card">
-                        <h4>IE（中断允许）A8H</h4>
+                        <h4><span class="sfr-tag sfr-bit">IE</span> 中断允许 A8H</h4>
                         <table>
-                            <tr><th>位</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th></tr>
-                            <tr><td>名称</td><td>EA</td><td>—</td><td>—</td><td>ES</td><td>ET1</td><td>EX1</td><td>ET0</td><td>EX0</td></tr>
-                            <tr><td>功能</td><td>总开关</td><td></td><td></td><td>串口</td><td>T1</td><td>INT1</td><td>T0</td><td>INT0</td></tr>
+                            <tr><th>位</th><th>名称</th><th>功能</th></tr>
+                            <tr><td>7</td><td>EA</td><td>总中断开关</td></tr>
+                            <tr><td>4</td><td>ES</td><td>串口中断</td></tr>
+                            <tr><td>3</td><td>ET1</td><td>T1中断</td></tr>
+                            <tr><td>2</td><td>EX1</td><td>INT1中断</td></tr>
+                            <tr><td>1</td><td>ET0</td><td>T0中断</td></tr>
+                            <tr><td>0</td><td>EX0</td><td>INT0中断</td></tr>
                         </table>
                     </div>
 
                     <div class="knowledge-card">
-                        <h4>SCON（串口控制）98H</h4>
+                        <h4><span class="sfr-tag sfr-bit">SCON</span> 串口控制 98H</h4>
                         <table>
-                            <tr><th>位</th><th>7-6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th></tr>
-                            <tr><td>名称</td><td>SM0-SM1</td><td>SM2</td><td>REN</td><td>TB8</td><td>RB8</td><td>TI</td><td>RI</td></tr>
-                            <tr><td>功能</td><td>方式选择</td><td>多机</td><td>允许接收</td><td>发送第9位</td><td>接收第9位</td><td>发送完成</td><td>接收完成</td></tr>
+                            <tr><th>位</th><th>名称</th><th>功能</th></tr>
+                            <tr><td>7-6</td><td>SM0-SM1</td><td>方式选择</td></tr>
+                            <tr><td>5</td><td>SM2</td><td>多机通信</td></tr>
+                            <tr><td>4</td><td>REN</td><td>允许接收</td></tr>
+                            <tr><td>3</td><td>TB8</td><td>发送第9位</td></tr>
+                            <tr><td>2</td><td>RB8</td><td>接收第9位</td></tr>
+                            <tr><td>1</td><td>TI</td><td>发送完成</td></tr>
+                            <tr><td>0</td><td>RI</td><td>接收完成</td></tr>
                         </table>
                     </div>
 
@@ -2425,8 +2445,11 @@ void main(void) {
                         </p>
                         <p><strong>常用值（12MHz）：</strong></p>
                         <table>
-                            <tr><td>定时</td><td>1ms</td><td>10ms</td><td>50ms</td><td>100ms</td></tr>
-                            <tr><td>初值</td><td>FC18H</td><td>D8F0H</td><td>3CB0H</td><td>1000H</td></tr>
+                            <tr><th>定时</th><th>初值</th></tr>
+                            <tr><td>1ms</td><td class="addr">FC18H</td></tr>
+                            <tr><td>10ms</td><td class="addr">D8F0H</td></tr>
+                            <tr><td>50ms</td><td class="addr">3CB0H</td></tr>
+                            <tr><td>100ms</td><td class="addr">1000H</td></tr>
                         </table>
                     </div>
 
@@ -2437,8 +2460,10 @@ void main(void) {
                         </p>
                         <p><strong>常用值（12MHz，SMOD=0）：</strong></p>
                         <table>
-                            <tr><td>波特率</td><td>2400</td><td>4800</td><td>9600</td></tr>
-                            <tr><td>TH1</td><td>F3H</td><td>F9H</td><td>FDH</td></tr>
+                            <tr><th>波特率</th><th>TH1</th></tr>
+                            <tr><td>2400</td><td class="addr">F3H</td></tr>
+                            <tr><td>4800</td><td class="addr">F9H</td></tr>
+                            <tr><td>9600</td><td class="addr">FDH</td></tr>
                         </table>
                     </div>
 
@@ -2498,10 +2523,17 @@ void main(void) {
                     <h3>// P3口第二功能</h3>
 
                     <div class="knowledge-card">
-                        <h4>P3口第二功能速记</h4>
+                        <h4><span class="sfr-tag sfr-io">P3</span> 口第二功能</h4>
                         <table>
-                            <tr><td>P3.0</td><td>P3.1</td><td>P3.2</td><td>P3.3</td><td>P3.4</td><td>P3.5</td><td>P3.6</td><td>P3.7</td></tr>
-                            <tr><td>RXD</td><td>TXD</td><td>INT0</td><td>INT1</td><td>T0</td><td>T1</td><td>WR</td><td>RD</td></tr>
+                            <tr><th>引脚</th><th>第二功能</th></tr>
+                            <tr><td>P3.0</td><td><span class="sfr-tag sfr-uart">RXD</span> 串行接收</td></tr>
+                            <tr><td>P3.1</td><td><span class="sfr-tag sfr-uart">TXD</span> 串行发送</td></tr>
+                            <tr><td>P3.2</td><td><span class="sfr-tag sfr-int">INT0</span> 外部中断0</td></tr>
+                            <tr><td>P3.3</td><td><span class="sfr-tag sfr-int">INT1</span> 外部中断1</td></tr>
+                            <tr><td>P3.4</td><td><span class="sfr-tag sfr-timer">T0</span> 定时器0</td></tr>
+                            <tr><td>P3.5</td><td><span class="sfr-tag sfr-timer">T1</span> 定时器1</td></tr>
+                            <tr><td>P3.6</td><td><span class="sfr-tag sfr-io">WR</span> 外部RAM写</td></tr>
+                            <tr><td>P3.7</td><td><span class="sfr-tag sfr-io">RD</span> 外部RAM读</td></tr>
                         </table>
                     </div>
 
