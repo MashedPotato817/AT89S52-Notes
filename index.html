@@ -1639,71 +1639,101 @@ unsigned char KeyScan() {
             </div>
         </section>
 
-        <!-- Module 6: Interrupt System -->
+        <!-- Module 6: Interrupt System (第6章) -->
         <section class="card" id="module6">
             <div class="card-header">
-                <h2><span class="icon">⏱️</span> 中断系统（第6章）</h2>
+                <h2><span class="icon">🔔</span> 中断系统（第6章）</h2>
                 <span class="arrow">▼</span>
             </div>
             <div class="card-content">
                 <div class="card-body">
-                    <div class="warning-box">
-                        不考：6.5节
+
+                    <h3>// 五个中断源</h3>
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-master">掌握</span>中断源与入口地址</h4>
+                        <table>
+                            <tr><th>中断源</th><th>中断号</th><th>入口地址</th><th>优先级</th></tr>
+                            <tr><td>INT0（外部中断0）</td><td>0</td><td>0003H</td><td>最高</td></tr>
+                            <tr><td>T0（定时器0）</td><td>1</td><td>000BH</td><td>↓</td></tr>
+                            <tr><td>INT1（外部中断1）</td><td>2</td><td>0013H</td><td>↓</td></tr>
+                            <tr><td>T1（定时器1）</td><td>3</td><td>001BH</td><td>↓</td></tr>
+                            <tr><td>串行口</td><td>4</td><td>0023H</td><td>最低</td></tr>
+                        </table>
+                        <div class="warning-box">
+                            <strong>出题重点：</strong>填空题考入口地址（0003H、000BH等），选择题考优先级顺序
+                        </div>
                     </div>
 
-                    <h3>// T0/T1 核心寄存器</h3>
+                    <h3>// 中断控制寄存器</h3>
                     <div class="knowledge-card">
-                        <h4>寄存器映射</h4>
+                        <h4><span class="level-tag level-tag-master">掌握</span>TCON寄存器（88H）</h4>
+                        <table>
+                            <tr><th>位</th><th>名称</th><th>功能</th><th>说明</th></tr>
+                            <tr><td>7</td><td>TF1</td><td>T1溢出标志</td><td>溢出自动置1，响应后自动清0</td></tr>
+                            <tr><td>6</td><td>TR1</td><td>T1启停控制</td><td>1=启动，0=停止</td></tr>
+                            <tr><td>5</td><td>TF0</td><td>T0溢出标志</td><td>同TF1</td></tr>
+                            <tr><td>4</td><td>TR0</td><td>T0启停控制</td><td>同TR1</td></tr>
+                            <tr><td>3</td><td>IE1</td><td>INT1中断标志</td><td>有中断请求时置1</td></tr>
+                            <tr><td>2</td><td>IT1</td><td>INT1触发方式</td><td>0=低电平，1=下降沿</td></tr>
+                            <tr><td>1</td><td>IE0</td><td>INT0中断标志</td><td>同IE1</td></tr>
+                            <tr><td>0</td><td>IT0</td><td>INT0触发方式</td><td>同IT1</td></tr>
+                        </table>
+                        <div class="tip-box">
+                            <strong>出题角度：</strong>给定TCON值，判断哪些中断有请求
+                        </div>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-master">掌握</span>IE寄存器（A8H）- 中断允许</h4>
+                        <table>
+                            <tr><th>位</th><th>名称</th><th>功能</th></tr>
+                            <tr><td>7</td><td>EA</td><td>总中断允许（1=允许）</td></tr>
+                            <tr><td>4</td><td>ES</td><td>串口中断允许</td></tr>
+                            <tr><td>3</td><td>ET1</td><td>T1中断允许</td></tr>
+                            <tr><td>2</td><td>EX1</td><td>INT1中断允许</td></tr>
+                            <tr><td>1</td><td>ET0</td><td>T0中断允许</td></tr>
+                            <tr><td>0</td><td>EX0</td><td>INT0中断允许</td></tr>
+                        </table>
+                        <div class="warning-box">
+                            <strong>出题重点：</strong>EA是总开关，必须先开EA再开具体中断
+                        </div>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-understand">理解</span>IP寄存器（B8H）- 中断优先级</h4>
                         <ul>
-                            <li><strong>TMOD</strong>（89H）：工作方式控制</li>
-                            <li><strong>TCON</strong>（88H）：控制和标志</li>
-                            <li><strong>TH0/TL0</strong>：定时器0高/低字节</li>
-                            <li><strong>TH1/TL1</strong>：定时器1高/低字节</li>
+                            <li><strong>PX0/PX1</strong>：外部中断优先级</li>
+                            <li><strong>PT0/PT1</strong>：定时器优先级</li>
+                            <li><strong>PS</strong>：串口优先级</li>
+                            <li>1=高优先级，0=低优先级</li>
                         </ul>
                     </div>
 
-                    <h3>// 四种工作方式</h3>
+                    <h3>// 中断处理过程</h3>
                     <div class="knowledge-card">
-                        <h4>方式0：13位定时/计数</h4>
-                        <p>TH0(8位) + TL0(5位) = 13位</p>
-                    </div>
-                    <div class="knowledge-card">
-                        <h4>方式1：16位定时/计数（最常用）</h4>
-                        <p>TH0(8位) + TL0(8位) = 16位</p>
-                        <p><strong>计数初值计算：</strong></p>
-                        <ul>
-                            <li>定时模式：X = 65536 - T×fosc/12</li>
-                            <li>计数模式：X = 65536 - N</li>
-                        </ul>
-                    </div>
-                    <div class="knowledge-card">
-                        <h4>方式2：8位自动重装</h4>
-                        <p>TL0计数，溢出时TH0自动重装，适合定时</p>
-                    </div>
-                    <div class="knowledge-card">
-                        <h4>方式3：仅T0可用</h4>
-                        <p>T0分为两个8位定时器，T1停止</p>
-                    </div>
-
-                    <h3>// TMOD寄存器</h3>
-                    <table>
-                        <tr><th>位</th><th>名称</th><th>功能</th></tr>
-                        <tr><td>7</td><td>GATE</td><td>T1门控位（1=INT1控制启停）</td></tr>
-                        <tr><td>6</td><td>C/T</td><td>T1定时/计数选择（0=定时，1=计数）</td></tr>
-                        <tr><td>5-4</td><td>M1M0</td><td>T1工作方式</td></tr>
-                        <tr><td>3-0</td><td>-</td><td>T0同上</td></tr>
-                    </table>
-
-                    <h3>// 初始化步骤</h3>
-                    <div class="knowledge-card">
-                        <h4>定时器初始化流程</h4>
+                        <h4><span class="level-tag level-tag-master">掌握</span>中断响应条件</h4>
                         <ol>
-                            <li>确定工作方式，写TMOD</li>
-                            <li>计算计数初值，装TH0/TL0</li>
-                            <li>开中断（ET0/ET1、EA）</li>
-                            <li>启动定时器（TR0/TR1）</li>
-                            <li>编写中断服务程序</li>
+                            <li>有中断请求（相应标志位置1）</li>
+                            <li>中断允许（EA=1，相应Ex/ETx=1）</li>
+                            <li>没有同级或更高级中断正在服务</li>
+                            <li>当前指令执行完毕</li>
                         </ol>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-master">掌握</span>中断函数定义（C51）</h4>
+<pre><code>void INT0_ISR(void) interrupt 0 {
+    // 外部中断0服务程序
+}
+
+void Timer0_ISR(void) interrupt 1 {
+    // 定时器0中断服务程序
+    TH0 = 0x3C;  // 重装初值
+    TL0 = 0xB0;
+}</code></pre>
+                        <div class="warning-box">
+                            <strong>出题重点：</strong>interrupt后面的中断号必须正确对应
+                        </div>
                     </div>
 
                     <div class="tip-box">
@@ -1717,65 +1747,98 @@ unsigned char KeyScan() {
             </div>
         </section>
 
-        <!-- Module 7: Timer/Counter -->
+        <!-- Module 7: Timer/Counter (第7章) -->
         <section class="card" id="module7">
             <div class="card-header">
-                <h2><span class="icon">🔔</span> 定时器/计数器（第7章）</h2>
+                <h2><span class="icon">⏱️</span> 定时器/计数器（第7章）</h2>
                 <span class="arrow">▼</span>
             </div>
             <div class="card-content">
                 <div class="card-body">
                     <div class="warning-box">
-                        不考：7.4节
+                        不考：7.4.4~7.4.7，7.5
                     </div>
 
-                    <h3>// 五个中断源</h3>
-                    <table>
-                        <tr><th>中断源</th><th>入口地址</th><th>优先级</th></tr>
-                        <tr><td>INT0（外部中断0）</td><td>0003H</td><td>最高</td></tr>
-                        <tr><td>T0（定时器0）</td><td>000BH</td><td>↓</td></tr>
-                        <tr><td>INT1（外部中断1）</td><td>0013H</td><td>↓</td></tr>
-                        <tr><td>T1（定时器1）</td><td>001BH</td><td>↓</td></tr>
-                        <tr><td>串行口</td><td>0023H</td><td>最低</td></tr>
-                    </table>
-
-                    <h3>// 中断控制寄存器</h3>
+                    <h3>// T0/T1 核心寄存器</h3>
                     <div class="knowledge-card">
-                        <h4>TCON寄存器（88H）</h4>
+                        <h4><span class="level-tag level-tag-master">掌握</span>寄存器映射</h4>
                         <ul>
-                            <li><strong>IT0/IT1</strong>：触发方式（0=低电平，1=下降沿）</li>
-                            <li><strong>IE0/IE1</strong>：中断请求标志</li>
-                            <li><strong>TR0/TR1</strong>：定时器启停</li>
-                            <li><strong>TF0/TF1</strong>：定时器溢出标志</li>
-                        </ul>
-                    </div>
-                    <div class="knowledge-card">
-                        <h4>IE寄存器（A8H）</h4>
-                        <ul>
-                            <li><strong>EA</strong>：总中断允许</li>
-                            <li><strong>ET0/ET1</strong>：定时器中断允许</li>
-                            <li><strong>EX0/EX1</strong>：外部中断允许</li>
-                            <li><strong>ES</strong>：串口中断允许</li>
-                        </ul>
-                    </div>
-                    <div class="knowledge-card">
-                        <h4>IP寄存器（B8H）</h4>
-                        <ul>
-                            <li><strong>PX0/PX1</strong>：外部中断优先级</li>
-                            <li><strong>PT0/PT1</strong>：定时器优先级</li>
-                            <li><strong>PS</strong>：串口优先级</li>
-                            <li>1=高优先级，0=低优先级</li>
+                            <li><strong>TMOD</strong>（89H）：工作方式控制</li>
+                            <li><strong>TCON</strong>（88H）：控制和标志</li>
+                            <li><strong>TH0/TL0</strong>：定时器0高/低字节</li>
+                            <li><strong>TH1/TL1</strong>：定时器1高/低字节</li>
                         </ul>
                     </div>
 
-                    <h3>// 中断处理过程</h3>
-                    <ol>
-                        <li>中断请求（硬件置位标志）</li>
-                        <li>中断响应（检查条件）</li>
-                        <li>断点保护（PC自动入栈）</li>
-                        <li>中断服务（执行ISR）</li>
-                        <li>中断返回（RETI）</li>
-                    </ol>
+                    <h3>// TMOD寄存器</h3>
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-master">掌握</span>TMOD位定义</h4>
+                        <table>
+                            <tr><th>位</th><th>名称</th><th>功能</th></tr>
+                            <tr><td>7</td><td>GATE</td><td>T1门控位（1=INT1控制启停）</td></tr>
+                            <tr><td>6</td><td>C/T</td><td>T1定时/计数选择（0=定时，1=计数）</td></tr>
+                            <tr><td>5-4</td><td>M1M0</td><td>T1工作方式（00-11）</td></tr>
+                            <tr><td>3</td><td>GATE</td><td>T0门控位</td></tr>
+                            <tr><td>2</td><td>C/T</td><td>T0定时/计数选择</td></tr>
+                            <tr><td>1-0</td><td>M1M0</td><td>T0工作方式</td></tr>
+                        </table>
+                    </div>
+
+                    <h3>// 四种工作方式</h3>
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-know">了解</span>方式0：13位定时/计数</h4>
+                        <p>TH0(8位) + TL0(5位) = 13位</p>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-master">掌握</span>方式1：16位定时/计数（最常用）</h4>
+                        <p>TH0(8位) + TL0(8位) = 16位</p>
+                        <p><strong>计数初值计算：</strong></p>
+                        <ul>
+                            <li>定时模式：X = 65536 - T×fosc/12</li>
+                            <li>计数模式：X = 65536 - N</li>
+                        </ul>
+                        <div class="tip-box">
+                            <strong>出题重点：</strong>给定定时时间和晶振频率，计算初值（例7-1、7-2）
+                        </div>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-master">掌握</span>方式2：8位自动重装</h4>
+                        <p>TL0计数，溢出时TH0自动重装</p>
+                        <p><strong>初值计算：</strong>X = 256 - T×fosc/12</p>
+                        <div class="tip-box">
+                            <strong>出题角度：</strong>适合精确定时，不需要在中断中重装初值
+                        </div>
+                    </div>
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-know">了解</span>方式3：仅T0可用</h4>
+                        <p>T0分为两个8位定时器（TH0+TL0），T1停止</p>
+                    </div>
+
+                    <h3>// 初始化步骤</h3>
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-master">掌握</span>定时器初始化流程</h4>
+                        <ol>
+                            <li>确定工作方式，写TMOD</li>
+                            <li>计算计数初值，装TH0/TL0</li>
+                            <li>开中断（ET0/ET1、EA）</li>
+                            <li>启动定时器（TR0/TR1）</li>
+                            <li>编写中断服务程序</li>
+                        </ol>
+<pre><code>void Timer0_Init(void) {
+    TMOD = 0x01;    // T0方式1
+    TH0 = 0x3C;     // 50ms初值 (12MHz)
+    TL0 = 0xB0;
+    ET0 = 1;         // 开T0中断
+    EA = 1;          // 开总中断
+    TR0 = 1;         // 启动T0
+}
+
+void Timer0_ISR(void) interrupt 1 {
+    TH0 = 0x3C;     // 重装初值
+    TL0 = 0xB0;
+    // 定时处理
+}</code></pre>
+                    </div>
 
                     <div class="tip-box">
                         重点例题：例7-1、例7-2、例7-3
