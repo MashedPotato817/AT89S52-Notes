@@ -61,6 +61,7 @@
         html {
             scroll-behavior: smooth;
             -webkit-tap-highlight-color: transparent;
+            scroll-padding-top: 100px;
         }
 
         body {
@@ -157,80 +158,6 @@
             padding: 0.25rem 0.75rem;
             border: 1px solid rgba(251, 191, 36, 0.3);
             border-radius: var(--radius);
-        }
-
-        /* ============ HAMBURGER ============ */
-        .menu-toggle {
-            display: none;
-            position: fixed;
-            top: 0.65rem;
-            right: 0.75rem;
-            width: 42px;
-            height: 42px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            cursor: pointer;
-            z-index: 200;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            transition: border-color 0.3s;
-        }
-
-        .menu-toggle:hover { border-color: var(--green-400); }
-
-        .menu-toggle span {
-            display: block;
-            width: 18px;
-            height: 2px;
-            background: var(--green-400);
-            border-radius: 1px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translateY(7px); }
-        .menu-toggle.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-        .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translateY(-7px); }
-
-        /* ============ FULLSCREEN NAV ============ */
-        .fullscreen-nav {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: var(--bg-deep);
-            z-index: 150;
-            padding: 5rem 1.5rem 1.5rem;
-            overflow-y: auto;
-            animation: navFadeIn 0.25s ease;
-        }
-
-        @keyframes navFadeIn {
-            from { opacity: 0; transform: translateY(-8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .fullscreen-nav.active { display: block; }
-
-        .fullscreen-nav a {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 1rem 1.25rem;
-            color: var(--text-secondary);
-            text-decoration: none;
-            border-bottom: 1px solid var(--border);
-            font-family: var(--font-mono);
-            font-size: 0.9rem;
-            transition: all 0.2s;
-        }
-
-        .fullscreen-nav a:hover,
-        .fullscreen-nav a:active {
-            background: var(--green-glow);
-            color: var(--green-400);
-            border-color: var(--border-bright);
         }
 
         /* ============ QUICK NAV ============ */
@@ -776,28 +703,6 @@
     </style>
 </head>
 <body>
-    <!-- Hamburger -->
-    <button class="menu-toggle" id="menuToggle" aria-label="菜单">
-        <span></span><span></span><span></span>
-    </button>
-
-    <!-- Fullscreen Nav -->
-    <nav class="fullscreen-nav" id="fullscreenNav">
-        <a href="#guide" onclick="closeMenu()">📖 复习指南</a>
-        <a href="#module0" onclick="closeMenu()">📋 考试信息</a>
-        <a href="#module1" onclick="closeMenu()">💻 C语言基础（1-4章）</a>
-        <a href="#module2" onclick="closeMenu()">💻 C语言进阶（5-8章）</a>
-        <a href="#module3" onclick="closeMenu()">🔧 硬件结构（1-2章）</a>
-        <a href="#module4" onclick="closeMenu()">📝 指令系统（第3章）</a>
-        <a href="#module5" onclick="closeMenu()">⚙️ 汇编程序（第5章）</a>
-        <a href="#module6" onclick="closeMenu()">⏱️ 定时器（第6章）</a>
-        <a href="#module7" onclick="closeMenu()">🔔 中断系统（第7章）</a>
-        <a href="#module8" onclick="closeMenu()">📡 串口通信（第8章）</a>
-        <a href="#module9" onclick="closeMenu()">🔌 系统扩展（第9章）</a>
-        <a href="#module10" onclick="closeMenu()">📟 C51编程（第11章）</a>
-        <a href="#code-templates" onclick="closeMenu()">📝 代码模板</a>
-    </nav>
-
     <!-- Header -->
     <header class="header">
         <div class="header-content">
@@ -2155,22 +2060,6 @@ void main(void) {
                 card.classList.toggle('active');
             });
         });
-
-        // Hamburger menu
-        const menuToggle = document.getElementById('menuToggle');
-        const fullscreenNav = document.getElementById('fullscreenNav');
-
-        menuToggle.addEventListener('click', () => {
-            menuToggle.classList.toggle('active');
-            fullscreenNav.classList.toggle('active');
-            document.body.style.overflow = fullscreenNav.classList.contains('active') ? 'hidden' : '';
-        });
-
-        function closeMenu() {
-            menuToggle.classList.remove('active');
-            fullscreenNav.classList.remove('active');
-            document.body.style.overflow = '';
-        }
 
         // Back to top
         const backToTop = document.getElementById('backToTop');
