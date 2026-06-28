@@ -658,6 +658,37 @@
             th, td { padding: 0.5rem 0.625rem; }
         }
 
+        /* ============ SFR TAGS ============ */
+        .sfr-tag {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            margin-right: 0.25rem;
+        }
+
+        .sfr-io { background: #dbeafe; color: #1d4ed8; }
+        .sfr-bit { background: #fef3c7; color: #92400e; }
+        .sfr-int { background: #fee2e2; color: #991b1b; }
+        .sfr-timer { background: #e0e7ff; color: #3730a3; }
+        .sfr-uart { background: #d1fae5; color: #065f46; }
+
+        .sfr-legend {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .addr {
+            font-family: var(--font-mono);
+            font-weight: 600;
+            color: var(--blue-600);
+        }
+
         /* ============ FORMULA ============ */
         .formula {
             font-family: var(--font-mono);
@@ -2416,21 +2447,42 @@ void main(void) {
                     <div class="knowledge-card">
                         <h4>中断入口地址</h4>
                         <table>
-                            <tr><td>INT0</td><td>T0</td><td>INT1</td><td>T1</td><td>串口</td></tr>
-                            <tr><td>0003H</td><td>000BH</td><td>0013H</td><td>001BH</td><td>0023H</td></tr>
+                            <tr><th>中断源</th><th>入口地址</th><th>优先级</th></tr>
+                            <tr><td><span class="sfr-tag sfr-int">INT0</span> 外部中断0</td><td class="addr">0003H</td><td>最高</td></tr>
+                            <tr><td><span class="sfr-tag sfr-timer">T0</span> 定时器0</td><td class="addr">000BH</td><td>↓</td></tr>
+                            <tr><td><span class="sfr-tag sfr-int">INT1</span> 外部中断1</td><td class="addr">0013H</td><td>↓</td></tr>
+                            <tr><td><span class="sfr-tag sfr-timer">T1</span> 定时器1</td><td class="addr">001BH</td><td>↓</td></tr>
+                            <tr><td><span class="sfr-tag sfr-uart">UART</span> 串行口</td><td class="addr">0023H</td><td>最低</td></tr>
                         </table>
                     </div>
 
                     <div class="knowledge-card">
-                        <h4>常用SFR地址</h4>
+                        <h4>常用SFR地址（按功能分类）</h4>
+                        <p><strong>I/O端口类</strong></p>
                         <table>
-                            <tr><td>P0</td><td>P1</td><td>P2</td><td>P3</td><td>SP</td><td>PSW</td><td>ACC</td><td>B</td></tr>
-                            <tr><td>80H</td><td>90H</td><td>A0H</td><td>B0H</td><td>81H</td><td>D0H</td><td>E0H</td><td>F0H</td></tr>
+                            <tr><td><span class="sfr-tag sfr-io">P0</span></td><td class="addr">80H</td><td><span class="sfr-tag sfr-io">P1</span></td><td class="addr">90H</td><td><span class="sfr-tag sfr-io">P2</span></td><td class="addr">A0H</td><td><span class="sfr-tag sfr-io">P3</span></td><td class="addr">B0H</td></tr>
                         </table>
+                        <p><strong>指针与状态类</strong></p>
                         <table>
-                            <tr><td>TCON</td><td>TMOD</td><td>TH0</td><td>TL0</td><td>TH1</td><td>TL1</td><td>SCON</td><td>IE</td></tr>
-                            <tr><td>88H</td><td>89H</td><td>8CH</td><td>8AH</td><td>8DH</td><td>8BH</td><td>98H</td><td>A8H</td></tr>
+                            <tr><td>SP</td><td class="addr">81H</td><td>DPL</td><td class="addr">82H</td><td>DPH</td><td class="addr">83H</td><td><span class="sfr-tag sfr-bit">PSW</span></td><td class="addr">D0H</td></tr>
+                            <tr><td>ACC</td><td class="addr">E0H</td><td>B</td><td class="addr">F0H</td><td colspan="4"></td></tr>
                         </table>
+                        <p><strong>定时器类</strong></p>
+                        <table>
+                            <tr><td><span class="sfr-tag sfr-bit">TCON</span></td><td class="addr">88H</td><td>TMOD</td><td class="addr">89H</td><td>TL0</td><td class="addr">8AH</td><td>TL1</td><td class="addr">8BH</td></tr>
+                            <tr><td>TH0</td><td class="addr">8CH</td><td>TH1</td><td class="addr">8DH</td><td colspan="4"></td></tr>
+                        </table>
+                        <p><strong>中断与串口类</strong></p>
+                        <table>
+                            <tr><td><span class="sfr-tag sfr-bit">IE</span></td><td class="addr">A8H</td><td><span class="sfr-tag sfr-bit">IP</span></td><td class="addr">B8H</td><td><span class="sfr-tag sfr-bit">SCON</span></td><td class="addr">98H</td><td>PCON</td><td class="addr">87H</td></tr>
+                        </table>
+                        <p class="sfr-legend">
+                            <span class="sfr-tag sfr-io">IO口</span>
+                            <span class="sfr-tag sfr-bit">可位寻址</span>
+                            <span class="sfr-tag sfr-int">中断</span>
+                            <span class="sfr-tag sfr-timer">定时器</span>
+                            <span class="sfr-tag sfr-uart">串口</span>
+                        </p>
                     </div>
 
                     <h3>// 复位后SFR初值</h3>
