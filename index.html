@@ -1407,78 +1407,100 @@ struct Student s1 = {101, "Li", 89.5};</code></pre>
             <div class="card-content">
                 <div class="card-body">
                     <div class="info-box">
-                        111条指令，重点掌握寻址方式和常用指令
+                        C51编程语言基础，重点掌握数据类型、存储类型、SFR定义、中断函数
                     </div>
 
-                    <h3>// 七种寻址方式</h3>
+                    <h3>// C51与标准C的区别</h3>
                     <div class="knowledge-card">
-                        <h4>1. 立即寻址</h4>
-                        <p>操作数在指令中：<code>MOV A, #30H</code></p>
-                    </div>
-                    <div class="knowledge-card">
-                        <h4>2. 直接寻址</h4>
-                        <p>操作数为地址：<code>MOV A, 30H</code>（访问片内RAM 30H单元）</p>
-                    </div>
-                    <div class="knowledge-card">
-                        <h4>3. 寄存器寻址</h4>
-                        <p>操作数在寄存器中：<code>MOV A, R0</code></p>
-                    </div>
-                    <div class="knowledge-card">
-                        <h4>4. 寄存器间接寻址</h4>
-                        <p>寄存器内容为地址：<code>MOV A, @R0</code>（R0中为地址）</p>
-                    </div>
-                    <div class="knowledge-card">
-                        <h4>5. 变址寻址</h4>
-                        <p>基址+变址：<code>MOVC A, @A+DPTR</code></p>
-                    </div>
-                    <div class="knowledge-card">
-                        <h4>6. 相对寻址</h4>
-                        <p>PC+偏移量：<code>SJMP rel</code>（相对转移）</p>
-                    </div>
-                    <div class="knowledge-card">
-                        <h4>7. 位寻址</h4>
-                        <p>对位操作：<code>MOV C, 20H</code>（位地址20H）</p>
+                        <h4><span class="level-tag level-tag-master">掌握</span>C51特殊数据类型</h4>
+                        <table>
+                            <tr><th>类型</th><th>说明</th><th>示例</th></tr>
+                            <tr><td><code>bit</code></td><td>位变量（1位）</td><td><code>bit flag;</code></td></tr>
+                            <tr><td><code>sbit</code></td><td>特殊功能位</td><td><code>sbit LED = P1^0;</code></td></tr>
+                            <tr><td><code>sfr</code></td><td>特殊功能寄存器（8位）</td><td><code>sfr P1 = 0x90;</code></td></tr>
+                            <tr><td><code>sfr16</code></td><td>16位特殊功能寄存器</td><td><code>sfr16 T0 = 0x8A;</code></td></tr>
+                        </table>
+                        <div class="tip-box">
+                            <strong>出题角度：</strong>填空题考<code>sfr</code>、<code>sbit</code>的定义格式；选择题考哪个关键字用于定义位变量
+                        </div>
                     </div>
 
-                    <h3>// 常用指令分类</h3>
                     <div class="knowledge-card">
-                        <h4>数据传送类</h4>
-                        <ul>
-                            <li><code>MOV</code> - 片内RAM传送</li>
-                            <li><code>MOVX</code> - 片外RAM传送</li>
-                            <li><code>MOVC</code> - ROM查表</li>
-                            <li><code>XCH</code> - 字节交换</li>
-                            <li><code>PUSH/POP</code> - 堆栈操作</li>
-                        </ul>
+                        <h4><span class="level-tag level-tag-understand">理解</span>C51存储类型</h4>
+                        <table>
+                            <tr><th>关键字</th><th>存储区域</th><th>访问速度</th><th>说明</th></tr>
+                            <tr><td><code>data</code></td><td>片内RAM 00H-7FH</td><td>最快</td><td>直接寻址</td></tr>
+                            <tr><td><code>bdata</code></td><td>片内RAM 20H-2FH</td><td>快</td><td>可位寻址</td></tr>
+                            <tr><td><code>idata</code></td><td>片内RAM 00H-FFH</td><td>较快</td><td>间接寻址</td></tr>
+                            <tr><td><code>xdata</code></td><td>片外RAM 0000H-FFFFH</td><td>慢</td><td>MOVX访问</td></tr>
+                            <tr><td><code>code</code></td><td>ROM程序存储器</td><td>—</td><td>MOVC访问</td></tr>
+                        </table>
+                        <div class="warning-box">
+                            <strong>出题重点：</strong>给定变量定义，判断存储在哪个区域；选择合适的存储类型
+                        </div>
                     </div>
+
                     <div class="knowledge-card">
-                        <h4>算术运算类</h4>
-                        <ul>
-                            <li><code>ADD/ADDC</code> - 加法/带进位加</li>
-                            <li><code>SUBB</code> - 带借位减</li>
-                            <li><code>INC/DEC</code> - 加1/减1</li>
-                            <li><code>MUL AB</code> - 乘法（A×B→BA）</li>
-                            <li><code>DIV AB</code> - 除法（A÷B→A...B）</li>
-                            <li><code>DA A</code> - BCD调整</li>
-                        </ul>
+                        <h4><span class="level-tag level-tag-master">掌握</span>SFR和位变量定义</h4>
+                        <p><strong>头文件方式（推荐）：</strong></p>
+<pre><code>#include &lt;reg51.h&gt;  // 包含所有SFR定义</code></pre>
+                        <p><strong>手动定义方式：</strong></p>
+<pre><code>sfr P1 = 0x90;      // 定义P1口地址
+sbit LED = P1^0;    // 定义P1.0位
+sbit KEY = P3^2;    // 定义P3.2位</code></pre>
+                        <div class="tip-box">
+                            <strong>出题角度：</strong>编程题要求用<code>sbit</code>定义引脚；填空题考SFR地址（如P1=90H）
+                        </div>
                     </div>
+
                     <div class="knowledge-card">
-                        <h4>逻辑运算类</h4>
-                        <ul>
-                            <li><code>ANL</code> - 与 / <code>ORL</code> - 或 / <code>XRL</code> - 异或</li>
-                            <li><code>RL/RR/RLC/RRC</code> - 移位</li>
-                            <li><code>CPL</code> - 取反 / <code>CLR</code> - 清零</li>
-                        </ul>
+                        <h4><span class="level-tag level-tag-master">掌握</span>绝对地址访问（_at_关键字）</h4>
+<pre><code>unsigned char xdata myvar _at_ 0x1000;
+// 在片外RAM 1000H处定义变量</code></pre>
+                        <div class="tip-box">
+                            <strong>出题角度：</strong>理解并掌握教材P53例3-3、例3-4
+                        </div>
                     </div>
+
                     <div class="knowledge-card">
-                        <h4>控制转移类</h4>
-                        <ul>
-                            <li><code>LJMP/AJMP/SJMP/JMP</code> - 无条件转移</li>
-                            <li><code>JZ/JNZ</code> - 判断A是否为0</li>
-                            <li><code>CJNE</code> - 比较不等转移</li>
-                            <li><code>DJNZ</code> - 减1不为0转移（循环常用）</li>
-                            <li><code>LCALL/ACALL/RET</code> - 子程序调用与返回</li>
-                        </ul>
+                        <h4><span class="level-tag level-tag-master">掌握</span>C51位运算</h4>
+                        <table>
+                            <tr><th>运算符</th><th>说明</th><th>示例</th></tr>
+                            <tr><td><code>&</code></td><td>按位与</td><td><code>P1 = P1 & 0xFE;</code>（清最低位）</td></tr>
+                            <tr><td><code>|</code></td><td>按位或</td><td><code>P1 = P1 | 0x01;</code>（置最低位）</td></tr>
+                            <tr><td><code>^</code></td><td>按位异或</td><td><code>P1 = P1 ^ 0x01;</code>（翻转最低位）</td></tr>
+                            <tr><td><code>~</code></td><td>按位取反</td><td><code>P1 = ~P1;</code></td></tr>
+                        </table>
+                        <div class="tip-box">
+                            <strong>出题角度：</strong>理解并掌握教材P56例3-5
+                        </div>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-master">掌握</span>中断服务函数</h4>
+<pre><code>void Timer0_ISR(void) interrupt 1 {
+    // interrupt n: 中断号
+    // 0=INT0, 1=T0, 2=INT1, 3=T1, 4=串口
+    TH0 = 0x3C;  // 重装初值
+    TL0 = 0xB0;
+}</code></pre>
+                        <div class="warning-box">
+                            <strong>出题重点：</strong>中断号与中断源的对应关系；中断函数的定义格式
+                        </div>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-master">掌握</span>常用库函数</h4>
+                        <table>
+                            <tr><th>头文件</th><th>功能</th></tr>
+                            <tr><td><code>reg51.h</code></td><td>SFR定义</td></tr>
+                            <tr><td><code>absacc.h</code></td><td>绝对地址访问（XBYTE等）</td></tr>
+                            <tr><td><code>stdio.h</code></td><td>标准输入输出</td></tr>
+                            <tr><td><code>string.h</code></td><td>字符串操作</td></tr>
+                        </table>
+                        <div class="tip-box">
+                            <strong>出题角度：</strong>选择题考哪个头文件包含SFR定义
+                        </div>
                     </div>
 
                     <div class="tip-box">
