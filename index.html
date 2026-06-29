@@ -2597,8 +2597,15 @@ void main(void) {
                     <div class="knowledge-card">
                         <h4>复位后关键寄存器值</h4>
                         <table>
-                            <tr><td>PC</td><td>SP</td><td>P0-P3</td><td>PSW</td><td>TMOD</td><td>TH0/TL0</td><td>IE</td><td>IP</td></tr>
-                            <tr><td>0000H</td><td>07H</td><td>FFH</td><td>00H</td><td>00H</td><td>00H</td><td>00H</td><td>00H</td></tr>
+                            <tr><th>寄存器</th><th>复位值</th><th>含义</th></tr>
+                            <tr><td>PC</td><td class="addr">0000H</td><td>程序从0000H开始</td></tr>
+                            <tr><td>SP</td><td class="addr">07H</td><td>堆栈指针</td></tr>
+                            <tr><td>P0-P3</td><td class="addr">FFH</td><td>I/O口全高</td></tr>
+                            <tr><td>PSW</td><td class="addr">00H</td><td>选择第0组寄存器</td></tr>
+                            <tr><td>TMOD</td><td class="addr">00H</td><td>定时器方式0</td></tr>
+                            <tr><td>TH0/TL0</td><td class="addr">00H</td><td>定时器清零</td></tr>
+                            <tr><td>IE</td><td class="addr">00H</td><td>中断全部禁止</td></tr>
+                            <tr><td>IP</td><td class="addr">00H</td><td>低优先级</td></tr>
                         </table>
                     </div>
 
