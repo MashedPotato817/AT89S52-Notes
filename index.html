@@ -2193,22 +2193,104 @@ unsigned char ADC_Read(unsigned char ch) {
 
                     <h3>// 软件滤波</h3>
                     <div class="knowledge-card">
-                        <h4><span class="level-tag level-tag-master">掌握</span>常见滤波方法（例11-8/9/10）</h4>
-                        <p><strong>1. 算术平均滤波：</strong></p>
-<pre><code>unsigned char AvgFilter() {
+                        <h4><span class="level-tag level-tag-master">掌握</span>1. 算术平均滤波（例11-8）</h4>
+                        <p>连续采样N次，取平均值</p>
+<pre><code>#define N 16
+
+unsigned char AvgFilter(void) {
     unsigned int sum = 0;
     unsigned char i;
-    for(i=0; i&lt;16; i++) {
-        sum += ADC_Read(0);
+    for(i = 0; i &lt; N; i++) {
+        sum += ADC_Read(0);  // 采样N次累加
     }
-    return (unsigned char)(sum >> 4);  // 除以16
+    return (unsigned char)(sum / N);
 }</code></pre>
-                        <p><strong>2. 中位值滤波：</strong></p>
-<pre><code>// 取多次采样的中间值
-// 排序后取中间值，去掉最大最小</code></pre>
-                        <p><strong>3. 滑动平均滤波：</strong></p>
-<pre><code>// 保持一个数组，新数据入队，老数据出队
-// 求平均值</code></pre>
+                        <p><strong>特点：</strong>对周期性干扰有良好抑制作用</p>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-master">掌握</span>2. 中位值滤波（例11-9）</h4>
+                        <p>连续采样N次，排序后取中间值</p>
+<pre><code>#define N 9
+
+unsigned char MidFilter(void) {
+    unsigned char buf[N];
+    unsigned char i, j, temp;
+
+    // 采样N次
+    for(i = 0; i &lt; N; i++) {
+        buf[i] = ADC_Read(0);
+    }
+
+    // 冒泡排序
+    for(i = 0; i &lt; N-1; i++) {
+        for(j = 0; j &lt; N-1-i; j++) {
+            if(buf[j] > buf[j+1]) {
+                temp = buf[j];
+                buf[j] = buf[j+1];
+                buf[j+1] = temp;
+            }
+        }
+    }
+
+    return buf[N/2];  // 返回中间值
+}</code></pre>
+                        <p><strong>特点：</strong>对偶然干扰和脉冲干扰有良好抑制作用</p>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-master">掌握</span>3. 滑动平均滤波（例11-10）</h4>
+                        <p>维护一个队列，新数据入队，老数据出队，求平均</p>
+<pre><code>#define N 8
+
+unsigned char buf[N];  // 滑动窗口
+unsigned char idx = 0; // 当前索引
+
+unsigned char MoveAvgFilter(void) {
+    unsigned char i;
+    unsigned int sum = 0;
+
+    // 新数据入队
+    buf[idx] = ADC_Read(0);
+    idx = (idx + 1) % N;  // 循环队列
+
+    // 求平均
+    for(i = 0; i &lt; N; i++) {
+        sum += buf[i];
+    }
+    return (unsigned char)(sum / N);
+}</code></pre>
+                        <p><strong>特点：</strong>对周期性干扰有良好抑制作用，灵敏度高</p>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <h4><span class="level-tag level-tag-master">掌握</span>4. 防脉冲干扰滤波</h4>
+                        <p>去掉最大最小值，取剩余平均</p>
+<pre><code>#define N 10
+
+unsigned char AntiPulseFilter(void) {
+    unsigned char buf[N];
+    unsigned char i, max, min;
+    unsigned int sum = 0;
+
+    // 采样
+    for(i = 0; i &lt; N; i++) {
+        buf[i] = ADC_Read(0);
+    }
+
+    // 求最大最小
+    max = min = buf[0];
+    for(i = 0; i &lt; N; i++) {
+        if(buf[i] > max) max = buf[i];
+        if(buf[i] &lt; min) min = buf[i];
+        sum += buf[i];
+    }
+
+    // 去掉最大最小，求平均
+    sum = sum - max - min;
+    return (unsigned char)(sum / (N - 2));
+}</code></pre>
+                        <p><strong>特点：</strong>结合中位值和平均滤波的优点</p>
                     </div>
 
                     <div class="tip-box">
